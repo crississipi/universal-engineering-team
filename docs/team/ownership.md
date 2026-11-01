@@ -43,3 +43,32 @@ Individual components may receive separate artifact IDs in the
 future when independent tracking or approval is necessary.
 
 See `docs/team/artifact-catalog.md` for the full catalog rules.
+
+
+## Responsibility Boundaries
+
+The responsibility boundaries and decision authority of all 17 roles
+are documented in:
+
+`docs/team/responsibility-boundaries.md`
+
+This document supplements the individual specialist skills and
+artifact ownership catalog.
+
+It defines:
+
+- Primary accountability for each role.
+- Decision authority within each engineering domain.
+- Explicit boundaries between overlapping roles.
+- Cross-role decision rules.
+- Escalation procedures.
+
+Responsibility boundaries do not create additional artifact owners
+or transfer ownership between roles.
+
+The canonical artifact ownership source remains:
+
+`docs/team/ownership.yml`
+
+Formal producer-consumer handoffs are defined separately and must not
+be inferred from contributor lists or collaboration descriptions.
