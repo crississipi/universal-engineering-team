@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "commit": "fc92e61d89b079a6a2082fcfa3126f30a401fe4b",
+  "generated_at_utc": "2026-11-01T16:28:50.898210+00:00",
+  "role_count": 17,
+  "token_method": "not-measured",
+  "total_tokens": null,
+  "skills": [
+    {
+      "slug": "accessibility-specialist",
+      "name": "accessibility-specialist",
+      "description_words": 8,
+      "bytes": 2176,
+      "sha256": "4b665f7864abc4917982f068f0cde2ac97d1a20b4e726a17d5564cda00ff9078"
+    },
+    {
+      "slug": "api-manager",
+      "name": "api-manager",
+      "description_words": 8,
+      "bytes": 2248,
+      "sha256": "207bbc12520983ce78598597b2a0928e12297e699f0e6b18db558a9366ac4601"
+    },
+    {
+      "slug": "backend-developer",
+      "name": "backend-developer",
+      "description_words": 9,
+      "bytes": 2271,
+      "sha256": "f83b3586551687b52681c574ced382ccc4d94882696204e8ccb9a33397b46eae"
+    },
+    {
+      "slug": "data-engineer",
+      "name": "data-engineer",
+      "description_words": 8,
+      "bytes": 2194,
+      "sha256": "345a4b66848ae2b3a177ecfeb0985793e6faaea6521da783690f37ff19d6af3c"
+    },
+    {
+      "slug": "database-manager",
+      "name": "database-manager",
+      "description_words": 8,
+      "bytes": 2321,
+      "sha256": "f6dc850a4e0921bfc2aea2bceb6b72b18058e852fb7b5ab9f6165f37b7214fdf"
+    },
+    {
+      "slug": "delivery-lead",
+      "name": "delivery-lead",
+      "description_words": 11,
+      "bytes": 4794,
+      "sha256": "f7d4af1231238c7633b195605f1e8cdb558698ed8c4686907cb7047581d3576b"
+    },
+    {
+      "slug": "devops-sre",
+      "name": "devops-sre",
+      "description_words": 7,
+      "bytes": 2300,
+      "sha256": "1b4794fd70e51f3913cdabe4e8f4b4802177e2b12d818c6ea97028ad25b2d520"
+    },
+    {
+      "slug": "frontend-developer",
+      "name": "frontend-developer",
+      "description_words": 8,
+      "bytes": 2307,
+      "sha256": "0ea0b40ed5f1c669efcd79e49606b4664e9b087a8a508088349edd6cd2aed95d"
+    },
+    {
+      "slug": "integration-engineer",
+      "name": "integration-engineer",
+      "description_words": 8,
+      "bytes": 2394,
+      "sha256": "84189973beded5c44fbdb42b7cf2bf316f737065d292e08cfd50e9ddf2f86d9f"
+    },
+    {
+      "slug": "penetration-tester",
+      "name": "penetration-tester",
+      "description_words": 8,
+      "bytes": 2308,
+      "sha256": "bbfbf560b4c64aab9afa8ad8faf80ef90ad768a87ef69e28050aa2779c094166"
+    },
+    {
+      "slug": "performance-engineer",
+      "name": "performance-engineer",
+      "description_words": 9,
+      "bytes": 2189,
+      "sha256": "03eb9b9c5c8fb87c36ba5bd854d5eefd5e2f1b1ab1ffb60edbb3daade9a0391a"
+    },
+    {
+      "slug": "product-analyst",
+      "name": "product-analyst",
+      "description_words": 8,
+      "bytes": 2352,
+      "sha256": "7adc762bc5c1adc0f61436737dab6eca6c59ba12295ed1e6808fbe2c9934dbca"
+    },
+    {
+      "slug": "qa-manager",
+      "name": "qa-manager",
+      "description_words": 10,
+      "bytes": 2313,
+      "sha256": "69d637cb6b6e376ef0f160b343ba6ab146f4c38877e97eaced9d316a2d57ffc3"
+    },
+    {
+      "slug": "release-manager",
+      "name": "release-manager",
+      "description_words": 8,
+      "bytes": 2266,
+      "sha256": "35387e6f64023fd5beb50b5ab661a3af03d1d711c6bea3e9d5342aa15a08908c"
+    },
+    {
+      "slug": "solution-architect",
+      "name": "solution-architect",
+      "description_words": 8,
+      "bytes": 2406,
+      "sha256": "85badcb0d83d7a170d0435505975e0eea091e4aad43b6f5d5ed4c07ab49f77df"
+    },
+    {
+      "slug": "technical-writer-knowledge-engineer",
+      "name": "technical-writer-knowledge-engineer",
+      "description_words": 9,
+      "bytes": 2601,
+      "sha256": "af37dd10a82144080b17be57069027a26c9dcafb430f3924a656b2d25e6b5994"
+    },
+    {
+      "slug": "ux-ui-designer",
+      "name": "ux-ui-designer",
+      "description_words": 10,
+      "bytes": 2196,
+      "sha256": "45a45e4044e914ee39a92d0bc2d4cd3c3fe436cd3943a659732514029f74a55e"
+    }
+  ]
+}
