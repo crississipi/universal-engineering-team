@@ -1,20 +1,51 @@
 # Delivery workflow
 
 ```mermaid
+
 flowchart TD
-  A[Request / issue] --> B[Product Analyst: outcome and acceptance]
-  B --> C[Solution Architect: impact and design]
-  C --> D[Lead assigns specialist owners]
-  D --> E[Parallel bounded implementation]
-  E --> F[Cross-role contract review]
-  F --> G[QA + Security + performance/accessibility as relevant]
-  G --> H{Acceptance and risk gates pass?}
-  H -- No --> I[Anti-stuck protocol; options and experiment]
-  I --> D
-  H -- Yes --> J[Release Manager + SRE readiness]
-  J --> K[Docs + Obsidian + Graphify + HTML report]
-  K --> L[Lead verifies consistency and closes]
+    A["Request or change"] --> B["Intake and qualification"]
+    B --> C{"Sufficiently understood?"}
+
+    C -- "No" --> D["Clarify request or defer"]
+    D --> B
+
+    C -- "Yes" --> E["Solution framing when required"]
+    E --> F["Plan work, owners, and dependencies"]
+    F --> G["Execute independent work"]
+
+    G --> H["Integration and review"]
+    H --> I{"Ready for verification?"}
+
+    I -- "No" --> J["Correct, replan, or escalate"]
+    J --> F
+
+    I -- "Yes" --> K["Verification"]
+    K --> L{"Required checks passed?"}
+
+    L -- "No" --> J
+    L -- "Yes" --> M{"Release required?"}
+
+    M -- "Yes" --> N["Release readiness and authorization"]
+    N --> O["Release and post-release verification"]
+    O --> P["Closure"]
+
+    M -- "No" --> P
+
 ```
+
+## Workflow lifecycle
+
+The detailed workflow lifecycle, stage definitions, entry and exit
+conditions, status transitions, and progression gates are defined in:
+
+`docs/team/workflow-lifecycle.md`
+
+The lifecycle is adaptable to task complexity and risk. It does not
+require every task to execute every stage or activate every specialist.
+
+Workflow progression must preserve the established artifact ownership,
+responsibility boundaries, producer-consumer relationships, and
+handoff acceptance rules.
 
 ## Change packet
 Each task has: ID, objective, acceptance criteria, owner, reviewers, affected components, interfaces, test plan, documentation targets, risk, status.
