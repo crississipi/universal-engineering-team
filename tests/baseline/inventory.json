@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "commit": "fc92e61d89b079a6a2082fcfa3126f30a401fe4b",
-  "generated_at_utc": "2026-11-01T16:28:50.898210+00:00",
+  "commit": "e3c935654601f9dcc29a4860487eaa9e60a028e9",
+  "generated_at_utc": "2026-11-01T16:31:38.885138+00:00",
   "role_count": 17,
-  "token_method": "not-measured",
-  "total_tokens": null,
+  "token_method": "tiktoken-cl100k_base",
+  "total_tokens": 7842,
   "skills": [
     {
       "slug": "accessibility-specialist",
