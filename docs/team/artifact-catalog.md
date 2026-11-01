@@ -215,8 +215,12 @@ it becomes an active handoff contract.
 
 A handoff transfers defined outputs, not ownership of the source package.
 
-Acceptance, rejection, resubmission, and escalation procedures are
-defined separately from the contract schema.
+Acceptance, rejection, partial acceptance, and resubmission procedures
+are documented in:
+
+`docs/team/handoff-acceptance-rules.md`
+
+Escalation and conflict-resolution procedures are defined separately.
 
 ## 7. Relationship to the Delivery Lead
 

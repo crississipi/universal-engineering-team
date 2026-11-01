@@ -39,3 +39,24 @@ according to `docs/team/handoff-contract-schema.md`.
 
 A handoff execution should reference the applicable contract ID
 and version when a formal contract exists.
+
+## Handoff acceptance process
+
+An individual handoff execution follows this sequence:
+
+1. Producer submits the required outputs and supporting context.
+2. Consumer identifies the applicable contract ID and version.
+3. Consumer evaluates each applicable acceptance check.
+4. Consumer records an overall decision:
+   `accepted`, `partially_accepted`, `rejected`, or `blocked`.
+5. When corrections are required, the producer submits a revised
+   output referencing the previous submission.
+6. Consumer reassesses the affected checks and records the new decision.
+7. Handoff closure is recorded only after outstanding required work
+   has been resolved.
+
+The detailed rules are documented in:
+
+`docs/team/handoff-acceptance-rules.md`
+
+A submitted file or message alone does not constitute acceptance.

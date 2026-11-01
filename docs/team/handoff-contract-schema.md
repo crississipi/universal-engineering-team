@@ -210,8 +210,10 @@ Prefer checks that can be answered with evidence, such as:
 Do not use subjective checks such as "looks good" or "is complete"
 without defining what completeness means.
 
-The detailed acceptance, rejection, and resubmission procedure is
-defined separately in the handoff acceptance rules.
+The evaluation, rejection, partial acceptance, and resubmission
+procedures are defined in:
+
+`docs/team/handoff-acceptance-rules.md`
 
 ### `status`
 
@@ -306,19 +308,21 @@ storage conventions have been approved.
 
 ## 7. Relationship to later handoff rules
 
-This schema defines the structure of a handoff contract.
+This schema does not define:
 
-It does not yet define:
-
-- Detailed acceptance decision procedures.
-- Standardized rejection reasons.
-- Resubmission limits or timing.
 - Response deadlines.
-- Escalation paths and authority.
+- Escalation time limits.
+- Resubmission limits.
+- Conflict-resolution authority beyond existing role boundaries.
 - Timeout behavior.
-- Conflict resolution.
+- Deadlock resolution.
 
-These are addressed in subsequent Phase 1.2 stages.
+Acceptance, rejection, and resubmission procedures are defined in:
+
+`docs/team/handoff-acceptance-rules.md`
+
+The remaining escalation and conflict-resolution rules are addressed
+in Phase 1.2.5.
 
 ## 8. Validation expectations
 
@@ -357,3 +361,26 @@ When changing an existing contract:
 
 Never silently change a contract in a way that alters what a consumer
 is expected to receive or accept.
+
+## 10. Relationship to acceptance rules
+
+The schema defines what the producer must submit and what the consumer
+must check.
+
+The acceptance rules define how the consumer evaluates an individual
+submission.
+
+Every execution should preserve the distinction between:
+
+- Contract requirements.
+- Individual acceptance-check results.
+- Overall handoff decisions.
+- Rejection reasons and correction requests.
+- Resubmission revisions.
+
+Do not add execution decisions or rejection records as fields in
+the reusable contract definition.
+
+See:
+
+`docs/team/handoff-acceptance-rules.md`
