@@ -1,3 +1,4 @@
+
 version: 1
 
 roles:
@@ -19,10 +20,411 @@ roles:
   - release-manager
   - delivery-lead
 
-# Add entries only after reviewing actual role responsibilities and artifacts.
-# Do not infer ownership solely from free-form "Own" sections.
-artifacts: []
+artifacts:
 
-# Each handoff transfers an artifact or defined output, not ownership itself.
-# Add directional handoffs only after producer/consumer requirements are verified.
+  - id: ART-PRODUCT-REQUIREMENTS
+    name: Product Requirements Package
+    owner: product-analyst
+    primary_producer: product-analyst
+    contributors:
+      - solution-architect
+      - ux-ui-designer
+      - qa-manager
+      - penetration-tester
+      - data-engineer
+      - devops-sre
+    classification: shared
+    status: proposed
+    purpose: Defines the approved problem, requirements, user journeys, scope, and acceptance criteria.
+    deliverables:
+      - requirements specification
+      - user journeys
+      - functional and non-functional requirements
+      - prioritization and scope boundaries
+      - assumptions and decision log
+      - acceptance criteria
+    paths: []
+
+  - id: ART-ARCHITECTURE
+    name: System Architecture Package
+    owner: solution-architect
+    primary_producer: solution-architect
+    contributors:
+      - product-analyst
+      - api-manager
+      - integration-engineer
+      - database-manager
+      - backend-developer
+      - frontend-developer
+      - devops-sre
+      - penetration-tester
+      - qa-manager
+    classification: shared
+    status: proposed
+    purpose: Defines system boundaries, architecture decisions, technical patterns, and cross-system consistency.
+    deliverables:
+      - system context and architecture diagrams
+      - container and component diagrams when applicable
+      - sequence and data-flow diagrams
+      - architecture decision records
+      - architecture map
+    paths: []
+
+  - id: ART-API-CONTRACT
+    name: API and Event Contract Package
+    owner: api-manager
+    primary_producer: api-manager
+    contributors:
+      - backend-developer
+      - frontend-developer
+      - integration-engineer
+      - penetration-tester
+      - qa-manager
+      - solution-architect
+    classification: shared
+    status: proposed
+    purpose: Defines API and event contracts, compatibility, authentication requirements, and error semantics.
+    deliverables:
+      - OpenAPI or AsyncAPI specifications
+      - API catalog
+      - schemas and examples
+      - error and authentication conventions
+      - versioning and compatibility notes
+      - pagination and idempotency rules
+    paths: []
+
+  - id: ART-BACKEND
+    name: Backend Implementation Package
+    owner: backend-developer
+    primary_producer: backend-developer
+    contributors:
+      - api-manager
+      - database-manager
+      - integration-engineer
+      - penetration-tester
+      - qa-manager
+      - devops-sre
+    classification: shared
+    status: proposed
+    purpose: Contains server-side application behavior, domain services, validation, authorization, and backend verification.
+    deliverables:
+      - backend application code
+      - domain services and background jobs
+      - server-side validation and authorization
+      - backend automated tests
+      - service documentation
+      - migration requests
+    paths: []
+
+  - id: ART-FRONTEND
+    name: Frontend Implementation Package
+    owner: frontend-developer
+    primary_producer: frontend-developer
+    contributors:
+      - ux-ui-designer
+      - api-manager
+      - backend-developer
+      - accessibility-specialist
+      - qa-manager
+      - performance-engineer
+    classification: shared
+    status: proposed
+    purpose: Contains the client-side application, user interactions, navigation, rendering, and frontend verification.
+    deliverables:
+      - UI implementation
+      - navigation and state management
+      - loading, error, and empty states
+      - client-side validation
+      - frontend automated tests
+      - component and flow notes
+    paths: []
+
+  - id: ART-UX-DESIGN
+    name: UX and Design Package
+    owner: ux-ui-designer
+    primary_producer: ux-ui-designer
+    contributors:
+      - product-analyst
+      - frontend-developer
+      - accessibility-specialist
+      - qa-manager
+    classification: shared
+    status: proposed
+    purpose: Defines user flows, interaction behavior, information hierarchy, and visual guidance.
+    deliverables:
+      - user flows
+      - wireframes and lightweight specifications
+      - interaction states
+      - information hierarchy
+      - design tokens and visual guidance
+      - usability recommendations
+    paths: []
+
+  - id: ART-DATA-MODEL
+    name: Data Model and Database Package
+    owner: database-manager
+    primary_producer: database-manager
+    contributors:
+      - backend-developer
+      - data-engineer
+      - devops-sre
+      - penetration-tester
+      - qa-manager
+    classification: shared
+    status: proposed
+    purpose: Defines data structures, integrity, migrations, retention, and database operational requirements.
+    deliverables:
+      - logical and physical data models
+      - entity relationship diagrams
+      - schema and migration plans
+      - data dictionary
+      - index and query guidance
+      - backup and retention implications
+    paths: []
+
+  - id: ART-INTEGRATION
+    name: Integration Engineering Package
+    owner: integration-engineer
+    primary_producer: integration-engineer
+    contributors:
+      - api-manager
+      - backend-developer
+      - data-engineer
+      - database-manager
+      - devops-sre
+      - penetration-tester
+      - qa-manager
+    classification: shared
+    status: proposed
+    purpose: Defines external system connectivity, adapters, orchestration, delivery reliability, and recovery.
+    deliverables:
+      - integration catalog
+      - adapters and mapping specifications
+      - integration sequence diagrams
+      - retry and idempotency behavior
+      - error and reconciliation matrix
+      - recovery runbooks
+    paths: []
+
+  - id: ART-DATA-PIPELINE
+    name: Data Engineering Package
+    owner: data-engineer
+    primary_producer: data-engineer
+    contributors:
+      - database-manager
+      - integration-engineer
+      - product-analyst
+      - devops-sre
+      - penetration-tester
+      - qa-manager
+    classification: shared
+    status: proposed
+    purpose: Defines data pipelines, transformations, lineage, scheduling, and data quality controls.
+    deliverables:
+      - pipeline implementation and diagrams
+      - transformation specifications
+      - data contracts
+      - lineage documentation
+      - data quality rules
+      - replay and backfill procedures
+    paths: []
+
+  - id: ART-QUALITY-EVIDENCE
+    name: Quality Assurance Package
+    owner: qa-manager
+    primary_producer: qa-manager
+    contributors:
+      - product-analyst
+      - backend-developer
+      - frontend-developer
+      - database-manager
+      - integration-engineer
+      - penetration-tester
+      - devops-sre
+      - performance-engineer
+      - accessibility-specialist
+      - release-manager
+    classification: shared
+    status: proposed
+    purpose: Defines quality strategy, test traceability, verification results, and defect reporting.
+    deliverables:
+      - test strategy and test pyramid
+      - acceptance traceability matrix
+      - test data strategy
+      - test execution results
+      - defect severity and summary
+      - regression evidence
+    paths: []
+
+  - id: ART-SECURITY-ASSESSMENT
+    name: Security Assessment Package
+    owner: penetration-tester
+    primary_producer: penetration-tester
+    contributors:
+      - solution-architect
+      - backend-developer
+      - api-manager
+      - devops-sre
+      - database-manager
+      - qa-manager
+      - release-manager
+    classification: shared
+    status: proposed
+    purpose: Documents security risks, authorized testing, findings, remediation guidance, and retest evidence.
+    deliverables:
+      - threat model
+      - security review findings
+      - vulnerability evidence and severity
+      - remediation recommendations
+      - retest results
+      - sanitized security report
+    paths: []
+
+  - id: ART-OPERATIONS
+    name: Infrastructure and Operations Package
+    owner: devops-sre
+    primary_producer: devops-sre
+    contributors:
+      - solution-architect
+      - backend-developer
+      - integration-engineer
+      - database-manager
+      - penetration-tester
+      - qa-manager
+      - release-manager
+    classification: shared
+    status: proposed
+    purpose: Defines deployment, runtime operations, infrastructure, monitoring, and recovery readiness.
+    deliverables:
+      - CI/CD configuration
+      - infrastructure and environment configuration
+      - deployment diagrams
+      - monitoring and alerting
+      - operational runbooks
+      - backup, restore, and rollback procedures
+    paths: []
+
+  - id: ART-PERFORMANCE-EVIDENCE
+    name: Performance Engineering Package
+    owner: performance-engineer
+    primary_producer: performance-engineer
+    contributors:
+      - frontend-developer
+      - backend-developer
+      - database-manager
+      - data-engineer
+      - devops-sre
+      - qa-manager
+      - product-analyst
+    classification: shared
+    status: proposed
+    purpose: Establishes performance expectations, profiling evidence, bottlenecks, and optimization results.
+    deliverables:
+      - performance budgets
+      - workload assumptions and load models
+      - performance baseline
+      - profiling and bottleneck analysis
+      - capacity estimates
+      - optimization verification
+    paths: []
+
+  - id: ART-ACCESSIBILITY-ASSESSMENT
+    name: Accessibility Assessment Package
+    owner: accessibility-specialist
+    primary_producer: accessibility-specialist
+    contributors:
+      - product-analyst
+      - ux-ui-designer
+      - frontend-developer
+      - qa-manager
+      - technical-writer-knowledge-engineer
+    classification: shared
+    status: proposed
+    purpose: Defines accessibility requirements, assessment scenarios, findings, and remediation verification.
+    deliverables:
+      - accessibility requirements
+      - audit findings
+      - assistive technology scenarios
+      - semantic and interaction guidance
+      - remediation checklist
+      - verification evidence
+    paths: []
+
+  - id: ART-KNOWLEDGE-DOCS
+    name: Documentation and Knowledge Package
+    owner: technical-writer-knowledge-engineer
+    primary_producer: technical-writer-knowledge-engineer
+    contributors:
+      - product-analyst
+      - solution-architect
+      - api-manager
+      - backend-developer
+      - frontend-developer
+      - ux-ui-designer
+      - database-manager
+      - integration-engineer
+      - data-engineer
+      - qa-manager
+      - penetration-tester
+      - devops-sre
+      - performance-engineer
+      - accessibility-specialist
+      - release-manager
+      - delivery-lead
+    classification: shared
+    status: proposed
+    purpose: Maintains documentation architecture, knowledge links, diagrams, and repository reporting.
+    deliverables:
+      - technical documentation
+      - Obsidian notes and knowledge maps
+      - Graphify nodes and relationships
+      - diagrams and documentation links
+      - central project report
+      - documentation change summary
+    paths: []
+
+  - id: ART-RELEASE-PACKAGE
+    name: Release Management Package
+    owner: release-manager
+    primary_producer: release-manager
+    contributors:
+      - qa-manager
+      - devops-sre
+      - penetration-tester
+      - solution-architect
+      - product-analyst
+    classification: shared
+    status: proposed
+    purpose: Coordinates release readiness, rollout sequencing, rollback planning, and release communication.
+    deliverables:
+      - release plan and checklist
+      - change inventory
+      - go/no-go evidence
+      - rollout and rollback plan
+      - release notes
+      - post-deployment verification
+    paths: []
+
+  - id: ART-DELIVERY-RECORD
+    name: Delivery Coordination Package
+    owner: delivery-lead
+    primary_producer: delivery-lead
+    contributors:
+      - solution-architect
+      - qa-manager
+      - technical-writer-knowledge-engineer
+      - release-manager
+    classification: internal
+    status: proposed
+    purpose: Tracks work breakdown, task ownership, dependency coordination, and delivery closure.
+    deliverables:
+      - work breakdown
+      - task ownership and assignment record
+      - dependency and blocker register
+      - role activation record
+      - escalation and decision log
+      - delivery closure summary
+    paths: []
+
+# Handoffs will be defined separately after package ownership is reviewed.
 handoffs: []

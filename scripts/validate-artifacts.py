@@ -47,6 +47,27 @@ def main():
             classification = item.get("classification")
             status = item.get("status", "proposed")
             paths = item.get("paths", [])
+            name = item.get("name")
+            purpose = item.get("purpose")
+            deliverables = item.get("deliverables", [])
+
+            if not isinstance(name, str) or not name.strip():
+                errors.append(f"{label}.name must be a non-empty string")
+
+            if not isinstance(purpose, str) or not purpose.strip():
+                errors.append(f"{label}.purpose must be a non-empty string")
+
+            if (
+                not isinstance(deliverables, list)
+                or not deliverables
+                or any(
+                    not isinstance(entry, str) or not entry.strip()
+                    for entry in deliverables
+                )
+            ):
+                errors.append(
+                    f"{label}.deliverables must be a non-empty list of strings"
+                )
 
             if not isinstance(artifact_id, str) or not artifact_id.strip():
                 errors.append(f"{label}.id must be a non-empty string")
@@ -64,15 +85,37 @@ def main():
                 )
 
             if (
-                not isinstance(contributors, list)
-                or any(
-                    not isinstance(role, str) or role not in roles
-                    for role in contributors
-                )
+                isinstance(owner, str)
+                and isinstance(producer, str)
+                and owner != producer
             ):
                 errors.append(
-                    f"{label}.contributors must contain valid role slugs"
+                    f"{label}: owner and primary_producer must match "
+                    "under the single-owner model"
                 )
+
+            if not isinstance(contributors, list):
+                errors.append(
+                    f"{label}.contributors must be a list of role slugs"
+                )
+            else:
+                if any(
+                    not isinstance(role, str) or role not in roles
+                    for role in contributors
+                ):
+                    errors.append(
+                        f"{label}.contributors must contain valid role slugs"
+                    )
+
+                if len(contributors) != len(set(contributors)):
+                    errors.append(
+                        f"{label}.contributors contains duplicate roles"
+                    )
+
+                if isinstance(owner, str) and owner in contributors:
+                    errors.append(
+                        f"{label}.owner must not also appear in contributors"
+                    )
 
             if (
                 not isinstance(classification, str)
