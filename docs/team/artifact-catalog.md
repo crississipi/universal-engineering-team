@@ -180,7 +180,7 @@ Do not delete historical records merely because a package is deprecated.
 
 ## 6. Relationship to handoffs
 
-Artifact ownership and handoff definitions are separate concerns.
+Artifact ownership and handoff contracts are separate concerns.
 
 The artifact catalog establishes:
 
@@ -189,17 +189,34 @@ The artifact catalog establishes:
 - Who may contribute.
 - What the package contains.
 
-The handoff catalog establishes:
+The producer-consumer matrix identifies candidate package relationships.
 
-- Which role consumes an output.
-- What specific output must be transferred.
-- What information must accompany it.
-- What acceptance checks the receiving role performs.
-- What happens when the handoff is incomplete.
+The formal handoff contract catalog establishes:
 
-Do not infer formal handoffs from the contributors list.
+- Which producer role supplies an output.
+- Which consumer role receives it.
+- Which producer and consumer packages are involved.
+- What specific outputs must be transferred.
+- What context must accompany the outputs.
+- What checks the consumer uses to assess the submission.
 
-Handoffs will be defined in a subsequent Phase 1 workstream.
+The canonical handoff definitions are maintained in:
+
+`docs/team/ownership.yml`
+
+Their required structure is documented in:
+
+`docs/team/handoff-contract-schema.md`
+
+Do not infer formal handoffs from contributor lists or role names.
+
+A producer-consumer relationship must be reviewed and approved before
+it becomes an active handoff contract.
+
+A handoff transfers defined outputs, not ownership of the source package.
+
+Acceptance, rejection, resubmission, and escalation procedures are
+defined separately from the contract schema.
 
 ## 7. Relationship to the Delivery Lead
 
