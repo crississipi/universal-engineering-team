@@ -188,23 +188,44 @@ For dependency planning:
 The Delivery Lead coordinates sequencing. Specialist owners retain
 authority over their respective outputs.
 
+
 ## 6. Relationship to handoff contracts
 
 This matrix identifies candidate producer-consumer relationships.
 
-It does not yet define:
+It does not independently approve or activate formal handoff contracts.
 
-- Formal handoff IDs.
-- Exact handoff payload schemas.
-- Required metadata.
-- Delivery channels or storage locations.
-- Acceptance checks.
-- Rejection and resubmission procedures.
-- Escalation and timeout rules.
+The canonical contract definitions are maintained in:
 
-Those are defined in Phase 1.2.3 and subsequent Phase 1.2 stages.
+`docs/team/ownership.yml`
 
-Only relationships approved during review should become formal handoffs.
+The contract schema is defined in:
+
+`docs/team/handoff-contract-schema.md`
+
+Acceptance, rejection, partial acceptance, and resubmission procedures
+are defined in:
+
+`docs/team/handoff-acceptance-rules.md`
+
+Escalation and conflict-resolution procedures are defined in:
+
+`docs/team/handoff-escalation-rules.md`
+
+The automated handoff validator checks that every declared contract:
+
+- References existing producer and consumer packages.
+- Uses the accountable package owners as producer and consumer.
+- References a package pair present in this matrix.
+- Uses the same relationship type declared in this matrix.
+
+A matrix relationship is a candidate, not automatic approval for a
+formal contract.
+
+Only reviewed and approved relationships should be added to
+`ownership.yml`.
+
+The validator must not infer missing relationships or create contracts.
 
 ## 7. Review and maintenance
 

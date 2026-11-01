@@ -193,6 +193,9 @@ Depending on the relationship, this may include:
 Do not include credentials, access tokens, passwords, private keys,
 or other secrets in a handoff.
 
+Use an empty list when no additional context is required for a
+particular contract.
+
 ### `acceptance_checks`
 
 List observable checks the receiving role can perform.
@@ -326,24 +329,54 @@ in Phase 1.2.5.
 
 ## 8. Validation expectations
 
-The handoff validator should eventually verify:
 
-1. Handoff IDs are unique and correctly formatted.
-2. Contract versions are non-empty version strings.
-3. Producer and consumer roles are valid and different.
+## 8. Validation expectations
+
+The automated handoff validator checks the canonical contract definitions
+against the ownership manifest and producer-consumer relationship matrix.
+
+It verifies:
+
+1. Handoff IDs are unique and follow the declared
+   `HOF-<PRODUCER>-<CONSUMER>-<SEQUENCE>` structure.
+2. Contract versions are quoted numeric version strings, such as `"1.0"`.
+3. Producer and consumer roles are canonical and different.
 4. Producer and consumer artifact IDs exist.
-5. Producer and consumer roles match their respective package ownership.
-6. Relationship types use the approved vocabulary.
-7. Conditional relationships declare an activation condition.
-8. Purpose is non-empty.
-9. Required outputs, required context, and acceptance checks follow
-   their defined list rules.
-10. Contract status uses the approved lifecycle vocabulary.
-11. Contract relationships agree with the reviewed producer-consumer matrix.
+5. The producer role matches the producer package owner and primary producer.
+6. The consumer role matches the consumer package owner.
+7. Producer and consumer package IDs are different.
+8. Relationship types use the approved vocabulary:
+   `required_input`, `conditional_input`, or `feedback`.
+9. The producer-consumer package pair exists in the relationship matrix.
+10. The contract relationship type matches the matrix relationship type.
+11. Conditional relationships declare a non-empty activation condition.
+12. Purpose is a non-empty string.
+13. Required outputs are a non-empty list of non-empty strings.
+14. Required context is a list of non-empty strings. An empty list is
+    permitted when no additional context is required.
+15. Acceptance checks are a non-empty list of non-empty strings.
+16. Contract status uses the approved lifecycle vocabulary:
+    `proposed`, `active`, or `deprecated`.
 
-Validator implementation and enforcement are handled in the
-validation workstream, after the schema and subsequent handoff rules
-have been reviewed.
+The validator does not:
+
+- Infer handoffs from contributor lists or role names.
+- Create or approve formal handoffs.
+- Decide whether a relationship should be activated in a particular project.
+- Determine whether an acceptance check is technically sufficient.
+- Verify the truthfulness or sufficiency of human-provided evidence.
+- Validate individual handoff execution decisions or escalation outcomes.
+- Accept business, security, or operational risks.
+
+Those decisions remain governed by the relevant human review and
+responsibility boundaries.
+
+The validator must pass when the handoff list is empty, while reporting
+the expected warning that no formal handoffs have been declared.
+
+Run:
+
+`python scripts/validate-handoffs.py`
 
 ## 9. Maintenance
 
