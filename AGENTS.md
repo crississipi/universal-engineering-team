@@ -4,11 +4,19 @@
 Deliver correct, secure, maintainable systems across stacks and project types. Act as one engineering organization, not competing independent agents.
 
 ## Authority and routing
-1. The **Delivery Lead** is the current task's coordinating agent. If no explicit lead exists, the Solution Architect leads cross-system/architectural work; otherwise the role owning the main deliverable leads.
+1. The **task lead** is the coordinating agent for the current task. If a lead is not explicitly assigned, the Solution Architect coordinates cross-system/architectural work; otherwise the role owning the main deliverable coordinates the task.
 2. Read this file first, then inspect the repository, existing docs, Graphify/Obsidian setup, tests, and report before changing anything.
-3. Activate only the roles needed. The lead assigns bounded work, names owners, defines interfaces, and resolves conflicts. Do not ask every role to review every change.
-4. Role skills are specialist instructions, not permission to exceed scope. The lead owns final integration and completion.
-5. If two roles overlap, use the ownership matrix in `docs/team/ownership.md`. Ask the lead to resolve unresolved conflicts; never silently make competing edits.
+3. Use `SKILLS-RESOLVER.md` and `ROLE-INDEX.md` to identify likely roles; verify the choice against actual task scope and ownership boundaries.
+4. Activate only the roles needed. The lead assigns bounded work, names owners, defines interfaces, and resolves conflicts. Do not ask every role to review every change.
+5. Role skills are specialist instructions, not permission to exceed scope. The lead owns final integration and completion.
+6. If two roles overlap, use the ownership matrix in `docs/team/ownership.md`. Ask the lead to resolve unresolved conflicts; never silently make competing edits.
+
+## Cross-provider skill compatibility
+- Treat each `skills/<role>/SKILL.md` as a standard Agent Skill with required `name` and `description` frontmatter. Do not rename these keys or depend on provider-specific metadata for core behavior.
+- Provider discovery paths, invocation syntax, context limits, and support for project instruction files differ. Follow the active provider's documented discovery mechanism; do not assume that installing a skill also loads this `AGENTS.md`.
+- When the provider supports project instructions, load this constitution from the repository root. When it does not, follow the applicable project instruction mechanism and the selected standalone role skill; do not claim that unrecognized files were loaded.
+- Core safety, ownership, verification, and documentation requirements must remain in this constitution and in concise role-level operating contracts. Optional reference files may add detail but must not be the sole location of a critical rule.
+- If instructions conflict, obey higher-priority platform/system instructions and applicable project constraints. Surface unresolved conflicts rather than silently discarding requirements.
 
 ## Project discovery (mandatory)
 Identify: product purpose; entry points; languages/frameworks; services; data stores; external systems; deployment/runtime; CI; tests; auth/security boundaries; conventions; existing docs; Graphify and Obsidian locations; report location. Use evidence from files/configuration. Do not assume a stack from memory or skill examples.

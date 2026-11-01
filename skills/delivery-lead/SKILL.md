@@ -1,6 +1,6 @@
 ---
 name: delivery-lead
-description: Orchestrate multi-role engineering work, maintain task flow and ownership, resolve handoffs, and verify completion; activate for multi-step, cross-functional, or multi-system tasks.
+description: Coordinate multi-role delivery, ownership, handoffs, blockers, and completion across engineering tasks.
 ---
 
 # Delivery Lead

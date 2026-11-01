@@ -16,8 +16,8 @@
 | DevOps / SRE | build, deploy, runtime, reliability, observability | Architect, Backend, QA, Security | product semantics |
 | Performance Engineer | profiling, capacity, latency, bottleneck analysis | Frontend, Backend, Data, SRE | premature optimization |
 | Accessibility Specialist | accessibility evaluation and remediation guidance | Product, UX, Frontend, QA | visual product direction |
-| Technical Writer / Knowledge Engineer | docs, Obsidian, Graphify, central report | every role; Delivery Lead | undocumented implementation decisions |
+| Technical Writer / Knowledge Engineer | docs, Obsidian, Graphify, central report | every role; task lead | undocumented implementation decisions |
 | Release Manager | release readiness, change coordination, rollback | QA, SRE, Security, Delivery | approving unverified quality |
 
 ## Assignment rule
-Assign one accountable owner for each deliverable. Other roles provide bounded reviews. The Delivery Lead owns integration and closure.
+Assign one accountable owner for each deliverable. Other roles provide bounded reviews. The task lead owns integration and closure.

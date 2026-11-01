@@ -1,7 +1,7 @@
 ---
 type: change-index
 status: active
-owner: Delivery Lead
+owner: Task Lead
 last_verified: YYYY-MM-DD
 tags: [changes, delivery]
 ---
