@@ -552,3 +552,28 @@ Keep individual `SKILL.md` definitions consistent with this document.
 Run the repository validation scripts after changes.
 
 Material changes to decision authority must include a documented rationale.
+
+## 9. Escalation and conflict resolution
+
+Role disagreements must be resolved according to the decision authority
+defined in this document.
+
+Use the following escalation references:
+
+- `docs/team/handoff-escalation-rules.md` for escalation levels,
+  decision routing, conflict resolution, timeout behavior, and deadlocks.
+- `docs/team/handoff-acceptance-rules.md` for handoff acceptance
+  disagreements and resubmission decisions.
+- `docs/team/workflow.md` for delivery coordination and blocker tracking.
+
+The Delivery Lead coordinates escalation and delivery impact but does
+not replace specialist decision authority.
+
+The Solution Architect resolves cross-system technical conflicts
+within architecture authority but does not override specialist domain
+authority.
+
+Product decisions and risk acceptance must be referred to their
+appropriate authorized decision-makers.
+
+No role may silently expand its authority to resolve a disagreement.

@@ -66,6 +66,10 @@ It defines:
 Responsibility boundaries do not create additional artifact owners
 or transfer ownership between roles.
 
+Escalation and conflict-resolution procedures are documented in:
+
+`docs/team/handoff-escalation-rules.md`
+
 The canonical artifact ownership source remains:
 
 `docs/team/ownership.yml`

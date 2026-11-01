@@ -357,21 +357,19 @@ will be established separately if required.
 
 ## 12. Relationship to escalation
 
-This document defines acceptance and correction behavior.
+Acceptance and resubmission decisions follow the escalation procedures
+defined in:
 
-It does not define:
+`docs/team/handoff-escalation-rules.md`
 
-- Response deadlines.
-- Escalation time limits.
-- Retry or resubmission limits.
-- Conflict-resolution authority beyond existing role boundaries.
-- Timeout behavior.
-- Deadlock resolution.
+Escalate unresolved disputes, ambiguous contracts, unavailable decision
+authority, and expired response windows according to those rules.
 
-These topics are addressed in Phase 1.2.5.
+A disagreement does not automatically change the current acceptance
+decision.
 
-Until then, unresolved issues must be recorded and coordinated rather
-than silently treated as accepted or rejected.
+Until resolved, preserve the existing evidence and decision history.
+Do not silently mark an unresolved handoff as accepted or complete.
 
 ## 13. Maintenance
 

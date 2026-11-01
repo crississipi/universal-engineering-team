@@ -17,8 +17,16 @@ This matrix supplements ownership by identifying:
 - Whether the relationship is required, conditional, or feedback-oriented.
 - Whether the relationship creates a genuine work prerequisite.
 
-This document does not define formal handoff contracts. Those will be
-specified separately in Phase 1.2.3.
+This document does not define formal handoff contracts.
+
+The contract schema is defined in:
+`docs/team/handoff-contract-schema.md`
+
+Acceptance and resubmission procedures are defined in:
+`docs/team/handoff-acceptance-rules.md`
+
+Escalation and conflict-resolution procedures are defined in:
+`docs/team/handoff-escalation-rules.md`
 
 ## 1. Relationship types
 

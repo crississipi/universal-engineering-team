@@ -60,3 +60,30 @@ The detailed rules are documented in:
 `docs/team/handoff-acceptance-rules.md`
 
 A submitted file or message alone does not constitute acceptance.
+
+## Escalation and conflict resolution
+
+Resolve disagreements at the lowest appropriate level.
+
+1. Producer and consumer attempt direct resolution using the applicable
+   contract, requirements, and evidence.
+2. Unresolved specialist-domain issues go to the accountable domain owner.
+3. Cross-system technical conflicts go to the Solution Architect.
+4. Product, business, or risk decisions requiring external authority
+   go to the appropriate authorized stakeholder or risk owner.
+5. The Delivery Lead coordinates escalation, tracks blockers, and
+   records delivery impact.
+
+Urgent security, privacy, safety, data-integrity, and production-stability
+concerns must be escalated immediately rather than waiting for normal
+response windows.
+
+An expired response window does not mean acceptance, rejection,
+approval, or risk acceptance.
+
+Unresolved work remains blocked when proceeding would violate a required
+dependency, safety constraint, or approval gate.
+
+Detailed procedures are documented in:
+
+`docs/team/handoff-escalation-rules.md`
