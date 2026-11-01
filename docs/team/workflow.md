@@ -47,6 +47,42 @@ Workflow progression must preserve the established artifact ownership,
 responsibility boundaries, producer-consumer relationships, and
 handoff acceptance rules.
 
+## Role activation and participation
+
+Role activation is governed by:
+
+`docs/team/role-activation-rules.md`
+
+Roles are activated according to task scope, responsibility boundaries, dependencies, and risk. The 17-role team is not a mandatory checklist for every task.
+
+Task planning must distinguish required, conditional, optional, and inactive roles while preserving accountable artifact ownership and specialist authority.
+
+Role activation does not automatically create a formal handoff or transfer artifact ownership.
+
+## Dependency-aware execution and parallel work
+
+Execution dependencies and parallel-work rules are governed by:
+
+`docs/team/dependency-execution-rules.md`
+
+Work must be sequenced according to explicit prerequisites. Independent work may proceed in parallel when ownership boundaries, interfaces, and safety conditions permit it.
+
+The execution dependency graph must remain acyclic. Collaboration and feedback relationships may be bidirectional.
+
+A blocked prerequisite must only prevent the work items or progression gates that actually depend on it. Provisional upstream outputs may be consumed only under the documented controls and must be reconciled before required integration and verification gates.
+
+Dependency coordination does not transfer artifact ownership or replace formal handoff acceptance.
+
+## Orchestration and coordination
+
+Cross-role orchestration and coordination responsibilities are governed by:
+
+`docs/team/orchestration-responsibilities.md`
+
+Coordination must occur at the lowest level that can manage the work effectively. Accountable package owners coordinate their own outputs, specialist owners coordinate domain-specific work, and the Delivery Lead coordinates cross-role execution when needed.
+
+Coordination does not transfer artifact ownership, override specialist authority, or constitute approval of required verification and acceptance evidence.
+
 ## Change packet
 Each task has: ID, objective, acceptance criteria, owner, reviewers, affected components, interfaces, test plan, documentation targets, risk, status.
 
@@ -118,3 +154,15 @@ dependency, safety constraint, or approval gate.
 Detailed procedures are documented in:
 
 `docs/team/handoff-escalation-rules.md`
+
+## Blockers, replanning, and workflow state transitions
+
+Blocker management, replanning decisions, and work-item state transitions are governed by:
+
+`docs/team/blockers-replanning-and-state-transitions.md`
+
+All work-item state changes must follow the approved transition rules. Blockers must have accountable owners, documented impact, and traceable resolution evidence.
+
+Replanning must preserve artifact ownership, specialist decision authority, dependency integrity, and previously recorded decisions. The Delivery Lead coordinates cross-role replanning but does not independently approve specialist decisions or waive required verification gates.
+
+Workflow stage progression, individual work-item states, and formal handoff decisions must remain separate and independently traceable.
