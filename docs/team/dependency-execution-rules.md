@@ -465,6 +465,7 @@ Use this document together with:
 - `docs/team/handoff-escalation-rules.md` — escalation and conflict resolution.
 - `docs/team/role-activation-rules.md` — task-specific role activation.
 - `docs/team/workflow-lifecycle.md` — workflow stages and progression gates.
+- `docs/team/blockers-replanning-and-state-transitions.md` — blocker management, replanning, and work-item state transitions.
 
 ## 14. Governing rule
 

@@ -616,6 +616,7 @@ This document must be used together with:
 - `docs/team/handoff-acceptance-rules.md` — acceptance and rejection decisions.
 - `docs/team/handoff-escalation-rules.md` — escalation and conflict resolution.
 - `docs/team/workflow-lifecycle.md` — workflow stages and progression gates.
+- `docs/team/blockers-replanning-and-state-transitions.md` — blocker management and replanning that may affect role participation.
 
 ## 12. Governing rule
 

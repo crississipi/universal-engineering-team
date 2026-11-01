@@ -25,6 +25,18 @@ Product Analyst; Solution Architect; API Manager; Backend Developer; Frontend De
 └── .github/workflows/
 ```
 
+## Team governance
+
+Start with `docs/team/workflow.md` for the team's workflow and governance navigation.
+
+Key references:
+
+- `docs/team/ownership.md` — artifact ownership and responsibility boundaries.
+- `docs/team/artifact-catalog.md` — the 17 accountable artifact packages.
+- `docs/team/producer-consumer-matrix.md` — package-level dependencies.
+- `docs/team/workflow-lifecycle.md` — workflow stages and overall workflow statuses.
+- `docs/team/blockers-replanning-and-state-transitions.md` — blocker and work-item execution rules.
+
 ## How agents should use the library
 
 1. Read the project's applicable instruction file and inspect the repository before proposing changes.
@@ -58,8 +70,6 @@ Copy-Item -Path (Join-Path $source "*") -Destination $destination -Recurse -Forc
 ```
 
 This example is illustrative; it does not assert that `.copilot\skills` is the correct directory for every VS Code/GitHub Copilot version or every agent provider.
-
-## Validation
 
 ## Validation
 

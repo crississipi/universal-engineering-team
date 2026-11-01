@@ -68,45 +68,51 @@ Material blocker decisions and replanning decisions must be recorded with enough
 - Which dependencies or assumptions changed.
 - What must happen before work can resume or close.
 
-## 3. Workflow Stage, Work-Item State, and Handoff Decision
+## 3. Workflow Stage, Overall Workflow Status, Work-Item State, and Handoff Decision
 
-These are separate dimensions and must be recorded independently.
+These are four separate dimensions and must be recorded independently.
 
 ### 3.1 Workflow stages
 
-The overall workflow lifecycle uses the following stages, as defined in `docs/team/workflow-lifecycle.md`:
+The overall workflow lifecycle uses the following nine stages,
+as defined in `docs/team/workflow-lifecycle.md`:
 
-1. Intake and qualification
-2. Solution framing
-3. Planning
-4. Execution
-5. Integration and review
-6. Verification
-7. Release readiness and release, when applicable
-8. Closure
+1. Intake
+2. Qualification
+3. Solution Framing
+4. Planning
+5. Execution
+6. Integration and Review
+7. Verification
+8. Release Readiness and Release, when applicable
+9. Closure
 
-A workflow stage describes the overall progress of a project or change. It does not describe the state of every individual task.
+A workflow stage describes the overall type of work being performed.
+It does not describe the current execution state of every individual
+task.
 
-### 3.2 Work-item states
+### 3.2 Overall workflow status
 
-Individual tasks and other explicitly tracked units of work use the following canonical states:
+The overall project or change has a separate workflow status.
 
-| State | Meaning |
-|---|---|
-| `not_started` | Work has been identified but execution has not begun. |
-| `ready` | Required prerequisites are sufficiently available and the work may begin. |
-| `in_progress` | The accountable owner or assigned contributor is actively performing the work. |
-| `blocked` | Work cannot safely or correctly proceed because a required dependency, decision, input, approval, or condition is unavailable. |
-| `in_review` | Work is submitted for the required review or verification activity. |
-| `changes_requested` | Review identified changes that must be addressed before the applicable acceptance condition is satisfied. |
-| `completed` | The work item has satisfied its defined completion criteria and required evidence is recorded. |
-| `cancelled` | The work item was explicitly discontinued through an authorized scope or planning decision. |
+Its canonical vocabulary, meanings, transition rules, and terminal
+dispositions are defined in:
 
-A work item may use only one current state at a time.
+`docs/team/workflow-lifecycle.md`
 
-State changes must follow the transition rules in Section 7.
+This document does not redefine that vocabulary.
 
-### 3.3 Handoff decisions
+Overall workflow status must not be confused with the state of an
+individual work item. For example, one task may be `blocked` while
+the overall workflow remains `in_progress` because independent work
+can continue.
+
+### 3.3 Work-item states
+
+Individual tasks and other explicitly tracked units of work use
+the following canonical states:
+
+### 3.4 Handoff decisions
 
 Handoff decisions continue to use the separate vocabulary defined in `docs/team/handoff-acceptance-rules.md`:
 
@@ -131,6 +137,13 @@ For example:
 - A handoff may be `rejected` while the producer's work item moves to `changes_requested`.
 
 The relationship between the two states must be explicitly recorded when both are tracked.
+
+The `completed` work-item state does not replace the overall
+workflow status `verified` or `released`.
+
+A completed work item means that its own defined completion criteria
+have been satisfied. Overall verification and release remain subject
+to the lifecycle gates and applicable specialist approvals.
 
 ## 4. Blocker Management
 

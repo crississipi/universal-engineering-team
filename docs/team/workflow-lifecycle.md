@@ -11,7 +11,7 @@ It establishes:
 - The stages through which work progresses.
 - Entry and exit conditions for each stage.
 - Rules for progressing, pausing, and revisiting work.
-- The relationship between workflow stages and task statuses.
+- The relationship between workflow stages, overall workflow status, and individual work-item states.
 - Minimum evidence required for responsible workflow progression.
 - Rules for adapting the workflow to different task sizes and risks.
 
@@ -357,15 +357,22 @@ These are illustrative paths, not automatic role assignments.
 Required verification and approval gates must remain satisfied
 even when a stage is combined with another stage.
 
-## 5. Workflow Stages and Task Statuses
+## 5. Workflow Stages and Overall Workflow Status
 
-Workflow stages and task statuses are separate concepts.
+Workflow stages and overall workflow status are separate concepts.
 
-A stage describes the type of work currently being performed.
+A stage describes the type of work currently being performed in the
+project or change lifecycle.
 
-A status describes the current state of the work item.
+Overall workflow status describes the current execution or delivery
+condition of the project or change as a whole.
 
-The canonical status vocabulary is:
+Individual work-item states are a separate, more detailed execution
+model. They are defined in:
+
+`docs/team/blockers-replanning-and-state-transitions.md`
+
+The canonical overall workflow status vocabulary is:
 
 - `proposed`
 - `planned`
@@ -377,29 +384,29 @@ The canonical status vocabulary is:
 - `deferred`
 - `cancelled`
 
-### Status meanings
+### Overall workflow status meanings
 
 | Status | Meaning |
 |---|---|
 | `proposed` | Request recorded but not yet approved for execution |
 | `planned` | Scope, ownership, and execution approach sufficiently defined |
-| `in_progress` | Work is actively being performed |
-| `blocked` | Work cannot safely or correctly proceed due to an unresolved condition |
-| `in_review` | Work is undergoing integration, review, or verification |
-| `verified` | Applicable acceptance and verification requirements passed |
+| `in_progress` | The overall project or change is actively being executed |
+| `blocked` | Overall workflow progression cannot safely or correctly continue |
+| `in_review` | Overall outputs are undergoing integration, review, or verification |
+| `verified` | Applicable overall acceptance and verification requirements passed |
 | `released` | Required release or delivery event completed |
-| `deferred` | Work intentionally postponed with a recorded reason |
-| `cancelled` | Work discontinued with a recorded reason |
+| `deferred` | Overall work intentionally postponed with a recorded reason |
+| `cancelled` | Overall work discontinued with a recorded reason |
 
-### Status transition rules
+### Overall workflow status transition rules
 
 1. `proposed` may transition to `planned`, `deferred`, or `cancelled`.
 2. `planned` may transition to `in_progress`, `blocked`, `deferred`,
    or `cancelled`.
 3. `in_progress` may transition to `in_review`, `blocked`, `deferred`,
    or `cancelled`.
-4. `blocked` returns to the appropriate previous working status after
-   its blocking condition is resolved.
+4. `blocked` returns to the appropriate previous overall workflow
+   status after its blocking condition is resolved.
 5. `in_review` may transition to `verified`, `blocked`, `in_progress`,
    `deferred`, or `cancelled`.
 6. `verified` may transition to `released` when a release is required.
@@ -411,17 +418,17 @@ The canonical status vocabulary is:
 10. `cancelled` work must not silently return to active execution.
     Reauthorization must be recorded.
 
-A task returning from `blocked` must resume at the appropriate
-working state. A blocker being resolved does not automatically
-mean the task is verified.
+A workflow returning from `blocked` must resume at the appropriate
+overall workflow status. Resolving a blocker does not automatically
+mean the workflow is verified.
 
 If a verified or released change requires additional work, record
-the follow-up or explicitly reopen the work item with its reason
+the follow-up or explicitly reopen the workflow with its reason
 and traceability.
 
 ### Terminal disposition
 
-The normal successful path ends in:
+The normal successful overall workflow path ends in:
 
 - `verified` when no release is required.
 - `released` when a release is required.
@@ -429,7 +436,9 @@ The normal successful path ends in:
 `deferred` and `cancelled` represent non-successful or postponed
 dispositions and must retain their reasons.
 
-The repository does not require a separate `completed` status.
+The overall workflow does not require a separate `completed` status.
+Individual work items may use `completed` under the separate
+work-item state model.
 
 ## 6. Workflow Gates
 
@@ -477,36 +486,40 @@ does not automatically mean that a formal handoff is active.
 
 ## 8. Blocked Work
 
-A work item must be marked `blocked` when it cannot safely or correctly
-proceed because of an unresolved condition.
+Individual work-item blocker classification, severity, records,
+ownership, resolution, and state transitions are governed by:
 
-Typical causes include:
+`docs/team/blockers-replanning-and-state-transitions.md`
 
-- Missing required input.
-- Unresolved technical decision.
-- Failed required acceptance check.
-- Unavailable approval authority.
-- Security or operational concern.
-- External dependency failure.
-- Conflicting requirements.
-- Missing access or environment prerequisite.
+An individual work item must be marked `blocked` when it cannot
+safely or correctly proceed because of an unresolved condition.
 
-A blocker must be visible in delivery coordination records.
+An overall workflow must only be marked `blocked` when the blocking
+condition prevents overall workflow progression or a required
+workflow gate from being satisfied.
 
-At minimum, record:
+A blocked work item does not automatically make the entire project
+or change blocked. Independent work may continue when its
+prerequisites, boundaries, and safety conditions permit it.
 
-- The blocking condition.
-- The affected work item.
-- The responsible party or decision authority, when known.
-- The next required action.
-- The dependency or decision needed to resume.
+Overall workflow blocker handling must preserve the following:
 
-Escalation follows:
+- The affected work and dependencies are identified.
+- The blocking condition and delivery impact are recorded.
+- The accountable owners remain identifiable.
+- Appropriate specialist or stakeholder authority is engaged.
+- The workflow resumes only when its applicable conditions are met.
 
-`docs/team/handoff-escalation-rules.md`
+A blocker being resolved does not automatically mean that an
+individual work item is ready, completed, or verified.
 
-A blocked item must not be marked verified or released merely
-because it has stopped progressing.
+A blocked overall workflow must not be marked verified or released
+merely because it has stopped progressing.
+
+Detailed blocker and escalation procedures are documented in:
+
+- `docs/team/blockers-replanning-and-state-transitions.md`
+- `docs/team/handoff-escalation-rules.md`
 
 ## 9. Workflow Coordination
 
@@ -531,8 +544,12 @@ The Delivery Lead does not:
 - Authorize changes outside delegated authority.
 - Treat coordination status as proof of technical completion.
 
-Detailed role activation and orchestration rules are defined
-in subsequent workflow governance documentation.
+Detailed coordination and execution rules are defined in:
+
+- `docs/team/role-activation-rules.md`
+- `docs/team/dependency-execution-rules.md`
+- `docs/team/orchestration-responsibilities.md`
+- `docs/team/blockers-replanning-and-state-transitions.md`
 
 ## 10. Relationship to Existing Governance
 
@@ -550,6 +567,10 @@ governance documents.
 | Handoff acceptance | `docs/team/handoff-acceptance-rules.md` |
 | Handoff escalation | `docs/team/handoff-escalation-rules.md` |
 | Workflow lifecycle | `docs/team/workflow-lifecycle.md` |
+| Role activation | `docs/team/role-activation-rules.md` |
+| Dependency-aware execution | `docs/team/dependency-execution-rules.md` |
+| Orchestration and coordination | `docs/team/orchestration-responsibilities.md` |
+| Blockers, replanning, and work-item states | `docs/team/blockers-replanning-and-state-transitions.md` |
 
 No workflow stage creates a new artifact owner or changes an existing
 role's decision authority.

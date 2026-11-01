@@ -86,12 +86,25 @@ Coordination does not transfer artifact ownership, override specialist authority
 ## Change packet
 Each task has: ID, objective, acceptance criteria, owner, reviewers, affected components, interfaces, test plan, documentation targets, risk, status.
 
-## Status vocabulary
-`proposed → planned → in_progress → blocked → in_review → verified → released`
-Use `deferred` or `cancelled` with a reason. Never mark `verified` based on assumptions.
+## Workflow and work-item states
+
+Overall workflow statuses are defined in:
+
+`docs/team/workflow-lifecycle.md`
+
+Individual work-item states and their allowed transitions are defined in:
+
+`docs/team/blockers-replanning-and-state-transitions.md`
+
+Formal handoff decisions use a separate vocabulary defined in:
+
+`docs/team/handoff-acceptance-rules.md`
+
+Do not treat workflow status, work-item state, and handoff decision
+as interchangeable.
 
 ## Handoff format
-- **Outcome / status**
+- **Outcome / handoff decision**
 - **Changed surfaces**
 - **Contracts and decisions**
 - **Verification**

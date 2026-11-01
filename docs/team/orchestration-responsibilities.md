@@ -414,6 +414,7 @@ Use this document together with:
 - `docs/team/handoff-escalation-rules.md` — escalation and conflict resolution.
 - `docs/team/workflow-lifecycle.md` — workflow stages and progression gates.
 - `docs/team/dependency-execution-rules.md` — dependency-aware execution and parallel work.
+- `docs/team/blockers-replanning-and-state-transitions.md` — blocker management, replanning, and workflow state transitions.
 
 ## 11. Governing rule
 
