@@ -1,0 +1,28 @@
+version: 1
+
+roles:
+  - product-analyst
+  - solution-architect
+  - api-manager
+  - backend-developer
+  - frontend-developer
+  - ux-ui-designer
+  - database-manager
+  - integration-engineer
+  - data-engineer
+  - qa-manager
+  - penetration-tester
+  - devops-sre
+  - performance-engineer
+  - accessibility-specialist
+  - technical-writer-knowledge-engineer
+  - release-manager
+  - delivery-lead
+
+# Add entries only after reviewing actual role responsibilities and artifacts.
+# Do not infer ownership solely from free-form "Own" sections.
+artifacts: []
+
+# Each handoff transfers an artifact or defined output, not ownership itself.
+# Add directional handoffs only after producer/consumer requirements are verified.
+handoffs: []

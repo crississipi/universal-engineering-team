@@ -86,6 +86,17 @@ The HTML report is a human-readable, navigable system handbook, not a dump of ev
 - Do not create docs that merely repeat the same information in multiple formats. Each format has a purpose: source docs explain, Obsidian connects concepts, Graphify models relationships, HTML report presents the whole system.
 - Batch related file reads and checks. Stop once acceptance criteria and verification are satisfied.
 
+<!-- BEGIN GENERATED CROSS-CUTTING REQUIREMENTS -->
+## Cross-cutting requirements
+
+<!-- REQ-CROSSCUT-VERIFY-001 -->
+- **Evidence-based verification:** Every meaningful change must have relevant verification evidence. Report the exact commands or checks run, their actual results, and any checks that were not run. Never describe an unexecuted check as passed.
+
+<!-- REQ-CROSSCUT-DOCS-001 -->
+- **Documentation consistency:** Every meaningful change must account for applicable technical documentation, diagrams, Obsidian notes, Graphify relationships, and the central HTML report. Update only affected content, preserve canonical sources, and identify items that are not applicable.
+
+<!-- END GENERATED CROSS-CUTTING REQUIREMENTS -->
+
 ## Definition of done
 - Acceptance criteria met and demonstrated.
 - Relevant tests/checks run; failures and unrun checks disclosed.

@@ -17,7 +17,12 @@
 | Performance Engineer | profiling, capacity, latency, bottleneck analysis | Frontend, Backend, Data, SRE | premature optimization |
 | Accessibility Specialist | accessibility evaluation and remediation guidance | Product, UX, Frontend, QA | visual product direction |
 | Technical Writer / Knowledge Engineer | docs, Obsidian, Graphify, central report | every role; task lead | undocumented implementation decisions |
+| Delivery Lead | work breakdown, sequencing, role activation, ownership coordination, handoffs, blockers, integration, and closure | assigned specialists; Solution Architect for architecture; QA for independent verification; Technical Writer for documentation; Release Manager for releases | specialist implementation decisions; architecture authority; independent QA approval; release go/no-go authority |
 | Release Manager | release readiness, change coordination, rollback | QA, SRE, Security, Delivery | approving unverified quality |
 
 ## Assignment rule
-Assign one accountable owner for each deliverable. Other roles provide bounded reviews. The task lead owns integration and closure.
+Assign one accountable owner for each deliverable. Other roles provide bounded reviews. The task lead owns integration and closure. The Delivery Lead coordinates cross-functional delivery but does not replace
+specialist accountability. Artifact ownership remains with the declared owner;
+handoffs transfer outputs and acceptance responsibilities, not permanent
+ownership. For a small task owned by one specialist, a separate Delivery Lead
+does not need to be activated.

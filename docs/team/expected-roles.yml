@@ -1,0 +1,20 @@
+version: 1
+
+roles:
+  - product-analyst
+  - solution-architect
+  - api-manager
+  - backend-developer
+  - frontend-developer
+  - ux-ui-designer
+  - database-manager
+  - integration-engineer
+  - data-engineer
+  - qa-manager
+  - penetration-tester
+  - devops-sre
+  - performance-engineer
+  - accessibility-specialist
+  - technical-writer-knowledge-engineer
+  - release-manager
+  - delivery-lead

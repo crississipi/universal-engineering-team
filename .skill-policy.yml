@@ -1,0 +1,13 @@
+version: 1
+
+skill:
+  expected_frontmatter_fields:
+    - name
+    - description
+  description_max_words: 18
+  require_name_to_match_directory: true
+  require_unique_names: true
+
+inventory:
+  expected_role_manifest: docs/team/expected-roles.yml
+  expected_skill_count: 17

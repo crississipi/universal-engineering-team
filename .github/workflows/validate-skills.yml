@@ -1,7 +1,9 @@
-name: Validate Agent Skills
+name: Validate Skills
 
 on:
   push:
+    branches:
+      - main
   pull_request:
   workflow_dispatch:
 
@@ -10,15 +12,38 @@ permissions:
 
 jobs:
   validate:
+    name: Validate Engineering Skills
     runs-on: ubuntu-latest
+
     steps:
-      - name: Check out repository
+      - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.x"
-      - name: Validate skill metadata and links
+          python-version: "3.12"
+
+      - name: Install validation dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-dev.txt
+
+      - name: Validate skills and role inventory
         run: python scripts/validate-skills.py
-      - name: Report skill sizes
+
+      - name: Validate artifact ownership
+        run: python scripts/validate-artifacts.py
+
+      - name: Validate handoffs
+        run: python scripts/validate-handoffs.py
+
+      - name: Validate scenarios and review records
+        run: python scripts/validate-scenarios.py
+
+      - name: Check generated AGENTS section
+        run: python scripts/build-agents-section.py --check
+
+      - name: Generate skill token report
         run: python scripts/measure-skill-tokens.py
+        continue-on-error: true

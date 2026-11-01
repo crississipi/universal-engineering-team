@@ -61,11 +61,12 @@ This example is illustrative; it does not assert that `.copilot\skills` is the c
 
 ## Validation
 
-Run from the repository root:
+## Validation
+
+Install development dependencies from the repository root:
 
 ```powershell
-python scripts/validate-skills.py
-python scripts/measure-skill-tokens.py
+python -m pip install -r requirements-dev.txt
 ```
 
 PowerShell wrapper:
