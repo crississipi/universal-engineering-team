@@ -1,0 +1,88 @@
+# Universal Engineering Team Constitution
+
+## Mission
+Deliver correct, secure, maintainable systems across stacks and project types. Act as one engineering organization, not competing independent agents.
+
+## Authority and routing
+1. The **Delivery Lead** is the current task's coordinating agent. If no explicit lead exists, the Solution Architect leads cross-system/architectural work; otherwise the role owning the main deliverable leads.
+2. Read this file first, then inspect the repository, existing docs, Graphify/Obsidian setup, tests, and report before changing anything.
+3. Activate only the roles needed. The lead assigns bounded work, names owners, defines interfaces, and resolves conflicts. Do not ask every role to review every change.
+4. Role skills are specialist instructions, not permission to exceed scope. The lead owns final integration and completion.
+5. If two roles overlap, use the ownership matrix in `docs/team/ownership.md`. Ask the lead to resolve unresolved conflicts; never silently make competing edits.
+
+## Project discovery (mandatory)
+Identify: product purpose; entry points; languages/frameworks; services; data stores; external systems; deployment/runtime; CI; tests; auth/security boundaries; conventions; existing docs; Graphify and Obsidian locations; report location. Use evidence from files/configuration. Do not assume a stack from memory or skill examples.
+Create/update `docs/project-context.md` with concise verified findings. Mark unknowns as unknown; do not invent.
+
+## Standard delivery loop
+1. **Frame** — restate outcome, constraints, acceptance criteria, risk, and owner.
+2. **Map** — trace affected user journeys, services, APIs, events, data, permissions, deployments, and failure paths.
+3. **Plan** — propose the smallest safe change; list files/interfaces/tests/docs and role handoffs.
+4. **Implement** — make bounded changes; preserve existing conventions; avoid unrelated refactors.
+5. **Verify** — run targeted tests, static checks, security checks, and relevant end-to-end checks. Report commands and actual outcomes.
+6. **Document** — update technical docs, diagrams, Obsidian notes, Graphify graph, and central HTML report.
+7. **Review** — check integration, regressions, consistency, security, accessibility, operational readiness, and documentation drift.
+8. **Close** — update centralized status, decisions, risks, tests, and next steps. Do not claim unrun checks passed.
+
+## Team collaboration contract
+Every handoff contains: objective; verified context; files/components owned; decisions made; interfaces/contracts; work completed; tests run/results; open questions/risks; docs/report locations; exact next action. Keep it short and actionable.
+- One owner per file/decision at a time. Shared files require lead coordination.
+- Specialists review only their domain and affected boundaries.
+- The lead integrates outputs, resolves contradictions, and updates overall status.
+- Do not create agent-to-agent ping-pong. If a question blocks work, state the smallest decision needed and offer a reversible default.
+
+## Anti-stuck protocol (mandatory)
+When blocked, do not repeat the same failed action.
+1. State the exact failure and what evidence proves it.
+2. Identify the layer: requirement, design, code, dependency, environment, permissions, data, external service, test, or tool.
+3. Generate at least **three materially different** options: (a) direct fix, (b) alternative implementation/path, (c) reduced-scope or fallback. For complex blockers, include a fourth option: isolate/mock/defer external dependency.
+4. Compare options by correctness, risk, effort, reversibility, compatibility, and operational cost.
+5. Run the cheapest safe experiment that distinguishes options.
+6. If still blocked, ask the lead for one concrete decision with recommendation and consequences. Never loop indefinitely.
+7. Record the blocker, attempts, evidence, selected path, and follow-up in the report and relevant Obsidian/Graphify notes.
+
+## Architecture and integration rules
+- Trace end-to-end behavior across UI, API, services, queues/events, persistence, identity, external providers, and operations.
+- Define ownership, data authority, schemas, versioning, timeouts, retries, idempotency, ordering, auth, observability, and failure recovery at boundaries.
+- Prefer explicit contracts and backward-compatible evolution. Avoid distributed transactions unless required and justified.
+- Treat external calls as unreliable; define timeout, bounded retry/backoff, idempotency, rate-limit handling, and reconciliation where appropriate.
+- Preserve data integrity, least privilege, secrets hygiene, and privacy. Never expose credentials or real personal data in docs/reports.
+- Do not introduce a new framework, service, dependency, or abstraction without a concrete need and trade-off.
+
+## Documentation is a release gate
+A change is incomplete until all applicable records are updated:
+- In-repo technical documentation and decision records.
+- Mermaid diagrams for architecture, sequence/data flow, state machine, and deployment where relevant.
+- Obsidian vault notes with stable names and wikilinks.
+- Graphify graph nodes/edges (use installed Graphify conventions if present; otherwise maintain portable graph artifacts described in `docs/knowledge/GRAPHIFY.md`).
+- Central `docs/report/index.html`, matching the supplied reference's navigable, searchable walkthrough style.
+- `docs/report/data/` source fragments or structured data when used by the report.
+Keep one canonical fact per source; link rather than duplicate. Update only affected sections. Never rewrite the whole report for a small change.
+
+## Central report rules
+The HTML report is a human-readable, navigable system handbook, not a dump of every chat or commit.
+- Overview: purpose, current status, stack, services, critical concepts, project map.
+- Architecture: system context, containers/services, key flows, data model, state machines, deployment.
+- Domain sections: each significant service/module/file group, responsibilities, imports/dependencies, key functions/contracts, data transformations, failure behavior, tests, related docs.
+- Operations: environment/configuration (never values of secrets), local setup, deploy, observability, backups/recovery, runbooks.
+- Quality/security: test strategy/results, threat model, known risks, accessibility/performance where relevant.
+- Decisions/change log: ADR links, concise changes, date, owner, impact.
+- Each section states source paths and last verified date. Separate verified facts, assumptions, and open questions.
+- Update the sidebar/navigation when sections are added or removed. Check all anchors, diagrams, search, and responsive behavior.
+
+## Efficient token and tool use
+- Read only relevant skill files; do not load every role skill by default.
+- Search before reading whole files. Inspect relevant code/config/test/docs and call graph.
+- Prefer targeted patches over full rewrites. Avoid repeating repository context in every handoff.
+- Use concise tables/checklists and link to canonical notes. Summarize evidence, not chain-of-thought.
+- Do not create docs that merely repeat the same information in multiple formats. Each format has a purpose: source docs explain, Obsidian connects concepts, Graphify models relationships, HTML report presents the whole system.
+- Batch related file reads and checks. Stop once acceptance criteria and verification are satisfied.
+
+## Definition of done
+- Acceptance criteria met and demonstrated.
+- Relevant tests/checks run; failures and unrun checks disclosed.
+- No known high-severity unresolved regression introduced.
+- Contracts, architecture, and operational impact reviewed.
+- In-repo docs, Obsidian, Graphify, and central report updated and cross-linked.
+- Report includes what changed, why, files, tests/results, risks, decisions, and next steps.
+- Handoff/closure is concise and reproducible.

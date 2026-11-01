@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Project Engineering Report</title>
+<style>
+:root{--bg:#f8fafc;--panel:#fff;--border:#e2e8f0;--accent:#059669;--accent2:#4f46e5;--text:#0f172a;--muted:#64748b;--code:#1e1e1e}
+*{box-sizing:border-box}body{margin:0;font:14px system-ui,sans-serif;background:var(--bg);color:var(--text);display:flex;height:100vh;overflow:hidden}
+aside{width:270px;min-width:270px;background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column}
+#search{padding:12px;border:0;border-bottom:1px solid var(--border);font-size:13px}nav{overflow:auto;padding:8px;flex:1}
+.group{margin:12px 0}.group h4{margin:8px;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.1em}
+nav a{display:block;padding:7px 10px;color:var(--muted);text-decoration:none;border-radius:5px;font-size:12px}nav a:hover{background:#ecfdf5;color:var(--accent)}
+main{overflow:auto;flex:1}article{max-width:1100px;margin:auto;padding:36px}
+.hero{text-align:center;padding:40px 0;border-bottom:1px solid var(--border);margin-bottom:38px}
+h1{font-size:2.2rem;background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--accent);margin:0}
+.hero p,p,li{color:var(--muted);line-height:1.7}.chips span{display:inline-block;border:1px solid var(--border);border-radius:20px;padding:4px 9px;margin:3px;color:var(--muted);font-size:11px}
+section{margin:0 0 54px;scroll-margin-top:20px}.head{border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:18px}
+.card{background:white;border:1px solid var(--border);border-radius:10px;padding:16px;margin:12px 0}
+pre{background:var(--code);color:#d4d4d4;padding:16px;border-radius:8px;overflow:auto;font:12px/1.6 ui-monospace,monospace}
+code{background:#e2e8f0;padding:2px 4px;border-radius:4px}
+table{border-collapse:collapse;width:100%;font-size:12px}td,th{text-align:left;padding:9px;border-bottom:1px solid var(--border);vertical-align:top}th{background:#f1f5f9}
+small,.muted{color:var(--muted)}.callout{padding:12px 15px;border-left:4px solid var(--accent2);background:#eef2ff;border-radius:5px}
+@media(max-width:760px){body{display:block;height:auto;overflow:auto}aside{width:100%;height:auto;max-height:260px}main{overflow:visible}article{padding:20px}}
+</style>
+</head>
+<body>
+<aside><input id="search" placeholder="Search report sections..." oninput="filterNav(this.value)">
+<nav id="nav">
+<div class="group"><h4>Overview</h4><a href="#overview">System Overview</a><a href="#architecture">Architecture</a></div>
+<div class="group"><h4>System</h4><a href="#product">Product & Domain</a><a href="#services">Services & Modules</a><a href="#apis">APIs & Integrations</a><a href="#data">Data Model</a></div>
+<div class="group"><h4>Engineering</h4><a href="#security">Security</a><a href="#quality">Quality & Tests</a><a href="#operations">Operations</a><a href="#decisions">Decisions & Changes</a></div>
+</nav></aside>
+<main><article>
+<header class="hero" id="overview"><h1>Project Engineering Report</h1><p>Living technical walkthrough of the system, its architecture, implementation, verification, and operational behavior.</p><div class="chips"><span>Stack: pending discovery</span><span>Status: discovery required</span><span>Report schema v1</span></div></header>
+<section id="architecture"><div class="head"><h2>Architecture & System Flows</h2><small>Replace placeholders with verified diagrams and source links.</small></div>
+<div class="card"><h3>System context</h3><pre class="mermaid">flowchart TD
+  User[User / Client] --> App[Application]
+  App --> Data[(Data Store)]
+  App --> External[External Systems]
+  App --> Ops[Runtime / Observability]</pre></div>
+<div class="card"><h3>Change workflow</h3><pre class="mermaid">flowchart TD
+  Req[Requirement] --> Design[Architecture and contracts]
+  Design --> Build[Implementation]
+  Build --> Verify[QA / Security / specialist checks]
+  Verify --> Docs[Docs + Obsidian + Graphify + Report]
+  Docs --> Release[Release and operations]</pre></div></section>
+<section id="product"><div class="head"><h2>Product & Domain</h2></div><div class="card"><p><b>Purpose:</b> Pending repository discovery.</p><p><b>Users / workflows:</b> To be verified.</p><p><b>Acceptance criteria:</b> Link approved requirements.</p></div></section>
+<section id="services"><div class="head"><h2>Services & Modules</h2></div><div class="card"><p>For each module, document purpose, source path, inputs/outputs, dependencies, key functions, failure behavior, tests, and related Obsidian/Graphify/ADR links.</p></div></section>
+<section id="apis"><div class="head"><h2>APIs & Integrations</h2></div><div class="card"><p>Document producers, consumers, contract versions, auth, mapping, rate limits, retries, idempotency, errors, and reconciliation.</p></div></section>
+<section id="data"><div class="head"><h2>Data Model</h2></div><div class="card"><p>Document ERD, data ownership, constraints, migrations, retention, sensitive fields, backup and restore.</p></div></section>
+<section id="security"><div class="head"><h2>Security</h2></div><div class="card"><p>Document trust boundaries, threats, controls, findings, remediation and retest status. Never include secret values or real personal data.</p></div></section>
+<section id="quality"><div class="head"><h2>Quality & Tests</h2></div><div class="card"><p>Record test strategy, acceptance traceability, exact commands, actual results, environment limitations and known gaps.</p></div></section>
+<section id="operations"><div class="head"><h2>Operations</h2></div><div class="card"><p>Document setup, environment variable names, deployment, monitoring, alerts, runbooks, backups, recovery and rollback.</p></div></section>
+<section id="decisions"><div class="head"><h2>Decisions & Changes</h2></div><div class="card"><p>Append dated entries with owner, purpose, affected paths, contracts, tests, risks, documentation links and next steps. Link ADRs.</p></div></section>
+<footer><small>Generated starter template. Populate from repository evidence; record last-verified dates per section.</small></footer>
+</article></main>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<script>
+function filterNav(q){q=q.toLowerCase();document.querySelectorAll('#nav a').forEach(a=>a.style.display=a.textContent.toLowerCase().includes(q)?'block':'none')}
+if(window.mermaid)mermaid.initialize({startOnLoad:true,theme:'default'});
+</script>
+</body></html>

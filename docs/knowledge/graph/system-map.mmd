@@ -1,0 +1,14 @@
+flowchart TD
+  Product[Product requirements] --> Architecture[System architecture]
+  Architecture --> Contracts[API and event contracts]
+  Contracts --> Implementation[Frontend / Backend / Integrations]
+  Implementation --> Data[Data stores and pipelines]
+  Implementation --> Quality[QA and specialist verification]
+  Quality --> Release[Release and operations]
+  Implementation --> Docs[Technical documentation]
+  Architecture --> Docs
+  Docs --> Obsidian[Obsidian knowledge vault]
+  Docs --> Graph[Graphify relationship graph]
+  Docs --> Report[Central HTML report]
+  Obsidian <--> Graph
+  Graph --> Report
