@@ -1,7 +1,10 @@
-name: Validate Agent Skills
+
+name: Validate Skills
 
 on:
   push:
+    branches:
+      - main
   pull_request:
   workflow_dispatch:
 
@@ -10,15 +13,21 @@ permissions:
 
 jobs:
   validate:
+    name: Validate Engineering Skills
     runs-on: ubuntu-latest
+
     steps:
-      - name: Check out repository
+      - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.x"
-      - name: Validate skill metadata and links
+          python-version: "3.12"
+
+      - name: Validate skills
         run: python scripts/validate-skills.py
-      - name: Report skill sizes
+
+      - name: Generate skill token report
         run: python scripts/measure-skill-tokens.py
+        continue-on-error: true
