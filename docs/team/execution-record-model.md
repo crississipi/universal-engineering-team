@@ -320,6 +320,12 @@ A handoff execution must not modify or redefine its referenced contract.
 
 A submission does not constitute acceptance.
 
+The canonical handoff execution record structure, submission
+history, lifecycle transitions, decision references, and validation
+requirements are defined in:
+
+`docs/team/handoff-execution-records.md`
+
 ### 4.6 Decision Records
 
 **File:** `decisions.yml`
@@ -352,71 +358,85 @@ A decision must not be attributed to a role that lacks the required decision aut
 
 A coordination record does not automatically constitute an approval or specialist decision.
 
+The canonical decision record structure, decision lifecycle,
+authority references, outcome requirements, and validation
+requirements are defined in:
+
+`docs/team/decision-records.md`
+
 ### 4.7 Evidence Records
 
 **File:** `evidence.yml`
 
-**Purpose:** Maintain traceable references to materials supporting execution claims and decisions.
+**Purpose:** Preserve verifiable information supporting execution claims, acceptance checks, decisions, and completion.
 
-Evidence may include:
+Evidence records are responsible for:
 
-- Test execution results.
-- Code review results.
-- Security assessment reports.
-- Performance measurements.
-- Accessibility audit results.
-- Build and deployment results.
-- Database migration verification.
-- Operational readiness checks.
-- Approval records.
-- Other relevant technical documentation.
+- Identifying the evidence item and its source.
+- Recording evidence classification and provenance.
+- Recording verification status and accountability.
+- Linking evidence to related execution records.
+- Preserving evidence history and supersession.
+- Maintaining traceability to the claims supported by the evidence.
 
-Its responsibilities include:
+Evidence records must follow:
 
-- Identifying the evidence.
-- Describing what it demonstrates.
-- Identifying its source or location.
-- Referencing the relevant work item, decision, handoff, or closure record.
-- Recording relevant environment and version information.
-- Identifying limitations or verification scope when applicable.
+`docs/team/evidence-records.md`
 
-Evidence records reference the actual supporting material.
+Evidence verification does not independently authorize work completion, handoff acceptance, dependency satisfaction, release, or execution closure.
 
-They must not claim that a test, review, measurement, or assessment occurred unless it was actually performed.
+The applicable canonical record and its authorized decision-maker remain responsible for those determinations.
 
-### 4.8 Blocker and Replan Records
+### 4.8 Blocker Records
 
-**Files:**
-- `blockers.yml`
-- `replans.yml`
+**File:** `blockers.yml`
 
-**Purpose:** Record execution interruptions and approved changes to the execution plan.
+**Purpose:** Record execution impediments and preserve their resolution history.
 
 Blocker records are responsible for:
 
-- Identifying the blocker.
-- Describing its cause and impact.
-- Identifying affected work items and dependencies.
-- Recording severity and current condition.
-- Identifying the accountable resolution owner.
-- Referencing escalation and resolution evidence.
+- Identifying the impediment and its classification.
+- Recording severity and lifecycle status.
+- Identifying affected work items and related dependencies.
+- Recording reporting and resolution responsibilities.
+- Linking supporting evidence and authorized decisions.
+- Preserving investigation, escalation, deferral, and resolution history.
 
-Replan records are responsible for:
+Blocker records must follow:
 
-- Identifying why replanning was necessary.
-- Describing the affected execution plan.
-- Recording approved changes.
-- Identifying affected work items and dependencies.
-- Preserving previous decisions and completed work.
-- Recording the authority responsible for the decision.
+`docs/team/blocker-records.md`
 
-Blocker and replan management must follow:
+A blocker does not independently change work-item status, dependency status, role activation, or workflow stage.
 
-`docs/team/blockers-replanning-and-state-transitions.md`
+Resolution must be evaluated independently by the responsible canonical records.`
 
-Replanning must not silently overwrite previous execution decisions or erase the history of completed work.
+### 4.9 Re-planning Records
 
-### 4.9 Closure Record
+**File:** `replans.yml`
+
+**Purpose:** Preserve authorized changes to an execution plan and their implementation history.
+
+Re-planning records are responsible for:
+
+- Identifying why re-planning is necessary.
+- Recording the proposed and authorized changes.
+- Identifying affected work items and related execution records.
+- Linking the canonical decision authorizing the changes.
+- Recording expected and actual impact.
+- Tracking implementation of approved changes.
+- Preserving proposal, authorization, and implementation history.
+
+Re-planning records must follow:
+
+`docs/team/replanning-records.md`
+
+Re-planning records do not replace the canonical records being changed.
+
+Approved changes must be applied to the relevant work-item, dependency, role-activation, handoff, or other applicable records.
+
+A re-planning proposal must not be treated as authorization to implement its proposed changes.
+
+### 4.10 Closure Record
 
 **File:** `closure.yml`
 

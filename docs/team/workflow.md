@@ -158,6 +158,29 @@ The detailed rules are documented in:
 
 A submitted file or message alone does not constitute acceptance.
 
+## Handoff execution records
+
+Actual producer-to-consumer transfer instances must be recorded in
+the canonical `handoff-executions.yml` collection within the
+applicable execution directory.
+
+The record structure, submission history, resubmission rules,
+acceptance references, lifecycle transitions, and validation
+requirements are defined in:
+
+`docs/team/handoff-execution-records.md`
+
+Each handoff execution must reference its applicable reusable
+handoff contract and preserve its submission history.
+
+Handoff decisions must reference the canonical decision records in
+`decisions.yml`. Decision outcomes and rejection codes must not be
+duplicated as independent decision records or authoritative fields
+in the handoff execution record.
+
+A handoff execution does not independently change artifact
+ownership or dependency status.
+
 ## Escalation and conflict resolution
 
 Resolve disagreements at the lowest appropriate level.
@@ -211,6 +234,69 @@ The identity hierarchy and traceability requirements for projects,
 changes, and execution instances are defined in:
 
 `docs/team/execution-identity-and-traceability.md`
+
+## Decision records
+
+Material engineering decisions must be recorded in the canonical
+`decisions.yml` collection within the applicable execution directory.
+
+The decision record structure, decision classifications, lifecycle,
+authority requirements, outcome rules, and history requirements
+are defined in:
+
+`docs/team/decision-records.md`
+
+Decisions must identify their authorized decision-maker and
+preserve their rationale, supporting evidence, and affected records.
+
+Handoff acceptance outcomes must also be recorded through canonical
+decision records using the `handoff_acceptance` decision type.
+
+A proposed decision does not authorize implementation. Decisions
+requiring approval must reach the appropriate authorized status
+before dependent work proceeds.
+
+## Evidence traceability
+
+Evidence supporting execution claims must be recorded in the canonical `evidence.yml` collection within the applicable execution directory.
+
+The evidence record structure, source requirements, verification status, supersession rules, and history requirements are defined in:
+
+`docs/team/evidence-records.md`
+
+Evidence records provide supporting information for work-item completion, decisions, dependency satisfaction, handoff acceptance, and execution closure.
+
+Evidence verification does not independently authorize acceptance or completion. The applicable canonical record and its authorized decision-maker remain responsible for those determinations.
+
+## Blocker management
+
+Execution impediments must be recorded in the canonical `blockers.yml` collection within the applicable execution directory.
+
+The blocker record structure, classifications, severity, lifecycle transitions, responsibility, resolution, and history requirements are defined in:
+
+`docs/team/blocker-records.md`
+
+A blocker must identify its affected work items and relevant execution records.
+
+Blocker status does not automatically change work-item status, dependency status, role activation, or workflow stage. Each affected canonical record must be reassessed independently.
+
+Escalation must follow the existing responsibility and escalation rules.
+
+## Re-planning and execution plan changes
+
+Material changes to an execution plan must be recorded in the canonical `replans.yml` collection within the applicable execution directory.
+
+The re-planning record structure, trigger classifications, approval requirements, affected-record references, implementation rules, and history requirements are defined in:
+
+`docs/team/replanning-records.md`
+
+Re-planning proposals must not be treated as authorization to implement proposed changes.
+
+Required authorization must be recorded through the canonical decision records in `decisions.yml`.
+
+Approved changes must be applied to the relevant canonical execution records. The re-planning record preserves the consolidated traceability of the change but does not replace the records being changed.
+
+The Delivery Lead may coordinate cross-role replanning but is not a universal approval authority.
 
 ## Role activation and work-item records
 
