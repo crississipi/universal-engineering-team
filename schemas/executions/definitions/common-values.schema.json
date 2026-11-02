@@ -8,9 +8,7 @@
       "pattern": "\\S"
     },
     "timestamp": {
-      "type": "string",
-      "format": "date-time",
-      "pattern": "Z$"
+      "$ref": "./timestamps.schema.json#/$defs/utcTimestamp"
     },
     "roleId": {
       "type": "string",
