@@ -229,7 +229,7 @@ def validate_root_index(execution, indexes, errors):
     closure_id = refs.get("closure_id")
     if closure_id is not None:
         resolve(closure_id, "closure", indexes, "execution.record_refs.closure_id", errors)
-        if indexes.get("closure") and closure_id not in indexes["closure"]:
+        if indexes.get("closure") and is_non_empty(closure_id) and closure_id not in indexes["closure"]:
             add(errors, "REF060", f"execution.record_refs.closure_id does not match the canonical closure record")
 
 
@@ -240,7 +240,7 @@ def validate_activation_work_items(indexes, errors):
     active_roles = {}
     for activation_id, activation in activations.items():
         role = activation.get("role_id")
-        if activation.get("activation_status") == "active" and role:
+        if activation.get("activation_status") == "active" and isinstance(role, str) and role:
             if role in active_roles:
                 add(errors, "REF021", f"Role {role} has multiple active activation records: {active_roles[role]} and {activation_id}")
             else:
@@ -345,10 +345,10 @@ def validate_handoffs(indexes, artifacts, contracts, errors, warnings):
             add(errors, "REF032", f"Handoff {handoff_id} consumer work item is not assigned to to_role")
 
         artifact_id = handoff.get("artifact_id")
-        if artifact_id and artifact_id not in artifacts:
+        if artifact_id is not None and (not is_non_empty(artifact_id) or artifact_id not in artifacts):
             add(errors, "REF033", f"Handoff {handoff_id} references unknown producer artifact {artifact_id}")
         consumer_artifact = handoff.get("consumer_artifact_id")
-        if consumer_artifact and consumer_artifact not in artifacts:
+        if consumer_artifact is not None and (not is_non_empty(consumer_artifact) or consumer_artifact not in artifacts):
             add(errors, "REF034", f"Handoff {handoff_id} references unknown consumer artifact {consumer_artifact}")
 
         submissions = as_list(handoff.get("submissions"), f"handoff {handoff_id}.submissions", errors, required=True)
@@ -394,13 +394,13 @@ def validate_handoffs(indexes, artifacts, contracts, errors, warnings):
             decision = resolve(current_decision_id, "decisions", indexes, f"handoff {handoff_id}.current_decision_id", errors)
             if decision and decision.get("decision_type") != "handoff_acceptance":
                 add(errors, "REF040", f"Handoff {handoff_id}.current_decision_id must reference a handoff_acceptance decision")
-            if submissions and current_submission_id in submission_index:
+            if submissions and is_non_empty(current_submission_id) and current_submission_id in submission_index:
                 submission_decision = submission_index[current_submission_id].get("decision_id")
                 if submission_decision and submission_decision != current_decision_id:
                     add(errors, "REF041", f"Handoff {handoff_id}.current_decision_id does not match the current submission decision")
             if decision:
                 expected_outcome = handoff.get("current_status")
-                if expected_outcome in {"accepted", "partially_accepted", "rejected", "blocked"} and decision.get("decision_outcome") != expected_outcome:
+                if isinstance(expected_outcome, str) and expected_outcome in {"accepted", "partially_accepted", "rejected", "blocked"} and decision.get("decision_outcome") != expected_outcome:
                     add(errors, "REF057", f"Handoff {handoff_id}.current_status does not match current decision outcome")
 
         for dependency_id in as_list(handoff.get("dependency_ids"), f"handoff {handoff_id}.dependency_ids", errors):
@@ -516,11 +516,11 @@ def validate_replans(indexes, artifacts, errors):
     for replan_id, replan in indexes["replans"].items():
         status = replan.get("status")
         decision_id = replan.get("decision_id")
-        if status in {"approved", "in_progress", "completed"} and not decision_id:
+        if isinstance(status, str) and status in {"approved", "in_progress", "completed"} and not decision_id:
             add(errors, "REF049", f"Replan {replan_id} in status {status!r} must reference its authorizing decision")
         if decision_id:
             decision = resolve(decision_id, "decisions", indexes, f"replan {replan_id}.decision_id", errors)
-            if decision and status in {"approved", "in_progress", "completed"} and decision.get("decision_status") != "approved":
+            if decision and isinstance(status, str) and status in {"approved", "in_progress", "completed"} and decision.get("decision_status") != "approved":
                 add(errors, "REF049", f"Replan {replan_id} in status {status!r} must reference an approved decision")
         for index, artifact_id in enumerate(as_list(replan.get("affected_artifact_ids"), f"replan {replan_id}.affected_artifact_ids", errors)):
             if not is_non_empty(artifact_id) or artifact_id not in artifacts:
