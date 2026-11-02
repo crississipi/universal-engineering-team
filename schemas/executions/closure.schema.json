@@ -422,11 +422,18 @@
                       "exception_proposed",
                       "exception_approved",
                       "exception_rejected",
+                      "exception_withdrawn",
+                      "closure_review_started",
+                      "closure_review_completed",
+                      "closure_blocked",
+                      "closure_unblocked",
+                      "closure_decision_recorded",
                       "closure_status_changed",
-                      "closure_approved",
                       "closure_cancelled",
-                      "closure_reviewed",
-                      "closure_reopened_for_preparation"
+                      "closure_approved",
+                      "closure_summary_updated",
+                      "follow_up_reference_added",
+                      "record_corrected"
                     ]
                   },
                   "previous_value": {
