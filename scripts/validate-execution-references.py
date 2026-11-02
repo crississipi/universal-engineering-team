@@ -242,11 +242,16 @@ def validate_activation_work_items(indexes, errors):
         if activation:
             if activation.get("role_id") != work_item.get("assigned_role"):
                 add(errors, "REF023", f"Work item {work_item_id}.assigned_role does not match activation {activation_id}.role_id")
-            if activation.get("activation_status") not in {"planned", "active"}:
-                add(errors, "REF024", f"Work item {work_item_id} is assigned to activation {activation_id} with incompatible status {activation.get('activation_status')!r}")
-            activation_items = activation.get("work_item_ids", [])
-            if work_item_id not in activation_items:
-                add(errors, "REF025", f"Work item {work_item_id} is missing from activation {activation_id}.work_item_ids")
+            state = work_item.get("state")
+            activation_status = activation.get("activation_status")
+            if state in {"in_progress", "in_review", "changes_requested"} and activation_status != "active":
+                add(errors, "REF024", f"Work item {work_item_id} in state {state!r} requires active role activation {activation_id}")
+            if state in {"not_started", "ready"} and activation_status not in {"planned", "active"}:
+                add(errors, "REF024", f"Work item {work_item_id} in state {state!r} has incompatible activation status {activation_status!r}")
+            if state == "completed" and activation_status not in {"active", "completed"}:
+                add(errors, "REF024", f"Completed work item {work_item_id} has incompatible activation status {activation_status!r}")
+            if state == "cancelled" and activation_status not in {"planned", "active", "completed", "deactivated"}:
+                add(errors, "REF024", f"Cancelled work item {work_item_id} has incompatible activation status {activation_status!r}")
 
 
 def validate_dependency_graph(indexes, errors):
@@ -264,11 +269,10 @@ def validate_dependency_graph(indexes, errors):
             add(errors, "REF026", f"Dependency {dependency_id} cannot reference the same predecessor and successor")
         if predecessor and successor:
             adjacency[predecessor_id].append(successor_id)
-            for field, expected in (("dependency_ids", dependency_id),):
-                for work_item_id, item in ((predecessor_id, predecessor), (successor_id, successor)):
-                    refs = item.get(field, [])
-                    if expected not in refs:
-                        add(errors, "REF027", f"Dependency {dependency_id} is not indexed by work item {work_item_id}.{field}")
+            for work_item_id, item in ((predecessor_id, predecessor), (successor_id, successor)):
+                refs = item.get("dependency_ids", [])
+                if dependency_id not in refs:
+                    add(errors, "REF027", f"Dependency {dependency_id} is not listed as related by work item {work_item_id}.dependency_ids")
 
         for field, kind in (
             ("satisfaction_evidence_refs", "evidence"),
@@ -312,7 +316,9 @@ def validate_handoffs(indexes, artifacts, contracts, errors, warnings):
         if contract_id and contracts and contract is None:
             add(errors, "REF029", f"Handoff execution {handoff_id} references unknown handoff contract {contract_id}")
         if contract:
-            for field in ("from_role", "to_role", "artifact_id", "consumer_artifact_id", "relationship_type"):
+            if contract.get("status") != "active":
+                add(errors, "REF030", f"Handoff execution {handoff_id} references contract {contract_id} whose status is not active")
+            for field in ("from_role", "to_role", "artifact_id", "consumer_artifact_id"):
                 if field in contract and handoff.get(field) != contract.get(field):
                     add(errors, "REF030", f"Handoff execution {handoff_id}.{field} does not match reusable contract {contract_id}")
 
