@@ -1,0 +1,278 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://crississipi.github.io/universal-engineering-team/schemas/executions/work-items.schema.json",
+  "$ref": "#/$defs/document",
+  "$defs": {
+    "document": {
+      "type": "object",
+      "properties": {
+        "work_items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "work_item_id": {
+                "$ref": "./definitions/identifiers.schema.json#/$defs/wiId"
+              },
+              "execution_id": {
+                "$ref": "./definitions/identifiers.schema.json#/$defs/exeId"
+              },
+              "title": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+              },
+              "objective": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+              },
+              "assigned_role": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/roleId"
+              },
+              "activation_id": {
+                "$ref": "./definitions/identifiers.schema.json#/$defs/actId"
+              },
+              "state": {
+                "type": "string",
+                "enum": [
+                  "not_started",
+                  "ready",
+                  "in_progress",
+                  "blocked",
+                  "in_review",
+                  "changes_requested",
+                  "completed",
+                  "cancelled"
+                ]
+              },
+              "acceptance_criteria": {
+                "type": "array",
+                "items": {
+                  "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                },
+                "minItems": 1
+              },
+              "created_at": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
+              },
+              "updated_at": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
+              },
+              "history": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "changed_at": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
+                    },
+                    "changed_by_role": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/roleId"
+                    },
+                    "change_type": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                    },
+                    "reason": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                    },
+                    "previous_values": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/genericHistoryValues"
+                    },
+                    "new_values": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/genericHistoryValues"
+                    },
+                    "related_record_ids": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/stringArray"
+                    }
+                  },
+                  "required": [
+                    "changed_at",
+                    "changed_by_role",
+                    "change_type",
+                    "reason"
+                  ],
+                  "additionalProperties": false
+                },
+                "minItems": 1
+              },
+              "artifact_id": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+              },
+              "scope_boundaries": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/stringArray"
+              },
+              "contributor_roles": {
+                "type": "array",
+                "items": {
+                  "$ref": "./definitions/common-values.schema.json#/$defs/roleId"
+                },
+                "minItems": 0
+              },
+              "dependency_ids": {
+                "type": "array",
+                "items": {
+                  "$ref": "./definitions/identifiers.schema.json#/$defs/depId"
+                },
+                "minItems": 0
+              },
+              "input_refs": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "reference_type": {
+                      "type": "string",
+                      "enum": [
+                        "artifact",
+                        "work_item",
+                        "role_activation",
+                        "dependency",
+                        "handoff_execution",
+                        "decision",
+                        "evidence",
+                        "blocker",
+                        "replan",
+                        "external"
+                      ]
+                    },
+                    "reference_id": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                    },
+                    "description": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                    },
+                    "uri": {
+                      "type": "string",
+                      "format": "uri"
+                    }
+                  },
+                  "required": [
+                    "reference_type",
+                    "reference_id"
+                  ],
+                  "additionalProperties": false
+                },
+                "minItems": 0
+              },
+              "output_refs": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "reference_type": {
+                      "type": "string",
+                      "enum": [
+                        "artifact",
+                        "work_item",
+                        "role_activation",
+                        "dependency",
+                        "handoff_execution",
+                        "decision",
+                        "evidence",
+                        "blocker",
+                        "replan",
+                        "external"
+                      ]
+                    },
+                    "reference_id": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                    },
+                    "description": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                    },
+                    "uri": {
+                      "type": "string",
+                      "format": "uri"
+                    }
+                  },
+                  "required": [
+                    "reference_type",
+                    "reference_id"
+                  ],
+                  "additionalProperties": false
+                },
+                "minItems": 0
+              },
+              "evidence_refs": {
+                "type": "array",
+                "items": {
+                  "$ref": "./definitions/identifiers.schema.json#/$defs/evdId"
+                },
+                "minItems": 0
+              },
+              "related_decision_ids": {
+                "type": "array",
+                "items": {
+                  "$ref": "./definitions/identifiers.schema.json#/$defs/decId"
+                },
+                "minItems": 0
+              },
+              "related_blocker_ids": {
+                "type": "array",
+                "items": {
+                  "$ref": "./definitions/identifiers.schema.json#/$defs/blkId"
+                },
+                "minItems": 0
+              },
+              "related_handoff_execution_ids": {
+                "type": "array",
+                "items": {
+                  "$ref": "./definitions/identifiers.schema.json#/$defs/hexId"
+                },
+                "minItems": 0
+              },
+              "external_references": {
+                "type": "array",
+                "items": {
+                  "$ref": "./definitions/common-values.schema.json#/$defs/externalReference"
+                },
+                "minItems": 0
+              },
+              "planned_completion_at": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
+              },
+              "completed_at": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
+              }
+            },
+            "required": [
+              "work_item_id",
+              "execution_id",
+              "title",
+              "objective",
+              "assigned_role",
+              "activation_id",
+              "state",
+              "acceptance_criteria",
+              "created_at",
+              "updated_at",
+              "history"
+            ],
+            "additionalProperties": false,
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "state": {
+                      "const": "completed"
+                    }
+                  },
+                  "required": [
+                    "state"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "completed_at"
+                  ]
+                }
+              }
+            ]
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "work_items"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
