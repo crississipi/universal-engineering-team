@@ -179,3 +179,13 @@ All work-item state changes must follow the approved transition rules. Blockers 
 Replanning must preserve artifact ownership, specialist decision authority, dependency integrity, and previously recorded decisions. The Delivery Lead coordinates cross-role replanning but does not independently approve specialist decisions or waive required verification gates.
 
 Workflow stage progression, individual work-item states, and formal handoff decisions must remain separate and independently traceable.
+
+## Execution records and traceability
+
+The canonical execution record architecture is defined in:
+
+`docs/team/execution-record-model.md`
+
+Execution records document actual project and change activity. They
+must preserve artifact ownership, workflow status distinctions,
+formal handoff governance, and traceable verification evidence.

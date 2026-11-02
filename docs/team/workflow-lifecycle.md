@@ -40,8 +40,7 @@ This document governs workflow progression. It does not replace:
 10. Security, safety, privacy, data integrity, and production stability
     concerns must not be bypassed for schedule convenience.
 11. A task must not advance through a required gate based on assumptions.
-12. Workflow stages describe the progress of work; task statuses describe
-    its current execution state.
+12. Workflow stages describe the type of work being performed; overall workflow status describes the project or change condition; work-item states describe individual execution conditions.
 
 ## 2. Workflow Overview
 
