@@ -1,0 +1,286 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://crississipi.github.io/universal-engineering-team/schemas/executions/decisions.schema.json",
+  "$ref": "#/$defs/document",
+  "$defs": {
+    "document": {
+      "type": "object",
+      "properties": {
+        "decisions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "decision_id": {
+                "$ref": "./definitions/identifiers.schema.json#/$defs/decId"
+              },
+              "execution_id": {
+                "$ref": "./definitions/identifiers.schema.json#/$defs/exeId"
+              },
+              "decision_type": {
+                "type": "string",
+                "enum": [
+                  "product_scope",
+                  "architecture",
+                  "api_contract",
+                  "data_management",
+                  "implementation",
+                  "integration",
+                  "security",
+                  "quality",
+                  "operations",
+                  "performance",
+                  "accessibility",
+                  "handoff_acceptance",
+                  "release",
+                  "execution_closure",
+                  "delivery",
+                  "other"
+                ]
+              },
+              "title": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+              },
+              "context": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+              },
+              "decision_status": {
+                "type": "string",
+                "enum": [
+                  "proposed",
+                  "under_review",
+                  "approved",
+                  "rejected",
+                  "superseded",
+                  "withdrawn"
+                ]
+              },
+              "decision_outcome": {
+                "type": "string",
+                "enum": [
+                  "accepted",
+                  "partially_accepted",
+                  "rejected",
+                  "blocked"
+                ]
+              },
+              "rejection_code": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+              },
+              "proposed_by_role": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/roleId"
+              },
+              "decided_by_role": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/roleId"
+              },
+              "decision_authority": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+              },
+              "options_considered": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "option_id": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                    },
+                    "description": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                    },
+                    "advantages": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/stringArray"
+                    },
+                    "disadvantages": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/stringArray"
+                    },
+                    "constraints": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/stringArray"
+                    }
+                  },
+                  "required": [
+                    "option_id",
+                    "description"
+                  ],
+                  "additionalProperties": false
+                },
+                "minItems": 0
+              },
+              "selected_option": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+              },
+              "rationale": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+              },
+              "impact_summary": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+              },
+              "affected_record_refs": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/stringArray"
+              },
+              "evidence_refs": {
+                "type": "array",
+                "items": {
+                  "$ref": "./definitions/identifiers.schema.json#/$defs/evdId"
+                },
+                "minItems": 0
+              },
+              "supersedes_decision_id": {
+                "$ref": "./definitions/identifiers.schema.json#/$defs/decId"
+              },
+              "related_decision_ids": {
+                "type": "array",
+                "items": {
+                  "$ref": "./definitions/identifiers.schema.json#/$defs/decId"
+                },
+                "minItems": 0
+              },
+              "created_at": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
+              },
+              "updated_at": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
+              },
+              "decided_at": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
+              },
+              "history": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "changed_at": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
+                    },
+                    "changed_by_role": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/roleId"
+                    },
+                    "change_type": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                    },
+                    "reason": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                    },
+                    "previous_status": {
+                      "type": "string",
+                      "enum": [
+                        "proposed",
+                        "under_review",
+                        "approved",
+                        "rejected",
+                        "superseded",
+                        "withdrawn"
+                      ]
+                    },
+                    "new_status": {
+                      "type": "string",
+                      "enum": [
+                        "proposed",
+                        "under_review",
+                        "approved",
+                        "rejected",
+                        "superseded",
+                        "withdrawn"
+                      ]
+                    },
+                    "changed_fields": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/stringArray"
+                    }
+                  },
+                  "required": [
+                    "changed_at",
+                    "changed_by_role",
+                    "change_type",
+                    "reason"
+                  ],
+                  "additionalProperties": false
+                },
+                "minItems": 1
+              }
+            },
+            "required": [
+              "decision_id",
+              "execution_id",
+              "decision_type",
+              "title",
+              "context",
+              "decision_status",
+              "proposed_by_role",
+              "decision_authority",
+              "options_considered",
+              "rationale",
+              "impact_summary",
+              "affected_record_refs",
+              "created_at",
+              "updated_at",
+              "history"
+            ],
+            "additionalProperties": false,
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "decision_type": {
+                      "const": "handoff_acceptance"
+                    }
+                  },
+                  "required": [
+                    "decision_type"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "decision_outcome"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "decision_status": {
+                      "enum": [
+                        "approved",
+                        "rejected"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "decision_status"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "decided_by_role",
+                    "decided_at",
+                    "selected_option"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "decision_outcome": {
+                      "const": "rejected"
+                    }
+                  },
+                  "required": [
+                    "decision_outcome"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "rejection_code"
+                  ]
+                }
+              }
+            ]
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "decisions"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
