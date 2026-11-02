@@ -128,6 +128,76 @@ For optional participation, explain why the role was activated or why its partic
 
 For `not_activated`, record the reason no participation is expected.
 
+### 3.5.1 Canonical Role Activation Fields
+
+The top-level key in `role-activations.yml` is `role_activations`,
+whose value is an array of role activation records.
+
+| Field | Requirement | Definition |
+|---|---|---|
+| `activation_id` | Required | Stable `ACT-<UUID>` identifier. |
+| `execution_id` | Required | Parent execution identifier. |
+| `role_id` | Required | Canonical role slug from `expected-roles.yml`. |
+| `classification` | Required | `required`, `conditional`, `optional`, or `not_activated`. |
+| `activation_status` | Required | Canonical activation status. |
+| `reason` | Required | Reason for the activation or non-activation decision. |
+| `participation_scope` | Required | Description of the role's expected or actual participation boundary. |
+| `activation_trigger` | Conditional | Trigger description; required when classification is `conditional`. |
+| `activation_trigger_applies` | Conditional | Boolean indicating whether the conditional trigger applies; required when classification is `conditional`. |
+| `work_item_ids` | Optional | Work-item identifiers associated with this activation. |
+| `activated_at` | Optional | UTC timestamp when participation became active. |
+| `deactivated_at` | Conditional | UTC timestamp when participation ended; required when status is `deactivated`. |
+| `completed_at` | Conditional | UTC timestamp when the role completed its participation; required when status is `completed`. |
+| `created_at` | Required | UTC timestamp when the activation record was created. |
+| `updated_at` | Required | UTC timestamp of the latest material update. |
+| `history` | Required | Chronological history of material changes. |
+
+For classifications other than `conditional`, omit
+`activation_trigger` and `activation_trigger_applies`. Do not use
+`null` to represent an inapplicable conditional field.
+
+When classification is `conditional`, both trigger fields are required.
+If `activation_trigger_applies` is `false`, the activation status must
+be `not_activated`. If it is `true`, the status must be one of
+`planned`, `active`, `completed`, or `deactivated`.
+
+For lifecycle timestamps:
+
+- `activated_at` is required when status is `active`, `completed`,
+  or `deactivated`.
+- `deactivated_at` is required when status is `deactivated`.
+- `completed_at` is required when status is `completed`.
+- These timestamps are omitted when their corresponding event has not
+  occurred.
+
+The compatibility between `classification` and
+`activation_status` remains a cross-record/governance validation rule,
+not merely an enum check.
+
+Each activation history entry contains:
+
+- `changed_at`: UTC timestamp.
+- `changed_by_role`: canonical role slug responsible for the change.
+- `change_type`: concise change description.
+- `reason`: explanation for the change.
+- `previous_values`: optional object containing prior values.
+- `new_values`: optional object containing resulting values.
+- `related_record_ids`: optional array of related canonical IDs.
+
+The initial history entry records creation. History entries must be
+chronological and must not replace the current record fields.
+
+The illustrative collection shape is:
+
+```yaml
+role_activations:
+  - activation_id: "ACT-<UUID>"
+    execution_id: "EXE-<UUID>"
+    role_id: "solution-architect"
+```
+
+This is a structural excerpt only; it omits other required fields.
+
 ### 3.6 Activation and Deactivation
 
 Role activation may change during execution.
@@ -215,11 +285,96 @@ A work-item record must capture:
 
 The assigned role and `activation_id` must reference the same canonical role activation record within the same execution.
 
-The assigned role and `activation_id` must reference the same canonical role activation record within the same execution.
-
 The referenced activation may have an `activation_status` of `planned` or `active` when the work item is assigned.
 
 The activation must have an `activation_status` of `active` before the assigned role begins executing the work item.
+
+### 4.3.1 Canonical Work-Item Fields
+
+The top-level key in `work-items.yml` is `work_items`, whose value
+is an array of work-item records.
+
+| Field | Requirement | Definition |
+|---|---|---|
+| `work_item_id` | Required | Stable `WI-<UUID>` identifier. |
+| `execution_id` | Required | Parent execution identifier. |
+| `title` | Required | Short human-readable work-item title. |
+| `objective` | Required | Specific objective of the work item. |
+| `assigned_role` | Required | Canonical role slug responsible for the work item. |
+| `activation_id` | Required | Activation record for the assigned role in this execution. |
+| `state` | Required | Canonical work-item state. |
+| `acceptance_criteria` | Required | Non-empty array of observable completion conditions. |
+| `created_at` | Required | UTC timestamp when the work item was created. |
+| `updated_at` | Required | UTC timestamp of the latest material update. |
+| `history` | Required | Chronological history of material changes. |
+| `artifact_id` | Optional | Related canonical artifact package ID. |
+| `scope_boundaries` | Optional | Array of concise scope boundary statements. |
+| `contributor_roles` | Optional | Array of canonical role slugs that contribute without becoming co-owners. |
+| `dependency_ids` | Optional | Related dependency record identifiers. |
+| `input_refs` | Optional | References to inputs used by the work item. |
+| `output_refs` | Optional | References to outputs produced by the work item. |
+| `evidence_refs` | Optional | Related evidence record identifiers. |
+| `related_decision_ids` | Optional | Related decision record identifiers. |
+| `related_blocker_ids` | Optional | Related blocker record identifiers. |
+| `related_handoff_execution_ids` | Optional | Related handoff execution identifiers. |
+| `external_references` | Optional | References to relevant external resources. |
+| `planned_completion_at` | Optional | Planned completion timestamp, when established. |
+| `completed_at` | Optional | Actual completion timestamp; present only after completion. |
+
+The canonical field name for the work objective is `objective`;
+the canonical assigned-role field is `assigned_role`; and the
+canonical completion-condition field is `acceptance_criteria`.
+Do not introduce aliases such as `description`,
+`assigned_role_id`, or `completion_conditions`.
+
+#### Input and output reference objects
+
+Each item in `input_refs` and `output_refs` is an object containing:
+
+- `reference_type`: one of `artifact`, `work_item`,
+  `role_activation`, `dependency`, `handoff_execution`,
+  `decision`, `evidence`, `blocker`, `replan`, or `external`.
+- `reference_id`: identifier of the referenced resource.
+- `description`: optional explanation of the relationship.
+- `uri`: optional URI when a directly addressable resource exists.
+
+The referenced resource must be traceable. For an `external`
+reference, `reference_id` is the external identifier; `uri` may
+also be supplied. For internal reference types, the identifier must
+resolve to the corresponding canonical record or artifact catalog.
+
+#### Work-item history entries
+
+Each history entry contains:
+
+- `changed_at`: UTC timestamp.
+- `changed_by_role`: canonical role slug responsible for the change.
+- `change_type`: concise change description.
+- `reason`: explanation for the change.
+- `previous_values`: optional object containing prior values.
+- `new_values`: optional object containing resulting values.
+- `related_record_ids`: optional array of related canonical IDs.
+
+The initial history entry records creation. History entries must be
+chronological and must not replace the current record fields.
+
+The illustrative collection shape is:
+
+```yaml
+work_items:
+  - work_item_id: "WI-<UUID>"
+    execution_id: "EXE-<UUID>"
+    title: "Define API contract"
+    objective: "Publish the approved API contract."
+    assigned_role: "api-manager"
+    activation_id: "ACT-<UUID>"
+    state: "not_started"
+    acceptance_criteria:
+      - "The API contract has been reviewed and approved."
+```
+
+This is a structural excerpt only; it omits timestamps and history
+required by the canonical record.
 
 ### 4.4 Optional and Conditional Information
 

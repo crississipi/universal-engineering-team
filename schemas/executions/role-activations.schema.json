@@ -1,0 +1,314 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://crississipi.github.io/universal-engineering-team/schemas/executions/role-activations.schema.json",
+  "$ref": "#/$defs/document",
+  "$defs": {
+    "document": {
+      "type": "object",
+      "properties": {
+        "role_activations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "activation_id": {
+                "$ref": "./definitions/identifiers.schema.json#/$defs/actId"
+              },
+              "execution_id": {
+                "$ref": "./definitions/identifiers.schema.json#/$defs/exeId"
+              },
+              "role_id": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/roleId"
+              },
+              "classification": {
+                "type": "string",
+                "enum": [
+                  "required",
+                  "conditional",
+                  "optional",
+                  "not_activated"
+                ]
+              },
+              "activation_status": {
+                "type": "string",
+                "enum": [
+                  "planned",
+                  "active",
+                  "completed",
+                  "deactivated",
+                  "not_activated"
+                ]
+              },
+              "reason": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+              },
+              "participation_scope": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+              },
+              "activation_trigger": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+              },
+              "activation_trigger_applies": {
+                "type": "boolean"
+              },
+              "work_item_ids": {
+                "type": "array",
+                "items": {
+                  "$ref": "./definitions/identifiers.schema.json#/$defs/wiId"
+                },
+                "minItems": 0
+              },
+              "activated_at": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
+              },
+              "deactivated_at": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
+              },
+              "completed_at": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
+              },
+              "created_at": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
+              },
+              "updated_at": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
+              },
+              "history": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "changed_at": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
+                    },
+                    "changed_by_role": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/roleId"
+                    },
+                    "change_type": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                    },
+                    "reason": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                    },
+                    "previous_values": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/genericHistoryValues"
+                    },
+                    "new_values": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/genericHistoryValues"
+                    },
+                    "related_record_ids": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/stringArray"
+                    }
+                  },
+                  "required": [
+                    "changed_at",
+                    "changed_by_role",
+                    "change_type",
+                    "reason"
+                  ],
+                  "additionalProperties": false
+                },
+                "minItems": 1
+              }
+            },
+            "required": [
+              "activation_id",
+              "execution_id",
+              "role_id",
+              "classification",
+              "activation_status",
+              "reason",
+              "participation_scope",
+              "created_at",
+              "updated_at",
+              "history"
+            ],
+            "additionalProperties": false,
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "classification": {
+                      "const": "conditional"
+                    }
+                  },
+                  "required": [
+                    "classification"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "activation_trigger",
+                    "activation_trigger_applies"
+                  ]
+                },
+                "else": {
+                  "not": {
+                    "anyOf": [
+                      {
+                        "required": [
+                          "activation_trigger"
+                        ]
+                      },
+                      {
+                        "required": [
+                          "activation_trigger_applies"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "activation_trigger_applies": {
+                      "const": false
+                    }
+                  },
+                  "required": [
+                    "activation_trigger_applies"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "activation_status": {
+                      "const": "not_activated"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "activation_status": {
+                      "enum": [
+                        "active",
+                        "completed",
+                        "deactivated"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "activation_status"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "activated_at"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "activation_status": {
+                      "const": "deactivated"
+                    }
+                  },
+                  "required": [
+                    "activation_status"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "deactivated_at"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "activation_status": {
+                      "const": "completed"
+                    }
+                  },
+                  "required": [
+                    "activation_status"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "completed_at"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "classification": {
+                      "const": "required"
+                    }
+                  },
+                  "required": [
+                    "classification"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "activation_status": {
+                      "enum": [
+                        "planned",
+                        "active",
+                        "completed",
+                        "deactivated"
+                      ]
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "classification": {
+                      "const": "not_activated"
+                    }
+                  },
+                  "required": [
+                    "classification"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "activation_status": {
+                      "const": "not_activated"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "activation_trigger_applies": {
+                      "const": true
+                    }
+                  },
+                  "required": [
+                    "activation_trigger_applies"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "activation_status": {
+                      "enum": [
+                        "planned",
+                        "active",
+                        "completed",
+                        "deactivated"
+                      ]
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "role_activations"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

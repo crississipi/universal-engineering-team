@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://crississipi.github.io/universal-engineering-team/schemas/executions/definitions/common-values.schema.json",
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "timestamp": {
+      "$ref": "./timestamps.schema.json#/$defs/utcTimestamp"
+    },
+    "roleId": {
+      "type": "string",
+      "enum": [
+        "product-analyst",
+        "solution-architect",
+        "api-manager",
+        "backend-developer",
+        "frontend-developer",
+        "ux-ui-designer",
+        "database-manager",
+        "integration-engineer",
+        "data-engineer",
+        "qa-manager",
+        "penetration-tester",
+        "devops-sre",
+        "performance-engineer",
+        "accessibility-specialist",
+        "technical-writer-knowledge-engineer",
+        "release-manager",
+        "delivery-lead"
+      ]
+    },
+    "stringArray": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/nonEmptyString"
+      }
+    },
+    "arbitraryObject": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "externalReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "reference_type",
+        "relationship"
+      ],
+      "properties": {
+        "provider": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "reference_type": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "relationship": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "identifier": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "uri": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "identifier"
+          ]
+        },
+        {
+          "required": [
+            "uri"
+          ]
+        }
+      ]
+    },
+    "genericHistoryValues": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

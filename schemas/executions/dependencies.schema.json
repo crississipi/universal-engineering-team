@@ -1,0 +1,214 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://crississipi.github.io/universal-engineering-team/schemas/executions/dependencies.schema.json",
+  "$ref": "#/$defs/document",
+  "$defs": {
+    "document": {
+      "type": "object",
+      "properties": {
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "dependency_id": {
+                "$ref": "./definitions/identifiers.schema.json#/$defs/depId"
+              },
+              "execution_id": {
+                "$ref": "./definitions/identifiers.schema.json#/$defs/exeId"
+              },
+              "predecessor_work_item_id": {
+                "$ref": "./definitions/identifiers.schema.json#/$defs/wiId"
+              },
+              "successor_work_item_id": {
+                "$ref": "./definitions/identifiers.schema.json#/$defs/wiId"
+              },
+              "relationship_type": {
+                "type": "string",
+                "enum": [
+                  "required_input",
+                  "conditional_input",
+                  "feedback"
+                ]
+              },
+              "purpose": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+              },
+              "dependency_condition": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+              },
+              "activation_condition": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "planned",
+                  "active",
+                  "satisfied",
+                  "blocked",
+                  "not_applicable",
+                  "cancelled"
+                ]
+              },
+              "created_at": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
+              },
+              "updated_at": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
+              },
+              "satisfaction_evidence_refs": {
+                "type": "array",
+                "items": {
+                  "$ref": "./definitions/identifiers.schema.json#/$defs/evdId"
+                },
+                "minItems": 0
+              },
+              "related_decision_ids": {
+                "type": "array",
+                "items": {
+                  "$ref": "./definitions/identifiers.schema.json#/$defs/decId"
+                },
+                "minItems": 0
+              },
+              "related_blocker_ids": {
+                "type": "array",
+                "items": {
+                  "$ref": "./definitions/identifiers.schema.json#/$defs/blkId"
+                },
+                "minItems": 0
+              },
+              "external_references": {
+                "type": "array",
+                "items": {
+                  "$ref": "./definitions/common-values.schema.json#/$defs/externalReference"
+                },
+                "minItems": 0
+              },
+              "history": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
+                    },
+                    "actor": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/roleId"
+                    },
+                    "action": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                    },
+                    "reason": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                    },
+                    "previous_values": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/genericHistoryValues"
+                    },
+                    "new_values": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/genericHistoryValues"
+                    },
+                    "related_record_ids": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/stringArray"
+                    }
+                  },
+                  "required": [
+                    "timestamp",
+                    "actor",
+                    "action",
+                    "reason"
+                  ],
+                  "additionalProperties": false
+                },
+                "minItems": 1
+              },
+              "handoff_execution_refs": {
+                "type": "array",
+                "items": {
+                  "$ref": "./definitions/identifiers.schema.json#/$defs/hexId"
+                },
+                "minItems": 0
+              }
+            },
+            "required": [
+              "dependency_id",
+              "execution_id",
+              "predecessor_work_item_id",
+              "successor_work_item_id",
+              "relationship_type",
+              "purpose",
+              "dependency_condition",
+              "status",
+              "created_at",
+              "updated_at",
+              "history"
+            ],
+            "additionalProperties": false,
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "relationship_type": {
+                      "const": "conditional_input"
+                    }
+                  },
+                  "required": [
+                    "relationship_type"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "activation_condition"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "status": {
+                      "const": "not_applicable"
+                    }
+                  },
+                  "required": [
+                    "status"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "relationship_type": {
+                      "const": "conditional_input"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "relationship_type": {
+                      "const": "conditional_input"
+                    }
+                  },
+                  "required": [
+                    "relationship_type"
+                  ]
+                },
+                "else": {
+                  "not": {
+                    "required": [
+                      "activation_condition"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "dependencies"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

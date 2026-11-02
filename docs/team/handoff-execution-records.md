@@ -18,6 +18,22 @@ Handoff execution records are stored in:
 
 The file contains a collection of independent handoff execution records belonging to the same execution.
 
+The canonical top-level YAML key is `handoff_executions`, and its
+value is an array of handoff execution mappings. The key must be present
+even when no formal handoff execution exists for the execution.
+
+Illustrative structural excerpt:
+
+```yaml
+handoff_executions:
+  - handoff_execution_id: "HEX-<UUID>"
+    execution_id: "EXE-<UUID>"
+    handoff_contract_id: "<contract-id>"
+```
+
+The excerpt is not a complete record; all required fields in this
+specification must be present in an actual handoff execution.
+
 Reusable handoff contracts remain defined in:
 
 `docs/team/handoffs.yml`

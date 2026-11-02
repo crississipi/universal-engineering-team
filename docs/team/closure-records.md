@@ -196,26 +196,18 @@ closure:
     replan_ids: []
     release_record_refs: []
 
-  closure_decision_id: null
-
-  proposed_by_role: null
-  coordinated_by_role: null
-  closure_authorized_by_role: null
-
   closure_summary: ""
   residual_risks: []
   follow_up_references: []
 
   created_at: ""
   updated_at: ""
-  proposed_at: null
-  reviewed_at: null
-  closed_at: null
+  # proposed_at, reviewed_at, and closed_at are omitted until applicable.
 
   history: []
 ```
 
-The fields and nested structures are defined in the following sections. Optional values may be omitted or represented as `null` according to the repository's eventual schema conventions. Required fields must not be omitted from an actual record.
+The fields and nested structures are defined in the following sections. Optional and conditional fields must be omitted when they do not apply or are not yet known; YAML `null` is not a substitute for omission. Required fields must not be omitted from an actual record. The example is illustrative and its empty strings are placeholders, not acceptable values for required non-empty text fields.
 
 ## 5. Field Definitions
 
@@ -334,8 +326,6 @@ closure_checks:
     related_record_refs: []
     evidence_refs: []
     notes: ""
-    checked_by_role: null
-    checked_at: null
 ```
 
 Fields:
@@ -411,7 +401,6 @@ exceptions:
     affected_record_refs: []
     evidence_refs: []
     accepted_by_decision_id: "DEC-<UUID>"
-    responsible_role: null
     follow_up_references: []
     status: "approved"
 ```
@@ -1044,7 +1033,6 @@ closure:
   history:
     - event_id: "HIS-00000000-0000-4000-8000-000000000001"
       event_type: "closure_record_created"
-      previous_value: null
       new_value: "not_started"
       reason: "Illustrative closure record creation."
       actor_role: "delivery-lead"
@@ -1063,7 +1051,6 @@ closure:
 
     - event_id: "HIS-00000000-0000-4000-8000-000000000003"
       event_type: "closure_approved"
-      previous_value: null
       new_value: "closed"
       reason: "Illustrative authorized closure decision."
       actor_role: "delivery-lead"
@@ -1072,7 +1059,7 @@ closure:
       occurred_at: "2026-01-01T10:30:00Z"
 ```
 
-The example is illustrative and must not be copied into an actual execution as evidence that work, verification, or approval occurred. Actual records must use generated IDs, real timestamps, and references to records that exist.
+The example is illustrative and must not be copied into an actual execution as evidence that work, verification, or approval occurred. Actual records must use generated IDs, real timestamps, and references to records that exist. The use of `delivery-lead` as the proposer, coordinator, and authorized role in this hypothetical example does not establish universal Delivery Lead approval authority. In a real execution, `closure_authorized_by_role` must match the authorized decider recorded in the approved `execution_closure` decision, and that authority must be supported by the applicable governance.
 
 ## 14. Future Schema and Validator Requirements
 

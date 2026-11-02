@@ -132,6 +132,160 @@ The root `execution.yml` record must identify:
 - `change_id`
 - `execution_id`
 
+### 5.1 Canonical Execution Record Fields
+
+The root file uses one top-level `execution` mapping containing the
+following canonical fields.
+
+| Field | Requirement | Definition |
+|---|---|---|
+| `project_id` | Required | Stable parent project identifier. |
+| `change_id` | Required | Stable parent change identifier. |
+| `execution_id` | Required | Stable execution identifier; must match the directory name. |
+| `title` | Required | Short human-readable execution title. |
+| `description` | Required | Brief explanation of the execution context. |
+| `intended_outcome` | Required | Observable outcome the execution is intended to achieve. |
+| `scope` | Required | Scope object defined below. |
+| `workflow_stage` | Required | Current workflow stage identifier. |
+| `workflow_status` | Required | Current overall workflow status. |
+| `coordination` | Required | Coordination object defined below. |
+| `record_refs` | Required | Index of supporting record identifiers. |
+| `created_at` | Required | UTC timestamp when the execution record was created. |
+| `updated_at` | Required | UTC timestamp of the latest material update. |
+| `history` | Required | Chronological history of material root-record changes. |
+| `external_references` | Optional | References to external systems or records. |
+| `source_control` | Optional | Source-control traceability information when applicable. |
+| `final_disposition` | Conditional | Final overall disposition when the execution reaches a terminal workflow outcome. |
+
+#### Scope object
+
+The required `scope` object contains:
+
+- `in_scope`: array of strings describing included work.
+- `out_of_scope`: array of strings describing explicit exclusions.
+- `constraints`: array of strings describing known constraints.
+
+Each array may be empty when no entries are known or applicable. Empty arrays must not be used to conceal unresolved scope questions.
+
+#### Workflow stage identifiers
+
+The `workflow_stage` field uses these stable identifiers, corresponding
+to the stage names in `workflow-lifecycle.md`:
+
+- `intake`
+- `qualification`
+- `solution_framing`
+- `planning`
+- `execution`
+- `integration_and_review`
+- `verification`
+- `release_readiness_and_release`
+- `closure`
+
+The `workflow_status` field uses only the canonical overall workflow
+statuses defined in `workflow-lifecycle.md`:
+
+- `proposed`
+- `planned`
+- `in_progress`
+- `blocked`
+- `in_review`
+- `verified`
+- `released`
+- `deferred`
+- `cancelled`
+
+Workflow stage and workflow status are independent fields and must
+not be substituted for one another.
+
+#### Coordination object
+
+The required `coordination` object contains:
+
+- `coordinator_role`: canonical role identifier responsible for coordinating this execution.
+- `coordination_notes`: optional explanatory text.
+
+The coordinator coordinates execution-level work. This field does not
+grant artifact ownership, specialist approval authority, or universal
+decision authority. The Delivery Lead is not automatically the
+coordinator for every execution.
+
+#### Supporting record reference index
+
+The required `record_refs` object contains arrays for:
+
+- `work_item_ids`
+- `activation_ids`
+- `dependency_ids`
+- `handoff_execution_ids`
+- `decision_ids`
+- `evidence_ids`
+- `blocker_ids`
+- `replan_ids`
+
+It may contain `closure_id` when the canonical closure record exists.
+Arrays must be present even when empty. The index is a navigation and
+traceability aid; the supporting files remain authoritative for their
+record contents. Validators must check that indexed identifiers resolve
+and that the index does not claim nonexistent records.
+
+#### History entries
+
+Each root history entry contains:
+
+- `changed_at`: UTC timestamp.
+- `changed_by_role`: canonical role identifier.
+- `change_type`: concise description of the change.
+- `reason`: explanation for the change.
+- `previous_values`: optional object containing prior values.
+- `new_values`: optional object containing resulting values.
+- `related_record_ids`: optional array of related canonical IDs.
+
+History entries must be chronological. The initial entry records
+creation. History is an audit of material changes, not a substitute
+for the current field values.
+
+#### Final disposition
+
+When present, `final_disposition` is an object containing:
+
+- `status`: one of `verified`, `released`, `deferred`, or `cancelled`.
+- `summary`: concise explanation of the disposition.
+- `recorded_at`: UTC timestamp.
+
+Its status must agree with the terminal overall workflow status at the
+time the disposition is recorded. The canonical closure record remains
+authoritative for formal execution closure and closure authorization.
+
+#### Optional external and source-control references
+
+Each `external_references` entry contains:
+
+- `provider`: external system or provider name.
+- `reference_type`: type of external resource.
+- `relationship`: how the resource relates to the execution.
+- At least one of `identifier` or `uri`.
+
+The optional `source_control` object may contain `repository`,
+`branch`, `base_commit`, `commit_refs`, `pull_request_refs`, and
+`resulting_commit`. Values must be recorded only when known; no
+placeholder hashes or inferred references are permitted.
+
+### 5.2 YAML Document Shape
+
+The root file must use this wrapper:
+
+```yaml
+execution:
+  project_id: "PRJ-<UUID>"
+  change_id: "CHG-<UUID>"
+  execution_id: "EXE-<UUID>"
+```
+
+The example is a structural excerpt, not a complete valid execution
+record. All required fields defined in this section must be present
+in an actual record.
+
 Every supporting record must explicitly identify its `execution_id`.
 Project and change context is inherited from the root execution record
 and must not conflict with it.

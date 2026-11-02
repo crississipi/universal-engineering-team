@@ -1,0 +1,418 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://crississipi.github.io/universal-engineering-team/schemas/executions/execution.schema.json",
+  "$ref": "#/$defs/document",
+  "$defs": {
+    "document": {
+      "type": "object",
+      "properties": {
+        "execution": {
+          "type": "object",
+          "properties": {
+            "project_id": {
+              "$ref": "./definitions/identifiers.schema.json#/$defs/prjId"
+            },
+            "change_id": {
+              "$ref": "./definitions/identifiers.schema.json#/$defs/chgId"
+            },
+            "execution_id": {
+              "$ref": "./definitions/identifiers.schema.json#/$defs/exeId"
+            },
+            "title": {
+              "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+            },
+            "description": {
+              "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+            },
+            "intended_outcome": {
+              "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+            },
+            "scope": {
+              "type": "object",
+              "properties": {
+                "in_scope": {
+                  "$ref": "./definitions/common-values.schema.json#/$defs/stringArray"
+                },
+                "out_of_scope": {
+                  "$ref": "./definitions/common-values.schema.json#/$defs/stringArray"
+                },
+                "constraints": {
+                  "$ref": "./definitions/common-values.schema.json#/$defs/stringArray"
+                }
+              },
+              "required": [
+                "in_scope",
+                "out_of_scope",
+                "constraints"
+              ],
+              "additionalProperties": false
+            },
+            "workflow_stage": {
+              "type": "string",
+              "enum": [
+                "intake",
+                "qualification",
+                "solution_framing",
+                "planning",
+                "execution",
+                "integration_and_review",
+                "verification",
+                "release_readiness_and_release",
+                "closure"
+              ]
+            },
+            "workflow_status": {
+              "type": "string",
+              "enum": [
+                "proposed",
+                "planned",
+                "in_progress",
+                "blocked",
+                "in_review",
+                "verified",
+                "released",
+                "deferred",
+                "cancelled"
+              ]
+            },
+            "coordination": {
+              "type": "object",
+              "properties": {
+                "coordinator_role": {
+                  "$ref": "./definitions/common-values.schema.json#/$defs/roleId"
+                },
+                "coordination_notes": {
+                  "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                }
+              },
+              "required": [
+                "coordinator_role"
+              ],
+              "additionalProperties": false
+            },
+            "record_refs": {
+              "type": "object",
+              "properties": {
+                "work_item_ids": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "./definitions/identifiers.schema.json#/$defs/wiId"
+                  },
+                  "minItems": 0
+                },
+                "activation_ids": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "./definitions/identifiers.schema.json#/$defs/actId"
+                  },
+                  "minItems": 0
+                },
+                "dependency_ids": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "./definitions/identifiers.schema.json#/$defs/depId"
+                  },
+                  "minItems": 0
+                },
+                "handoff_execution_ids": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "./definitions/identifiers.schema.json#/$defs/hexId"
+                  },
+                  "minItems": 0
+                },
+                "decision_ids": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "./definitions/identifiers.schema.json#/$defs/decId"
+                  },
+                  "minItems": 0
+                },
+                "evidence_ids": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "./definitions/identifiers.schema.json#/$defs/evdId"
+                  },
+                  "minItems": 0
+                },
+                "blocker_ids": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "./definitions/identifiers.schema.json#/$defs/blkId"
+                  },
+                  "minItems": 0
+                },
+                "replan_ids": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "./definitions/identifiers.schema.json#/$defs/rplId"
+                  },
+                  "minItems": 0
+                },
+                "closure_id": {
+                  "$ref": "./definitions/identifiers.schema.json#/$defs/clsId"
+                }
+              },
+              "required": [
+                "work_item_ids",
+                "activation_ids",
+                "dependency_ids",
+                "handoff_execution_ids",
+                "decision_ids",
+                "evidence_ids",
+                "blocker_ids",
+                "replan_ids"
+              ],
+              "additionalProperties": false
+            },
+            "created_at": {
+              "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
+            },
+            "updated_at": {
+              "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
+            },
+            "history": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "changed_at": {
+                    "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
+                  },
+                  "changed_by_role": {
+                    "$ref": "./definitions/common-values.schema.json#/$defs/roleId"
+                  },
+                  "change_type": {
+                    "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                  },
+                  "reason": {
+                    "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                  },
+                  "previous_values": {
+                    "$ref": "./definitions/common-values.schema.json#/$defs/genericHistoryValues"
+                  },
+                  "new_values": {
+                    "$ref": "./definitions/common-values.schema.json#/$defs/genericHistoryValues"
+                  },
+                  "related_record_ids": {
+                    "$ref": "./definitions/common-values.schema.json#/$defs/stringArray"
+                  }
+                },
+                "required": [
+                  "changed_at",
+                  "changed_by_role",
+                  "change_type",
+                  "reason"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1
+            },
+            "external_references": {
+              "type": "array",
+              "items": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/externalReference"
+              },
+              "minItems": 0
+            },
+            "source_control": {
+              "type": "object",
+              "properties": {
+                "repository": {
+                  "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                },
+                "branch": {
+                  "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                },
+                "base_commit": {
+                  "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                },
+                "commit_refs": {
+                  "$ref": "./definitions/common-values.schema.json#/$defs/stringArray"
+                },
+                "pull_request_refs": {
+                  "$ref": "./definitions/common-values.schema.json#/$defs/stringArray"
+                },
+                "resulting_commit": {
+                  "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                }
+              },
+              "required": [],
+              "additionalProperties": false
+            },
+            "final_disposition": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "verified",
+                    "released",
+                    "deferred",
+                    "cancelled"
+                  ]
+                },
+                "summary": {
+                  "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                },
+                "recorded_at": {
+                  "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
+                }
+              },
+              "required": [
+                "status",
+                "summary",
+                "recorded_at"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "project_id",
+            "change_id",
+            "execution_id",
+            "title",
+            "description",
+            "intended_outcome",
+            "scope",
+            "workflow_stage",
+            "workflow_status",
+            "coordination",
+            "record_refs",
+            "created_at",
+            "updated_at",
+            "history"
+          ],
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "workflow_status": {
+                    "enum": [
+                      "verified",
+                      "released",
+                      "deferred",
+                      "cancelled"
+                    ]
+                  }
+                },
+                "required": [
+                  "workflow_status"
+                ]
+              },
+              "then": {
+                "required": [
+                  "final_disposition"
+                ]
+              },
+              "else": {
+                "not": {
+                  "required": [
+                    "final_disposition"
+                  ]
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "workflow_status": {
+                    "const": "verified"
+                  }
+                },
+                "required": [
+                  "workflow_status"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "final_disposition": {
+                    "properties": {
+                      "status": {
+                        "const": "verified"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "workflow_status": {
+                    "const": "released"
+                  }
+                },
+                "required": [
+                  "workflow_status"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "final_disposition": {
+                    "properties": {
+                      "status": {
+                        "const": "released"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "workflow_status": {
+                    "const": "deferred"
+                  }
+                },
+                "required": [
+                  "workflow_status"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "final_disposition": {
+                    "properties": {
+                      "status": {
+                        "const": "deferred"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "workflow_status": {
+                    "const": "cancelled"
+                  }
+                },
+                "required": [
+                  "workflow_status"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "final_disposition": {
+                    "properties": {
+                      "status": {
+                        "const": "cancelled"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": [
+        "execution"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

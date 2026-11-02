@@ -156,8 +156,17 @@ Child records inherit project and change context from their execution.
 They must reference their execution explicitly and must not introduce
 conflicting identity relationships.
 
-Exact YAML schemas and automated identity validation are deferred to
-Phase 1.4.7.
+The shared serialization rules, canonical YAML wrappers, omission/null
+policy, timestamp format, identifier conventions, and reference rules
+are defined in:
+
+`docs/team/execution-record-field-conventions.md`
+
+The exact root execution fields are defined in
+`docs/team/execution-identity-and-traceability.md`.
+
+Exact JSON Schemas and automated identity validation are delivered
+through Phase 1.4.7.
 
 ### 3.4 Role Activation and Work-Item Records
 
@@ -172,11 +181,17 @@ Work-item records reference the parent execution, assigned role, and applicable 
 
 A work item must reference an activated role within the same execution. Assignment does not transfer artifact package ownership.
 
-The canonical record requirements, relationships, and field definitions are documented in:
+The canonical record requirements, relationships, exact field names,
+and collection wrappers are documented in:
 
 `docs/team/role-activation-and-work-item-records.md`
 
-Exact schemas and automated validation are deferred to Phase 1.4.7.
+Shared serialization and omission rules are documented in:
+
+`docs/team/execution-record-field-conventions.md`
+
+Exact JSON Schemas and automated validation are delivered through
+Phase 1.4.7.
 
 ## 4. Canonical Record Types
 
