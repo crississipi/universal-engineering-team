@@ -60,7 +60,8 @@ The validator checks:
   (`in_progress`, `in_review`, or `changes_requested`) reference an
   active activation. A blocked item is not assumed to have started work.
 - Not-started or ready work items may reference planned or active activations.
-- Completed work items may reference active or completed activations.
+- Completed work items may reference active, completed, or deactivated
+  activations.
 - Cancelled work items may reference a planned, active, completed,
   deactivated, or not-activated activation.
 - A role does not have multiple simultaneously active activation records.
