@@ -126,6 +126,12 @@ BLOCKER_STATUSES = set(BLOCKER_TRANSITIONS)
 REPLAN_STATUSES = set(REPLAN_TRANSITIONS)
 CLOSURE_STATUSES = set(CLOSURE_TRANSITIONS)
 WORK_ITEM_STATES = set(WORK_ITEM_TRANSITIONS)
+HANDOFF_DECISION_OUTCOMES = {"accepted", "partially_accepted", "rejected", "blocked"}
+HANDOFF_REJECTION_CODES = {
+    "missing_output", "incomplete_output", "failed_acceptance_check",
+    "invalid_or_inconsistent_output", "missing_required_context",
+    "unsupported_claim", "unsafe_or_prohibited_content", "scope_mismatch",
+}
 
 
 def add(errors, code, message):
@@ -488,6 +494,12 @@ def validate_decisions(records, errors):
             add(errors, "LIFE072", f"{label}.decided_at must be omitted before a decision is approved or rejected")
         if current == "approved" and not nonempty(record.get("selected_option")) and not nonempty(record.get("decision_outcome")):
             add(errors, "LIFE073", f"{label} approved status requires selected_option or decision_outcome")
+        if record.get("decision_type") == "handoff_acceptance":
+            outcome = record.get("decision_outcome")
+            if not isinstance(outcome, str) or outcome not in HANDOFF_DECISION_OUTCOMES:
+                add(errors, "LIFE074", f"{label} handoff_acceptance decision requires a valid decision_outcome")
+            if outcome == "rejected" and record.get("rejection_code") not in HANDOFF_REJECTION_CODES:
+                add(errors, "LIFE074", f"{label} rejected handoff outcome requires a valid rejection_code")
 
 
 def validate_evidence(records, errors):
