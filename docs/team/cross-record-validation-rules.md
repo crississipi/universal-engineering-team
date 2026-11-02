@@ -56,12 +56,13 @@ The validator checks:
 - Every work item's `activation_id` resolves to a role activation in the
   same execution.
 - The activation's `role_id` matches the work item's `assigned_role`.
-- Work items in active execution states (`in_progress`, `blocked`,
-  `in_review`, or `changes_requested`) reference an active activation.
+- Work items in execution states that establish active work
+  (`in_progress`, `in_review`, or `changes_requested`) reference an
+  active activation. A blocked item is not assumed to have started work.
 - Not-started or ready work items may reference planned or active activations.
 - Completed work items may reference active or completed activations.
-- Cancelled work items may reference a planned, active, completed, or
-  deactivated activation.
+- Cancelled work items may reference a planned, active, completed,
+  deactivated, or not-activated activation.
 - A role does not have multiple simultaneously active activation records.
 - Work-item IDs listed by an activation resolve and point back to that
   activation when the optional list is supplied.
