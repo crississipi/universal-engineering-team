@@ -215,6 +215,8 @@ def validate_root_index(execution, indexes, errors):
     closure_id = refs.get("closure_id")
     if closure_id is not None:
         resolve(closure_id, "closure", indexes, "execution.record_refs.closure_id", errors)
+        if indexes.get("closure") and closure_id not in indexes["closure"]:
+            add(errors, "REF060", f"execution.record_refs.closure_id does not match the canonical closure record")
 
 
 def validate_activation_work_items(indexes, errors):
@@ -281,7 +283,10 @@ def validate_dependency_graph(indexes, errors):
             ("handoff_execution_refs", "handoff_executions"),
         ):
             for index, ref in enumerate(as_list(dependency.get(field), f"dependency {dependency_id}.{field}", errors)):
-                resolve(ref, kind, indexes, f"dependency {dependency_id}.{field}[{index}]", errors)
+                target = resolve(ref, kind, indexes, f"dependency {dependency_id}.{field}[{index}]", errors)
+                if kind == "handoff_executions" and target:
+                    if dependency_id not in target.get("dependency_ids", []):
+                        add(errors, "REF059", f"Dependency {dependency_id} is not reciprocally referenced by handoff {ref}")
 
     # Every dependency edge participates in the governed acyclic dependency graph.
     visiting = set()
@@ -552,6 +557,37 @@ def validate_closure(indexes, artifacts, errors):
 
     completion = closure_record.get("completion", {})
     verification = closure_record.get("verification", {})
+    completion_lists = {
+        "completed_work_item_ids": set(as_list(completion.get("completed_work_item_ids"), f"closure {closure_id}.completion.completed_work_item_ids", errors, required=True)),
+        "cancelled_work_item_ids": set(as_list(completion.get("cancelled_work_item_ids"), f"closure {closure_id}.completion.cancelled_work_item_ids", errors, required=True)),
+        "outstanding_work_item_ids": set(as_list(completion.get("outstanding_work_item_ids"), f"closure {closure_id}.completion.outstanding_work_item_ids", errors, required=True)),
+    }
+    verification_lists = {
+        "verified_work_item_ids": set(as_list(verification.get("verified_work_item_ids"), f"closure {closure_id}.verification.verified_work_item_ids", errors, required=True)),
+        "failed_work_item_ids": set(as_list(verification.get("failed_work_item_ids"), f"closure {closure_id}.verification.failed_work_item_ids", errors, required=True)),
+        "not_verified_work_item_ids": set(as_list(verification.get("not_verified_work_item_ids"), f"closure {closure_id}.verification.not_verified_work_item_ids", errors, required=True)),
+    }
+    for label, groups in (("completion", completion_lists), ("verification", verification_lists)):
+        seen_ids = set()
+        for group_name, group_ids in groups.items():
+            overlap = seen_ids.intersection(group_ids)
+            for overlap_id in sorted(overlap):
+                add(errors, "REF061", f"Closure {closure_id} work item {overlap_id} appears in multiple {label} classifications")
+            seen_ids.update(group_ids)
+    for group_name, group_ids in completion_lists.items():
+        for work_item_id in group_ids:
+            item = resolve(work_item_id, "work_items", indexes, f"closure {closure_id}.{group_name}", errors)
+            if item:
+                expected_state = {
+                    "completed_work_item_ids": "completed",
+                    "cancelled_work_item_ids": "cancelled",
+                }.get(group_name)
+                if expected_state and item.get("state") != expected_state:
+                    add(errors, "REF062", f"Closure {closure_id}.{group_name} includes {work_item_id} whose state is {item.get('state')!r}, expected {expected_state!r}")
+                if group_name == "outstanding_work_item_ids" and item.get("state") in {"completed", "cancelled"}:
+                    add(errors, "REF063", f"Closure {closure_id}.outstanding_work_item_ids includes terminal work item {work_item_id}")
+    for work_item_id in verification_lists["verified_work_item_ids"] | verification_lists["failed_work_item_ids"] | verification_lists["not_verified_work_item_ids"]:
+        resolve(work_item_id, "work_items", indexes, f"closure {closure_id}.verification work-item classification", errors)
     for section, field, kind in (
         (completion, "completed_work_item_ids", "work_items"),
         (completion, "cancelled_work_item_ids", "work_items"),
