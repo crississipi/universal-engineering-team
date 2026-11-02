@@ -596,6 +596,7 @@ def validate_closure(indexes, artifacts, errors):
             for overlap_id in sorted(overlap):
                 add(errors, "REF061", f"Closure {closure_id} work item {overlap_id} appears in multiple {label} classifications")
             seen_ids.update(group_ids)
+    in_scope_work_items = string_set(refs.get("work_item_ids"), f"closure {closure_id}.required_record_refs.work_item_ids", errors)
     accounted_work_items = set().union(*completion_lists.values())
     missing_completion_items = in_scope_work_items - accounted_work_items
     for work_item_id in sorted(missing_completion_items):
@@ -635,7 +636,6 @@ def validate_closure(indexes, artifacts, errors):
     for index, ref in enumerate(as_list(completion.get("completion_evidence_refs"), f"closure {closure_id}.completion.completion_evidence_refs", errors)):
         resolve(ref, "evidence", indexes, f"closure {closure_id}.completion.completion_evidence_refs[{index}]", errors)
 
-    in_scope_work_items = string_set(refs.get("work_item_ids"), f"closure {closure_id}.required_record_refs.work_item_ids", errors)
     for classification, ids in {**completion_lists, **verification_lists}.items():
         for work_item_id in ids:
             if work_item_id not in in_scope_work_items:
