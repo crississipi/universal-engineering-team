@@ -159,6 +159,25 @@ conflicting identity relationships.
 Exact YAML schemas and automated identity validation are deferred to
 Phase 1.4.7.
 
+### 3.4 Role Activation and Work-Item Records
+
+Each execution maintains two distinct record collections:
+
+- `role-activations.yml` records the roles considered and activated for the execution.
+- `work-items.yml` records the specific units of work performed during the execution.
+
+Role activation records reference the parent execution and canonical role. They preserve the activation classifications defined in `role-activation-rules.md`.
+
+Work-item records reference the parent execution, assigned role, and applicable work-item state. Their state vocabulary and transitions remain governed by `blockers-replanning-and-state-transitions.md`.
+
+A work item must reference an activated role within the same execution. Assignment does not transfer artifact package ownership.
+
+The canonical record requirements, relationships, and field definitions are documented in:
+
+`docs/team/role-activation-and-work-item-records.md`
+
+Exact schemas and automated validation are deferred to Phase 1.4.7.
+
 ## 4. Canonical Record Types
 
 ### 4.1 Execution Record

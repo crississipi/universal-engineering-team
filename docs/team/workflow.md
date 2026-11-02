@@ -194,3 +194,17 @@ The identity hierarchy and traceability requirements for projects,
 changes, and execution instances are defined in:
 
 `docs/team/execution-identity-and-traceability.md`
+
+## Role activation and work-item records
+
+Role activation and work-item records are governed by:
+
+`docs/team/role-activation-and-work-item-records.md`
+
+Each execution records applicable role activation decisions and the individual units of work performed.
+
+Role activation determines participation. Work items define assigned work, state, dependencies, outputs, and completion conditions.
+
+Assignments must preserve artifact ownership and specialist authority. Work-item states must follow the existing blocker and state-transition rules.
+
+Exact YAML schemas and automated validation are deferred to Phase 1.4.7.
