@@ -55,9 +55,9 @@ change explicitly introduces them.
 8. Required strings must not be blank or whitespace-only unless a
    record-specific specification explicitly permits an empty string.
 
-The closure-record example currently contains null placeholders for
-conditional fields. Those placeholders are illustrative legacy notation;
-actual records and schemas must follow this document's omission policy.
+The closure-record examples have been aligned with this omission policy.
+Future examples and actual records must continue to omit inapplicable
+conditional fields rather than using YAML null.
 
 ## 4. Identifiers
 
