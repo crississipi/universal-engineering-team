@@ -203,7 +203,48 @@
               "updated_at",
               "history"
             ],
-            "additionalProperties": false
+            "additionalProperties": false,
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "current_status": {
+                      "const": "submitted"
+                    }
+                  },
+                  "required": [
+                    "current_status"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "current_submission_id"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "current_status": {
+                      "enum": [
+                        "partially_accepted",
+                        "accepted",
+                        "rejected"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "current_status"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "current_submission_id",
+                    "current_decision_id"
+                  ]
+                }
+              }
+            ]
           },
           "minItems": 0
         }
