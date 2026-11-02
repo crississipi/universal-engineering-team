@@ -123,10 +123,42 @@
                       "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
                     },
                     "previous_value": {
-                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "boolean"
+                        },
+                        {
+                          "type": "object"
+                        },
+                        {
+                          "type": "array"
+                        }
+                      ]
                     },
                     "proposed_value": {
-                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                      "oneOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "boolean"
+                        },
+                        {
+                          "type": "object"
+                        },
+                        {
+                          "type": "array"
+                        }
+                      ]
                     },
                     "reason": {
                       "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
