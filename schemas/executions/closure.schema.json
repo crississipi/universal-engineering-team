@@ -206,7 +206,31 @@
                   "evidence_refs",
                   "notes"
                 ],
-                "additionalProperties": false
+                "additionalProperties": false,
+                "allOf": [
+                  {
+                    "if": {
+                      "properties": {
+                        "result": {
+                          "enum": [
+                            "passed",
+                            "failed",
+                            "not_applicable"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "result"
+                      ]
+                    },
+                    "then": {
+                      "required": [
+                        "checked_by_role",
+                        "checked_at"
+                      ]
+                    }
+                  }
+                ]
               },
               "minItems": 0
             },
@@ -519,6 +543,24 @@
               "then": {
                 "required": [
                   "closure_decision_id"
+                ]
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "closure_status": {
+                    "const": "cancelled"
+                  }
+                },
+                "required": [
+                  "closure_status"
+                ]
+              },
+              "then": {
+                "required": [
+                  "closure_decision_id",
+                  "closure_authorized_by_role"
                 ]
               }
             }
