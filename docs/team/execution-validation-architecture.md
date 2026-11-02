@@ -201,16 +201,22 @@ relationships.
 
 Responsibilities:
 
-- Verify allowed state transitions.
+- Verify allowed state transitions where the governing specification defines them.
 - Verify role activation and work assignment compatibility.
 - Verify work-item dependency conditions.
 - Verify handoff submission and acceptance consistency.
 - Verify decision lifecycle consistency.
 - Verify blocker resolution requirements.
 - Verify replanning approval requirements.
-- Verify evidence verification-state consistency.
+- Verify evidence verification-state consistency without inventing an unspecified transition matrix.
 - Verify completion, verification, and closure requirements.
 - Verify release requirements when release is applicable.
+
+The Phase 1.4.7.4 implementation is
+`scripts/validate-execution-lifecycle.py`, documented in
+`docs/team/lifecycle-validation-rules.md`. It validates one execution
+directory independently; a successful result covers only the lifecycle
+checks implemented by that script.
 
 A valid record structure does not automatically mean the execution is governance-compliant.
 
@@ -288,6 +294,11 @@ The prescribed execution order is:
 5. Validate cross-record relationships.
 6. Validate lifecycle and governance rules.
 7. Produce the consolidated report.
+
+The cross-record and lifecycle validators may be run independently during
+development. Neither independent pass represents a complete execution
+validation. The integrated entry point must run both after successful
+parsing and schema validation.
 
 The cross-record reference validator may also be invoked independently for
 one execution directory during development. An independent pass reports
@@ -430,3 +441,20 @@ Phase 1.4.7.3 is complete when:
 
 This subphase does not complete JSON Schema validation, lifecycle transition
 validation, test-fixture coverage, or the unified validator entry point.
+
+### 13.4 Phase 1.4.7.4 — Lifecycle and State-Transition Validation
+
+Phase 1.4.7.4 is complete when:
+
+- A deterministic Python validator checks lifecycle state and history for the ten canonical execution record files.
+- Explicit work-item, dependency, handoff, decision, blocker, replan, closure, and overall workflow transition rules are enforced.
+- Role activation and evidence states are checked against their canonical compatibility and verification rules without inventing unspecified transition matrices.
+- History timestamps are valid UTC values and chronological.
+- Material status history is continuous where previous and new values are recorded.
+- Current lifecycle fields agree with their latest recorded history values.
+- Status-specific timestamps, terminal conditions, authorization references, and closure events are checked where the governing documents require them.
+- The validator is read-only and reports stable finding codes.
+- Lifecycle rules and explicit non-goals are documented.
+
+This subphase does not complete test-fixture coverage, negative tests,
+unified validator integration, or end-to-end execution validation.
