@@ -277,22 +277,34 @@ def validate_execution_lifecycle(execution, errors):
         add(errors, "LIFE021", f"{label}.workflow_stage has unsupported value {stage!r}")
     history = validate_history(execution, label, execution.get("updated_at"), errors)
     transitions = []
+    stages = []
     for index, entry in enumerate(history):
         old = history_value(entry, "previous_values", "workflow_status")
         new = history_value(entry, "new_values", "workflow_status")
-        if old is not None and new is not None:
-            if old == "blocked":
-                previous_active = next(
-                    (value for value in reversed(transitions) if value != "blocked"),
-                    None,
-                )
-                if previous_active is None or new != previous_active:
-                    add(errors, "LIFE022", f"{label}.history[{index}] must resume the most recent non-blocked workflow status after blocked")
-            else:
-                check_transition(f"{label}.history[{index}].workflow_status", old, new, WORKFLOW_TRANSITIONS, errors, "LIFE022")
+        if new is not None:
+            if old is not None:
+                if old == "blocked":
+                    previous_active = next(
+                        (value for value in reversed(transitions) if value != "blocked"),
+                        None,
+                    )
+                    if previous_active is None or new != previous_active:
+                        add(errors, "LIFE022", f"{label}.history[{index}] must resume the most recent non-blocked workflow status after blocked")
+                else:
+                    check_transition(f"{label}.history[{index}].workflow_status", old, new, WORKFLOW_TRANSITIONS, errors, "LIFE022")
+                    if transitions and old != transitions[-1]:
+                        add(errors, "LIFE022", f"{label}.history[{index}] previous workflow status does not match the preceding recorded status")
             transitions.append(new)
+        old_stage = history_value(entry, "previous_values", "workflow_stage")
+        new_stage = history_value(entry, "new_values", "workflow_stage")
+        if new_stage is not None:
+            if old_stage is not None and stages and old_stage != stages[-1]:
+                add(errors, "LIFE024", f"{label}.history[{index}] previous workflow stage does not match the preceding recorded stage")
+            stages.append(new_stage)
     if transitions and status != transitions[-1]:
-        add(errors, "LIFE022", f"{label}.workflow_status does not match its latest recorded transition")
+        add(errors, "LIFE022", f"{label}.workflow_status does not match its latest recorded history value")
+    if stages and stage != stages[-1]:
+        add(errors, "LIFE024", f"{label}.workflow_stage does not match its latest recorded history value")
     final = execution.get("final_disposition")
     if status in {"verified", "released", "deferred", "cancelled"}:
         if not isinstance(final, dict):
@@ -346,10 +358,6 @@ def validate_role_activations(records, errors):
             add(errors, "LIFE043", f"{label} completed status requires completed_at")
         if status == "deactivated" and not parse_timestamp(record.get("deactivated_at")):
             add(errors, "LIFE043", f"{label} deactivated status requires deactivated_at")
-        if status != "completed" and record.get("completed_at") is not None:
-            add(errors, "LIFE043", f"{label}.completed_at is only valid for completed status")
-        if status != "deactivated" and record.get("deactivated_at") is not None:
-            add(errors, "LIFE043", f"{label}.deactivated_at is only valid for deactivated status")
         history = validate_history(record, label, record.get("updated_at"), errors)
         # Activation history uses previous_values/new_values maps. Governance
         # explicitly permits reactivation but does not define a full transition
@@ -453,8 +461,8 @@ def validate_decisions(records, errors):
                 add(errors, "LIFE072", f"{label} status {current!r} requires decided_at")
             if not nonempty(record.get("decided_by_role")):
                 add(errors, "LIFE072", f"{label} status {current!r} requires decided_by_role")
-        elif record.get("decided_at") is not None:
-            add(errors, "LIFE072", f"{label}.decided_at is only valid after approval or rejection")
+        elif current in {"proposed", "under_review", "withdrawn"} and record.get("decided_at") is not None:
+            add(errors, "LIFE072", f"{label}.decided_at must be omitted before a decision is approved or rejected")
 
 
 def validate_evidence(records, errors):
