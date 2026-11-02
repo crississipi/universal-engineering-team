@@ -247,8 +247,7 @@
                 "then": {
                   "required": [
                     "decided_by_role",
-                    "decided_at",
-                    "selected_option"
+                    "decided_at"
                   ]
                 }
               },
@@ -305,6 +304,23 @@
                   "required": [
                     "decided_by_role",
                     "decided_at"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "decision_status": {
+                      "const": "approved"
+                    }
+                  },
+                  "required": [
+                    "decision_status"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "selected_option"
                   ]
                 }
               }
