@@ -204,6 +204,7 @@
                 "then": {
                   "required": [
                     "resolution_summary",
+                    "resolution_evidence_refs",
                     "resolved_at"
                   ]
                 }
