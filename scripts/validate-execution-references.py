@@ -596,6 +596,11 @@ def validate_closure(indexes, artifacts, errors):
             for overlap_id in sorted(overlap):
                 add(errors, "REF061", f"Closure {closure_id} work item {overlap_id} appears in multiple {label} classifications")
             seen_ids.update(group_ids)
+    accounted_work_items = set().union(*completion_lists.values())
+    missing_completion_items = in_scope_work_items - accounted_work_items
+    for work_item_id in sorted(missing_completion_items):
+        add(errors, "REF070", f"In-scope work item {work_item_id} is not accounted for in the closure completion lists")
+
     for group_name, group_ids in completion_lists.items():
         for work_item_id in group_ids:
             item = resolve(work_item_id, "work_items", indexes, f"closure {closure_id}.{group_name}", errors)
@@ -608,6 +613,11 @@ def validate_closure(indexes, artifacts, errors):
                     add(errors, "REF062", f"Closure {closure_id}.{group_name} includes {work_item_id} whose state is {item.get('state')!r}, expected {expected_state!r}")
                 if group_name == "outstanding_work_item_ids" and item.get("state") in {"completed", "cancelled"}:
                     add(errors, "REF063", f"Closure {closure_id}.outstanding_work_item_ids includes terminal work item {work_item_id}")
+                if group_name == "outstanding_work_item_ids" and item.get("state") not in {"not_started", "ready", "in_progress", "blocked", "in_review", "changes_requested"}:
+                    add(errors, "REF071", f"Closure {closure_id}.outstanding_work_item_ids contains {work_item_id} with an unsupported non-terminal state")
+
+    if completion.get("status") == "complete" and completion_lists["outstanding_work_item_ids"]:
+        add(errors, "REF072", f"Closure {closure_id} cannot claim completion status 'complete' while outstanding work items remain")
     for work_item_id in verification_lists["verified_work_item_ids"] | verification_lists["failed_work_item_ids"] | verification_lists["not_verified_work_item_ids"]:
         resolve(work_item_id, "work_items", indexes, f"closure {closure_id}.verification work-item classification", errors)
     for section, field, kind in (
