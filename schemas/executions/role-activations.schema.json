@@ -232,6 +232,49 @@
                     "completed_at"
                   ]
                 }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "classification": {
+                      "const": "required"
+                    }
+                  },
+                  "required": [
+                    "classification"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "activation_status": {
+                      "enum": [
+                        "planned",
+                        "active",
+                        "completed",
+                        "deactivated"
+                      ]
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "classification": {
+                      "const": "not_activated"
+                    }
+                  },
+                  "required": [
+                    "classification"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "activation_status": {
+                      "const": "not_activated"
+                    }
+                  }
+                }
               }
             ]
           },
