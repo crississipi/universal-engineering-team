@@ -240,7 +240,8 @@
                 "type": "object",
                 "properties": {
                   "exception_id": {
-                    "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                    "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString",
+                    "pattern": "^EXC-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                   },
                   "category": {
                     "type": "string",
@@ -433,7 +434,8 @@
                 "type": "object",
                 "properties": {
                   "event_id": {
-                    "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                    "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString",
+                    "pattern": "^HIS-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                   },
                   "event_type": {
                     "type": "string",
