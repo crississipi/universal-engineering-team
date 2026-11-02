@@ -196,26 +196,18 @@ closure:
     replan_ids: []
     release_record_refs: []
 
-  closure_decision_id: null
-
-  proposed_by_role: null
-  coordinated_by_role: null
-  closure_authorized_by_role: null
-
   closure_summary: ""
   residual_risks: []
   follow_up_references: []
 
   created_at: ""
   updated_at: ""
-  proposed_at: null
-  reviewed_at: null
-  closed_at: null
+  # proposed_at, reviewed_at, and closed_at are omitted until applicable.
 
   history: []
 ```
 
-The fields and nested structures are defined in the following sections. Optional values may be omitted or represented as `null` according to the repository's eventual schema conventions. Required fields must not be omitted from an actual record.
+The fields and nested structures are defined in the following sections. Optional and conditional fields must be omitted when they do not apply or are not yet known; YAML `null` is not a substitute for omission. Required fields must not be omitted from an actual record. The example is illustrative and its empty strings are placeholders, not acceptable values for required non-empty text fields.
 
 ## 5. Field Definitions
 
