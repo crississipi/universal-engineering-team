@@ -56,6 +56,35 @@ The standard engineering lifecycle consists of nine stages:
 8. Release Readiness and Release
 9. Closure
 
+### 2.1 Canonical Workflow Stage Identifiers
+
+Execution records use stable machine-readable identifiers in the
+`workflow_stage` field. These identifiers map one-to-one to the
+human-readable stage names above:
+
+| Stage identifier | Canonical stage name |
+|---|---|
+| `intake` | Intake |
+| `qualification` | Qualification |
+| `solution_framing` | Solution Framing |
+| `planning` | Planning |
+| `execution` | Execution |
+| `integration_and_review` | Integration and Review |
+| `verification` | Verification |
+| `release_readiness_and_release` | Release Readiness and Release |
+| `closure` | Closure |
+
+The stage identifier records the current stage, not the workflow status.
+It must not be replaced with the stage's display name, an ordinal
+number, or an individual work-item state.
+
+The release stage remains conditional according to the existing
+release applicability rules. Its identifier remains valid for
+executions that enter that stage.
+
+The canonical overall workflow status vocabulary is defined in
+Section 5 and remains separate from these stage identifiers.
+
 The lifecycle is adaptable.
 
 A small, isolated task may require only a subset of these stages.
