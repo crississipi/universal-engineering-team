@@ -146,7 +146,8 @@ whose value is an array of role activation records.
 | `activation_trigger_applies` | Conditional | Boolean indicating whether the conditional trigger applies; required when classification is `conditional`. |
 | `work_item_ids` | Optional | Work-item identifiers associated with this activation. |
 | `activated_at` | Optional | UTC timestamp when participation became active. |
-| `deactivated_at` | Optional | UTC timestamp when participation ended. |
+| `deactivated_at` | Conditional | UTC timestamp when participation ended; required when status is `deactivated`. |
+| `completed_at` | Conditional | UTC timestamp when the role completed its participation; required when status is `completed`. |
 | `created_at` | Required | UTC timestamp when the activation record was created. |
 | `updated_at` | Required | UTC timestamp of the latest material update. |
 | `history` | Required | Chronological history of material changes. |
@@ -154,6 +155,20 @@ whose value is an array of role activation records.
 For classifications other than `conditional`, omit
 `activation_trigger` and `activation_trigger_applies`. Do not use
 `null` to represent an inapplicable conditional field.
+
+When classification is `conditional`, both trigger fields are required.
+If `activation_trigger_applies` is `false`, the activation status must
+be `not_activated`. If it is `true`, the status must be one of
+`planned`, `active`, `completed`, or `deactivated`.
+
+For lifecycle timestamps:
+
+- `activated_at` is required when status is `active`, `completed`,
+  or `deactivated`.
+- `deactivated_at` is required when status is `deactivated`.
+- `completed_at` is required when status is `completed`.
+- These timestamps are omitted when their corresponding event has not
+  occurred.
 
 The compatibility between `classification` and
 `activation_status` remains a cross-record/governance validation rule,
