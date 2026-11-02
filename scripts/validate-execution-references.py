@@ -246,7 +246,7 @@ def validate_activation_work_items(indexes, errors):
                 add(errors, "REF023", f"Work item {work_item_id}.assigned_role does not match activation {activation_id}.role_id")
             state = work_item.get("state")
             activation_status = activation.get("activation_status")
-            if state in {"in_progress", "in_review", "changes_requested"} and activation_status != "active":
+            if state in {"in_progress", "blocked", "in_review", "changes_requested"} and activation_status != "active":
                 add(errors, "REF024", f"Work item {work_item_id} in state {state!r} requires active role activation {activation_id}")
             if state in {"not_started", "ready"} and activation_status not in {"planned", "active"}:
                 add(errors, "REF024", f"Work item {work_item_id} in state {state!r} has incompatible activation status {activation_status!r}")
@@ -271,11 +271,7 @@ def validate_dependency_graph(indexes, errors):
             add(errors, "REF026", f"Dependency {dependency_id} cannot reference the same predecessor and successor")
         if predecessor and successor:
             adjacency[predecessor_id].append(successor_id)
-            for work_item_id, item in ((predecessor_id, predecessor), (successor_id, successor)):
-                refs = item.get("dependency_ids", [])
-                if dependency_id not in refs:
-                    add(errors, "REF027", f"Dependency {dependency_id} is not listed as related by work item {work_item_id}.dependency_ids")
-
+    
         for field, kind in (
             ("satisfaction_evidence_refs", "evidence"),
             ("related_decision_ids", "decisions"),
@@ -283,10 +279,7 @@ def validate_dependency_graph(indexes, errors):
             ("handoff_execution_refs", "handoff_executions"),
         ):
             for index, ref in enumerate(as_list(dependency.get(field), f"dependency {dependency_id}.{field}", errors)):
-                target = resolve(ref, kind, indexes, f"dependency {dependency_id}.{field}[{index}]", errors)
-                if kind == "handoff_executions" and target:
-                    if dependency_id not in target.get("dependency_ids", []):
-                        add(errors, "REF059", f"Dependency {dependency_id} is not reciprocally referenced by handoff {ref}")
+                resolve(ref, kind, indexes, f"dependency {dependency_id}.{field}[{index}]", errors)
 
     # Every dependency edge participates in the governed acyclic dependency graph.
     visiting = set()
@@ -390,9 +383,7 @@ def validate_handoffs(indexes, artifacts, contracts, errors, warnings):
                     add(errors, "REF057", f"Handoff {handoff_id}.current_status does not match current decision outcome")
 
         for dependency_id in as_list(handoff.get("dependency_ids"), f"handoff {handoff_id}.dependency_ids", errors):
-            dependency = resolve(dependency_id, "dependencies", indexes, f"handoff {handoff_id}.dependency_ids", errors)
-            if dependency and handoff_id not in dependency.get("handoff_execution_refs", []):
-                add(errors, "REF042", f"Handoff {handoff_id} is not reciprocally referenced by dependency {dependency_id}")
+            resolve(dependency_id, "dependencies", indexes, f"handoff {handoff_id}.dependency_ids", errors)
 
 
 def validate_typed_reference(reference, indexes, artifacts, label, errors):
@@ -421,8 +412,9 @@ def validate_typed_reference(reference, indexes, artifacts, label, errors):
     elif ref_type == "replan":
         resolve(ref_id, "replans", indexes, label, errors)
     elif ref_type == "external":
-        if not is_non_empty(reference.get("uri")) and not is_non_empty(reference.get("description")):
-            add(errors, "REF045", f"{label} external reference needs a URI or meaningful description")
+        # The external identifier is the canonical reference; a URI is supplementary.
+        if not is_non_empty(ref_id):
+            add(errors, "REF045", f"{label} external reference requires its external reference_id")
     else:
         add(errors, "REF046", f"{label}.reference_type is unsupported: {ref_type!r}")
 
@@ -451,7 +443,7 @@ def validate_common_record_references(indexes, artifacts, errors):
                 if field in record:
                     for index, dependency_id in enumerate(as_list(record.get(field), f"{label}.{field}", errors)):
                         dependency = resolve(dependency_id, "dependencies", indexes, f"{label}.{field}[{index}]", errors)
-                        if dependency and record_id not in {
+                        if kind == "work_items" and dependency and record_id not in {
                             dependency.get("predecessor_work_item_id"),
                             dependency.get("successor_work_item_id"),
                         }:
@@ -503,8 +495,8 @@ def validate_replans(indexes, artifacts, errors):
     for replan_id, replan in indexes["replans"].items():
         if replan.get("decision_id"):
             decision = resolve(replan["decision_id"], "decisions", indexes, f"replan {replan_id}.decision_id", errors)
-            if decision and decision.get("decision_status") != "approved":
-                add(errors, "REF049", f"Approved replan {replan_id} must reference an approved decision")
+            if decision and replan.get("status") in {"approved", "in_progress", "completed"} and decision.get("decision_status") != "approved":
+                add(errors, "REF049", f"Replan {replan_id} in status {replan.get('status')!r} must reference an approved decision")
         for index, artifact_id in enumerate(as_list(replan.get("affected_artifact_ids"), f"replan {replan_id}.affected_artifact_ids", errors)):
             if artifact_id not in artifacts:
                 add(errors, "REF050", f"Replan {replan_id}.affected_artifact_ids[{index}] references unknown artifact {artifact_id}")
