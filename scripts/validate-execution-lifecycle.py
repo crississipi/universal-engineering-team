@@ -236,40 +236,12 @@ def check_transition(label, old, new, allowed, errors, code):
         add(errors, code, f"{label} has prohibited transition {old!r} -> {new!r}")
 
 
-def validate_status_history(record, label, current, history, allowed, errors,
-                            code, extractor):
-    transitions = []
-    for index, entry in enumerate(history):
-        pair = extractor(entry)
-        if pair is None:
-            continue
-        old, new = pair
-        check_transition(f"{label}.history[{index}]", old, new, allowed, errors, code)
-        transitions.append((index, new))
-    if transitions and transitions[-1][1] != current:
-        add(errors, code, f"{label}.{extractor.field_name} does not match the latest recorded history value")
-    return transitions
-
-
-def extract_previous_new(entry, previous_key, new_key, field=None):
-    if field:
-        return history_value(entry, previous_key, field), history_value(entry, new_key, field)
-    return entry.get(previous_key), entry.get(new_key)
-
-
 def check_status(record, label, field, allowed, errors, code):
     value = record.get(field)
     if value not in allowed:
         add(errors, code, f"{label}.{field} has unsupported value {value!r}")
         return None
     return value
-
-
-def validate_history_shape_and_order(records, kind, errors):
-    id_field = RECORD_FILES[kind][3]
-    for index, record in enumerate(records):
-        label = f"{kind}[{index}] ({record.get(id_field, 'unknown')})"
-        validate_history(record, label, record.get("updated_at"), errors)
 
 
 def validate_execution_lifecycle(execution, errors):
