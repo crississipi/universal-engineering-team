@@ -87,12 +87,87 @@
                     "output_refs": {
                       "type": "array",
                       "items": {
-                        "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "reference_type": {
+                            "type": "string",
+                            "enum": [
+                              "artifact",
+                              "work_item",
+                              "role_activation",
+                              "dependency",
+                              "handoff_execution",
+                              "decision",
+                              "evidence",
+                              "blocker",
+                              "replan",
+                              "external"
+                            ]
+                          },
+                          "reference_id": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "\\S"
+                          },
+                          "description": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "\\S"
+                          },
+                          "uri": {
+                            "type": "string",
+                            "format": "uri"
+                          }
+                        },
+                        "required": [
+                          "reference_type",
+                          "reference_id"
+                        ]
                       },
                       "minItems": 1
                     },
                     "context_refs": {
-                      "$ref": "./definitions/common-values.schema.json#/$defs/stringArray"
+                      "$ref": "./definitions/common-values.schema.json#/$defs/stringArray",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                          "reference_type": {
+                            "type": "string",
+                            "enum": [
+                              "artifact",
+                              "work_item",
+                              "role_activation",
+                              "dependency",
+                              "handoff_execution",
+                              "decision",
+                              "evidence",
+                              "blocker",
+                              "replan",
+                              "external"
+                            ]
+                          },
+                          "reference_id": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "\\S"
+                          },
+                          "description": {
+                            "type": "string",
+                            "minLength": 1,
+                            "pattern": "\\S"
+                          },
+                          "uri": {
+                            "type": "string",
+                            "format": "uri"
+                          }
+                        },
+                        "required": [
+                          "reference_type",
+                          "reference_id"
+                        ]
+                      }
                     },
                     "notes": {
                       "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
