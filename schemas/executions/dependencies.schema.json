@@ -180,6 +180,25 @@
                     }
                   }
                 }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "relationship_type": {
+                      "const": "conditional_input"
+                    }
+                  },
+                  "required": [
+                    "relationship_type"
+                  ]
+                },
+                "else": {
+                  "not": {
+                    "required": [
+                      "activation_condition"
+                    ]
+                  }
+                }
               }
             ]
           },
