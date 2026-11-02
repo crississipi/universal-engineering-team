@@ -237,10 +237,7 @@
                 "if": {
                   "properties": {
                     "decision_status": {
-                      "enum": [
-                        "approved",
-                        "rejected"
-                      ]
+                      "const": "approved"
                     }
                   },
                   "required": [
@@ -250,7 +247,8 @@
                 "then": {
                   "required": [
                     "decided_by_role",
-                    "decided_at"
+                    "decided_at",
+                    "selected_option"
                   ]
                 }
               },
@@ -289,6 +287,24 @@
                 "then": {
                   "required": [
                     "rejection_code"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "decision_status": {
+                      "const": "rejected"
+                    }
+                  },
+                  "required": [
+                    "decision_status"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "decided_by_role",
+                    "decided_at"
                   ]
                 }
               }
