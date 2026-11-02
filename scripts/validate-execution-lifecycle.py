@@ -508,6 +508,8 @@ def validate_evidence(records, errors):
                 add(errors, "LIFE081", f"{label} history contains unknown new verification status {new!r}")
         if values and current != values[-1]:
             add(errors, "LIFE081", f"{label}.verification_status does not match its latest recorded history value")
+        if current == "verified" and not nonempty(record.get("verified_by_role")):
+            add(errors, "LIFE082", f"{label} verified status requires verified_by_role")
         if current in {"verified", "invalid"} and not nonempty(record.get("verification_notes")):
             add(errors, "LIFE082", f"{label} status {current!r} requires verification_notes")
         evidence_id = record.get("evidence_id")
@@ -616,6 +618,9 @@ def validate_closure(record, decisions, errors):
     if current == "closed":
         if not decision or decision.get("decision_type") != "execution_closure" or decision.get("decision_status") != "approved":
             add(errors, "LIFE112", f"{label} closed status requires an approved execution_closure decision")
+        authorized_role = record.get("closure_authorized_by_role")
+        if authorized_role and decision and authorized_role != decision.get("decided_by_role"):
+            add(errors, "LIFE112", f"{label}.closure_authorized_by_role must match the approved closure decision's decided_by_role")
         closed_at = parse_timestamp(record.get("closed_at"))
         if closed_at is None:
             add(errors, "LIFE112", f"{label} closed status requires UTC closed_at")
