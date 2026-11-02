@@ -19,7 +19,7 @@ The Phase 1.4.7.3 implementation is:
 Run it from the repository root:
 
 ```powershell
-python scripts/validate-execution-references.py executions/EXE-<uuid>
+python scripts/validate-execution-references.py "executions/EXE-<uuid>"
 ```
 
 The supplied directory must be a direct child of `executions/`. It must
