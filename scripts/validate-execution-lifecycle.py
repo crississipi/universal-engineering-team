@@ -323,8 +323,12 @@ def validate_work_items(records, errors):
         if planned is not None and parse_timestamp(planned) is None:
             add(errors, "LIFE033", f"{label}.planned_completion_at must be a UTC timestamp when present")
         completed = parse_timestamp(record.get("completed_at"))
-        if completed is not None and parse_timestamp(record.get("created_at")) is not None and completed < parse_timestamp(record.get("created_at")):
+        created = parse_timestamp(record.get("created_at"))
+        if completed is not None and created is not None and completed < created:
             add(errors, "LIFE033", f"{label}.completed_at precedes created_at")
+        updated = parse_timestamp(record.get("updated_at"))
+        if completed is not None and updated is not None and completed > updated:
+            add(errors, "LIFE033", f"{label}.completed_at is later than updated_at")
 
 
 def validate_role_activations(records, errors):
@@ -350,6 +354,18 @@ def validate_role_activations(records, errors):
             add(errors, "LIFE043", f"{label} completed status requires completed_at")
         if status == "deactivated" and not parse_timestamp(record.get("deactivated_at")):
             add(errors, "LIFE043", f"{label} deactivated status requires deactivated_at")
+        created = parse_timestamp(record.get("created_at"))
+        activated = parse_timestamp(record.get("activated_at"))
+        completed = parse_timestamp(record.get("completed_at"))
+        deactivated = parse_timestamp(record.get("deactivated_at"))
+        if created and activated and activated < created:
+            add(errors, "LIFE043", f"{label}.activated_at precedes created_at")
+        if activated and completed and completed < activated:
+            add(errors, "LIFE043", f"{label}.completed_at precedes activated_at")
+        if activated and deactivated and deactivated < activated:
+            add(errors, "LIFE043", f"{label}.deactivated_at precedes activated_at")
+        if completed and deactivated and deactivated < completed:
+            add(errors, "LIFE043", f"{label}.deactivated_at precedes completed_at")
         history = validate_history(record, label, record.get("updated_at"), errors)
         # Activation history uses previous_values/new_values maps. Governance
         # explicitly permits reactivation but does not define a full transition
@@ -480,8 +496,20 @@ def validate_evidence(records, errors):
             add(errors, "LIFE081", f"{label}.verification_status does not match its latest recorded history value")
         if current in {"verified", "invalid"} and not nonempty(record.get("verification_notes")):
             add(errors, "LIFE082", f"{label} status {current!r} requires verification_notes")
+        evidence_id = record.get("evidence_id")
+        replacement_id = record.get("supersedes_evidence_id")
+        if replacement_id:
+            replacement = next(
+                (other for other in records if other.get("evidence_id") == replacement_id),
+                None,
+            )
+            if replacement is None:
+                add(errors, "LIFE083", f"{label}.supersedes_evidence_id references a missing replacement {replacement_id}")
+            elif replacement_id == evidence_id:
+                add(errors, "LIFE083", f"{label} cannot supersede itself")
+            elif replacement.get("supersedes_evidence_id") != evidence_id:
+                add(errors, "LIFE083", f"{label}.supersedes_evidence_id is not reciprocated by replacement {replacement_id}")
         if current == "superseded":
-            evidence_id = record.get("evidence_id")
             replacements = [
                 other for other in records
                 if other.get("supersedes_evidence_id") == evidence_id
@@ -613,14 +641,15 @@ def validate_closure(record, decisions, errors):
             add(errors, "LIFE113", f"{label} cancelled status requires a cancellation history event")
     completion = record.get("completion", {})
     verification = record.get("verification", {})
-    if isinstance(completion, dict) and completion.get("status") == "complete_with_exceptions":
-        exceptions = record.get("exceptions", [])
-        if not any(isinstance(item, dict) and item.get("status") == "approved" for item in exceptions if isinstance(exceptions, list)):
-            add(errors, "LIFE114", f"{label} complete_with_exceptions requires an approved exception")
-    if isinstance(verification, dict) and verification.get("status") == "passed_with_exceptions":
-        exceptions = record.get("exceptions", [])
-        if not any(isinstance(item, dict) and item.get("status") == "approved" for item in exceptions if isinstance(exceptions, list)):
-            add(errors, "LIFE114", f"{label} passed_with_exceptions requires an approved exception")
+    exceptions = record.get("exceptions", [])
+    approved_exceptions = (
+        any(isinstance(item, dict) and item.get("status") == "approved" for item in exceptions)
+        if isinstance(exceptions, list) else False
+    )
+    if isinstance(completion, dict) and completion.get("status") == "complete_with_exceptions" and not approved_exceptions:
+        add(errors, "LIFE114", f"{label} complete_with_exceptions requires an approved exception")
+    if isinstance(verification, dict) and verification.get("status") == "passed_with_exceptions" and not approved_exceptions:
+        add(errors, "LIFE114", f"{label} passed_with_exceptions requires an approved exception")
 
 
 def validate_execution(directory):
