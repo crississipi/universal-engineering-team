@@ -601,13 +601,43 @@ def validate_closure(record, decisions, errors):
     if current == "closed":
         if not decision or decision.get("decision_type") != "execution_closure" or decision.get("decision_status") != "approved":
             add(errors, "LIFE112", f"{label} closed status requires an approved execution_closure decision")
-        if not parse_timestamp(record.get("closed_at")):
-            add(errors, "LIFE112", f"{label} closed status requires closed_at")
+        closed_at = parse_timestamp(record.get("closed_at"))
+        if closed_at is None:
+            add(errors, "LIFE112", f"{label} closed status requires UTC closed_at")
+        closure_events = [
+            entry for entry in history
+            if entry.get("event_type") == "closure_status_changed"
+            and entry.get("new_value") == "closed"
+        ]
+        approval_events = [
+            entry for entry in history
+            if entry.get("event_type") == "closure_approved"
+        ]
+        if not closure_events or not approval_events:
+            add(errors, "LIFE112", f"{label} closed status requires closure_status_changed and closure_approved history events")
+        elif closed_at is not None:
+            event_time = parse_timestamp(closure_events[-1].get("occurred_at"))
+            if event_time is not None and event_time != closed_at:
+                add(errors, "LIFE112", f"{label}.closed_at must match the recorded closure status event timestamp")
+        if decision_id and approval_events:
+            refs = approval_events[-1].get("related_record_refs", [])
+            if not isinstance(refs, list) or decision_id not in refs:
+                add(errors, "LIFE112", f"{label} closure_approved history event must reference closure decision {decision_id}")
     elif record.get("closed_at") is not None:
         add(errors, "LIFE112", f"{label}.closed_at is only valid when closure_status is closed")
     if current == "cancelled":
         if not decision or decision.get("decision_status") != "approved":
             add(errors, "LIFE113", f"{label} cancelled status requires an approved cancellation decision")
+        cancellation_events = [
+            entry for entry in history
+            if entry.get("event_type") == "closure_cancelled"
+            or (
+                entry.get("event_type") == "closure_status_changed"
+                and entry.get("new_value") == "cancelled"
+            )
+        ]
+        if not cancellation_events:
+            add(errors, "LIFE113", f"{label} cancelled status requires a cancellation history event")
     completion = record.get("completion", {})
     verification = record.get("verification", {})
     if isinstance(completion, dict) and completion.get("status") == "complete_with_exceptions":
