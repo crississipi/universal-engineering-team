@@ -1051,7 +1051,6 @@ closure:
 
     - event_id: "HIS-00000000-0000-4000-8000-000000000003"
       event_type: "closure_approved"
-      previous_value: null
       new_value: "closed"
       reason: "Illustrative authorized closure decision."
       actor_role: "delivery-lead"
