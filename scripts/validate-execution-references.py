@@ -285,7 +285,7 @@ def validate_dependency_graph(indexes, errors):
             add(errors, "REF026", f"Dependency {dependency_id} cannot reference the same predecessor and successor")
         if predecessor and successor:
             adjacency[predecessor_id].append(successor_id)
-    
+
         for field, kind in (
             ("satisfaction_evidence_refs", "evidence"),
             ("related_decision_ids", "decisions"),
