@@ -285,22 +285,23 @@ def validate_execution_lifecycle(execution, errors):
     history = validate_history(execution, label, execution.get("updated_at"), errors)
     transitions = []
     stage_history = []
+    last_non_blocked_status = None
     for index, entry in enumerate(history):
         old = history_value(entry, "previous_values", "workflow_status")
         new = history_value(entry, "new_values", "workflow_status")
         if new is not None:
             if old is not None:
                 if old == "blocked":
-                    previous_active = next(
-                        (value for value in reversed(transitions) if value != "blocked"),
-                        None,
-                    )
-                    if previous_active is None or new != previous_active:
+                    if last_non_blocked_status is None or new != last_non_blocked_status:
                         add(errors, "LIFE022", f"{label}.history[{index}] must resume the most recent non-blocked workflow status after blocked")
                 else:
                     check_transition(f"{label}.history[{index}].workflow_status", old, new, WORKFLOW_TRANSITIONS, errors, "LIFE022")
                     if transitions and old != transitions[-1]:
                         add(errors, "LIFE022", f"{label}.history[{index}] previous workflow status does not match the preceding recorded status")
+                    if new == "blocked":
+                        last_non_blocked_status = old
+                    elif old == "blocked":
+                        last_non_blocked_status = None
             transitions.append(new)
         old_stage = history_value(entry, "previous_values", "workflow_stage")
         new_stage = history_value(entry, "new_values", "workflow_stage")
