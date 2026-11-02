@@ -6,12 +6,11 @@ from __future__ import annotations
 import argparse
 from datetime import datetime, timezone
 from pathlib import Path
-import re
 import sys
 
 import yaml
 
-from validation_common import ROOT, load_yaml, report
+from validation_common import ROOT, report
 
 
 RECORD_FILES = {
@@ -355,11 +354,14 @@ def validate_role_activations(records, errors):
         # Activation history uses previous_values/new_values maps. Governance
         # explicitly permits reactivation but does not define a full transition
         # matrix, so validate chronology and current-state traceability only.
-        status_values = [
-            history_value(entry, "new_values", "activation_status")
-            for entry in history
-            if history_value(entry, "new_values", "activation_status") is not None
-        ]
+        status_values = []
+        for index, entry in enumerate(history):
+            old = history_value(entry, "previous_values", "activation_status")
+            new = history_value(entry, "new_values", "activation_status")
+            if new is not None:
+                if old is not None and status_values and old != status_values[-1]:
+                    add(errors, "LIFE044", f"{label}.history[{index}] previous activation status {old!r} does not match preceding recorded status {status_values[-1]!r}")
+                status_values.append(new)
         if status_values and status != status_values[-1]:
             add(errors, "LIFE044", f"{label}.activation_status does not match its latest recorded history value")
 
@@ -380,8 +382,11 @@ def validate_dependencies(records, errors):
                 old = entry.get("previous_status")
             if new is None:
                 new = entry.get("new_status")
-            if old is not None and new is not None:
-                check_transition(f"{label}.history[{index}].status", old, new, DEPENDENCY_TRANSITIONS, errors, "LIFE052")
+            if new is not None:
+                if old is not None:
+                    check_transition(f"{label}.history[{index}].status", old, new, DEPENDENCY_TRANSITIONS, errors, "LIFE052")
+                    if transitions and old != transitions[-1]:
+                        add(errors, "LIFE052", f"{label}.history[{index}] previous status {old!r} does not match preceding recorded status {transitions[-1]!r}")
                 transitions.append(new)
         if transitions and current != transitions[-1]:
             add(errors, "LIFE052", f"{label}.status does not match its latest recorded history value")
@@ -399,8 +404,11 @@ def validate_handoffs(records, errors):
             change_type = entry.get("change_type", "")
             if isinstance(change_type, str) and "status" in change_type.lower():
                 old, new = entry.get("previous_value"), entry.get("new_value")
-                if old is not None and new is not None:
-                    check_transition(f"{label}.history[{index}]", old, new, HANDOFF_TRANSITIONS, errors, "LIFE061")
+                if new is not None:
+                    if old is not None:
+                        check_transition(f"{label}.history[{index}]", old, new, HANDOFF_TRANSITIONS, errors, "LIFE061")
+                        if transitions and old != transitions[-1]:
+                            add(errors, "LIFE061", f"{label}.history[{index}] previous status does not match the preceding recorded status")
                     transitions.append(new)
         if transitions and current != transitions[-1]:
             add(errors, "LIFE061", f"{label}.current_status does not match its latest recorded status history")
@@ -432,8 +440,11 @@ def validate_decisions(records, errors):
         transitions = []
         for index, entry in enumerate(history):
             old, new = entry.get("previous_status"), entry.get("new_status")
-            if old is not None and new is not None:
-                check_transition(f"{label}.history[{index}]", old, new, DECISION_TRANSITIONS, errors, "LIFE071")
+            if new is not None:
+                if old is not None:
+                    check_transition(f"{label}.history[{index}]", old, new, DECISION_TRANSITIONS, errors, "LIFE071")
+                    if transitions and old != transitions[-1]:
+                        add(errors, "LIFE071", f"{label}.history[{index}] previous status does not match the preceding recorded status")
                 transitions.append(new)
         if transitions and current != transitions[-1]:
             add(errors, "LIFE071", f"{label}.decision_status does not match its latest recorded history value")
@@ -455,6 +466,8 @@ def validate_evidence(records, errors):
         for entry in history:
             old, new = entry.get("previous_status"), entry.get("new_status")
             if new is not None:
+                if old is not None and values and old != values[-1]:
+                    add(errors, "LIFE081", f"{label} history previous status {old!r} does not match preceding recorded status {values[-1]!r}")
                 values.append(new)
             if old is not None and old not in EVIDENCE_STATUSES:
                 add(errors, "LIFE081", f"{label} history contains unknown previous verification status {old!r}")
@@ -464,8 +477,14 @@ def validate_evidence(records, errors):
             add(errors, "LIFE081", f"{label}.verification_status does not match its latest recorded history value")
         if current in {"verified", "invalid"} and not nonempty(record.get("verification_notes")):
             add(errors, "LIFE082", f"{label} status {current!r} requires verification_notes")
-        if current == "superseded" and not nonempty(record.get("supersedes_evidence_id")):
-            add(errors, "LIFE083", f"{label} superseded status requires a replacement reference on the newer evidence record")
+        if current == "superseded":
+            evidence_id = record.get("evidence_id")
+            replacements = [
+                other for other in records
+                if other.get("supersedes_evidence_id") == evidence_id
+            ]
+            if not replacements:
+                add(errors, "LIFE083", f"{label} is superseded but no newer evidence record references it through supersedes_evidence_id")
 
 
 def validate_blockers(records, decisions, errors):
@@ -477,8 +496,11 @@ def validate_blockers(records, decisions, errors):
         transitions = []
         for index, entry in enumerate(history):
             old, new = entry.get("previous_status"), entry.get("new_status")
-            if old is not None and new is not None:
-                check_transition(f"{label}.history[{index}]", old, new, BLOCKER_TRANSITIONS, errors, "LIFE091")
+            if new is not None:
+                if old is not None:
+                    check_transition(f"{label}.history[{index}]", old, new, BLOCKER_TRANSITIONS, errors, "LIFE091")
+                    if transitions and old != transitions[-1]:
+                        add(errors, "LIFE091", f"{label}.history[{index}] previous status does not match the preceding recorded status")
                 transitions.append(new)
         if transitions and current != transitions[-1]:
             add(errors, "LIFE091", f"{label}.status does not match its latest recorded history value")
@@ -507,8 +529,11 @@ def validate_replans(records, decisions, errors):
         transitions = []
         for index, entry in enumerate(history):
             old, new = entry.get("previous_status"), entry.get("new_status")
-            if old is not None and new is not None:
-                check_transition(f"{label}.history[{index}]", old, new, REPLAN_TRANSITIONS, errors, "LIFE101")
+            if new is not None:
+                if old is not None:
+                    check_transition(f"{label}.history[{index}]", old, new, REPLAN_TRANSITIONS, errors, "LIFE101")
+                    if transitions and old != transitions[-1]:
+                        add(errors, "LIFE101", f"{label}.history[{index}] previous status does not match the preceding recorded status")
                 transitions.append(new)
         if transitions and current != transitions[-1]:
             add(errors, "LIFE101", f"{label}.status does not match its latest recorded history value")
@@ -532,8 +557,11 @@ def validate_closure(record, decisions, errors):
         event_type = entry.get("event_type")
         if event_type == "closure_status_changed":
             old, new = entry.get("previous_value"), entry.get("new_value")
-            if old is not None and new is not None:
-                check_transition(f"{label}.history[{index}]", old, new, CLOSURE_TRANSITIONS, errors, "LIFE111")
+            if new is not None:
+                if old is not None:
+                    check_transition(f"{label}.history[{index}]", old, new, CLOSURE_TRANSITIONS, errors, "LIFE111")
+                    if transitions and old != transitions[-1]:
+                        add(errors, "LIFE111", f"{label}.history[{index}] previous status does not match the preceding recorded status")
                 transitions.append(new)
     if transitions and current != transitions[-1]:
         add(errors, "LIFE111", f"{label}.closure_status does not match its latest recorded status history")
