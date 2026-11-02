@@ -305,6 +305,105 @@
                 "required": [
                   "final_disposition"
                 ]
+              },
+              "else": {
+                "not": {
+                  "required": [
+                    "final_disposition"
+                  ]
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "workflow_status": {
+                    "const": "verified"
+                  }
+                },
+                "required": [
+                  "workflow_status"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "final_disposition": {
+                    "properties": {
+                      "status": {
+                        "const": "verified"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "workflow_status": {
+                    "const": "released"
+                  }
+                },
+                "required": [
+                  "workflow_status"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "final_disposition": {
+                    "properties": {
+                      "status": {
+                        "const": "released"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "workflow_status": {
+                    "const": "deferred"
+                  }
+                },
+                "required": [
+                  "workflow_status"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "final_disposition": {
+                    "properties": {
+                      "status": {
+                        "const": "deferred"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "workflow_status": {
+                    "const": "cancelled"
+                  }
+                },
+                "required": [
+                  "workflow_status"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "final_disposition": {
+                    "properties": {
+                      "status": {
+                        "const": "cancelled"
+                      }
+                    }
+                  }
+                }
               }
             }
           ]
