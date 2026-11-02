@@ -625,7 +625,7 @@ def validate_closure(indexes, artifacts, errors):
     for index, ref in enumerate(as_list(completion.get("completion_evidence_refs"), f"closure {closure_id}.completion.completion_evidence_refs", errors)):
         resolve(ref, "evidence", indexes, f"closure {closure_id}.completion.completion_evidence_refs[{index}]", errors)
 
-    in_scope_work_items = set(as_list(refs.get("work_item_ids"), f"closure {closure_id}.required_record_refs.work_item_ids", errors, required=True))
+    in_scope_work_items = string_set(refs.get("work_item_ids"), f"closure {closure_id}.required_record_refs.work_item_ids", errors)
     for classification, ids in {**completion_lists, **verification_lists}.items():
         for work_item_id in ids:
             if work_item_id not in in_scope_work_items:
