@@ -264,7 +264,7 @@ def validate_activation_work_items(indexes, errors):
                 add(errors, "REF024", f"Work item {work_item_id} in state {state!r} requires active role activation {activation_id}")
             if state in {"not_started", "ready"} and activation_status not in {"planned", "active"}:
                 add(errors, "REF024", f"Work item {work_item_id} in state {state!r} has incompatible activation status {activation_status!r}")
-            if state == "completed" and activation_status not in {"active", "completed"}:
+            if state == "completed" and activation_status not in {"active", "completed", "deactivated"}:
                 add(errors, "REF024", f"Completed work item {work_item_id} has incompatible activation status {activation_status!r}")
             if state == "cancelled" and activation_status not in {"planned", "active", "completed", "deactivated", "not_activated"}:
                 add(errors, "REF024", f"Cancelled work item {work_item_id} has incompatible activation status {activation_status!r}")
