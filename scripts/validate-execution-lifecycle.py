@@ -665,6 +665,13 @@ def validate_closure(record, decisions, errors):
         any(isinstance(item, dict) and item.get("status") == "approved" for item in exceptions)
         if isinstance(exceptions, list) else False
     )
+    if current == "closed":
+        completion_status = completion.get("status") if isinstance(completion, dict) else None
+        verification_status = verification.get("status") if isinstance(verification, dict) else None
+        if completion_status not in {"complete", "complete_with_exceptions"}:
+            add(errors, "LIFE115", f"{label} closed status requires complete or complete_with_exceptions completion")
+        if verification_status not in {"passed", "passed_with_exceptions"}:
+            add(errors, "LIFE115", f"{label} closed status requires passed or passed_with_exceptions verification")
     if isinstance(completion, dict) and completion.get("status") == "complete_with_exceptions" and not approved_exceptions:
         add(errors, "LIFE114", f"{label} complete_with_exceptions requires an approved exception")
     if isinstance(verification, dict) and verification.get("status") == "passed_with_exceptions" and not approved_exceptions:
