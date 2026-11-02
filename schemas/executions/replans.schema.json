@@ -179,10 +179,28 @@
                       "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
                     },
                     "previous_status": {
-                      "type": "string"
+                      "type": "string",
+                      "enum": [
+                        "proposed",
+                        "under_review",
+                        "approved",
+                        "rejected",
+                        "in_progress",
+                        "completed",
+                        "withdrawn"
+                      ]
                     },
                     "new_status": {
-                      "type": "string"
+                      "type": "string",
+                      "enum": [
+                        "proposed",
+                        "under_review",
+                        "approved",
+                        "rejected",
+                        "in_progress",
+                        "completed",
+                        "withdrawn"
+                      ]
                     },
                     "changed_fields": {
                       "$ref": "./definitions/common-values.schema.json#/$defs/stringArray"
