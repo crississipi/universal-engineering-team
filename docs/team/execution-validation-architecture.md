@@ -121,6 +121,28 @@ Canonical record objects should reject undocumented properties after their field
 
 Legitimate extensions require an explicit governance and schema update.
 
+### 4.6 Canonical field conventions
+
+The shared YAML wrappers, omission/null policy, timestamp format,
+identifier conventions, role identifiers, reference rules, and history
+boundaries are defined in:
+
+`docs/team/execution-record-field-conventions.md`
+
+The exact root execution fields are defined in
+`docs/team/execution-identity-and-traceability.md`.
+
+The exact role activation and work-item fields are defined in
+`docs/team/role-activation-and-work-item-records.md`.
+
+Workflow stage identifiers are defined in
+`docs/team/workflow-lifecycle.md`.
+
+The ten primary schemas and three shared definition schemas are
+maintained under `schemas/executions/`. The schemas must follow these
+field sources and must not invent aliases or wrapper structures.
+
+
 ## 5. Validation Layers
 
 ### 5.1 Layer 1 — Parsing and File Integrity
