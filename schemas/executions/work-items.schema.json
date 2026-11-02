@@ -262,6 +262,13 @@
                   "required": [
                     "completed_at"
                   ]
+                },
+                "else": {
+                  "not": {
+                    "required": [
+                      "completed_at"
+                    ]
+                  }
                 }
               }
             ]
