@@ -469,13 +469,15 @@ def validate_decisions(records, errors):
                 transitions.append(new)
         if transitions and current != transitions[-1]:
             add(errors, "LIFE071", f"{label}.decision_status does not match its latest recorded history value")
-        if current in {"approved", "rejected"}:
+        if current in {"approved", "rejected", "superseded"}:
             if not parse_timestamp(record.get("decided_at")):
                 add(errors, "LIFE072", f"{label} status {current!r} requires decided_at")
             if not nonempty(record.get("decided_by_role")):
                 add(errors, "LIFE072", f"{label} status {current!r} requires decided_by_role")
         elif current in {"proposed", "under_review", "withdrawn"} and record.get("decided_at") is not None:
             add(errors, "LIFE072", f"{label}.decided_at must be omitted before a decision is approved or rejected")
+        if current == "approved" and not nonempty(record.get("selected_option")) and not nonempty(record.get("decision_outcome")):
+            add(errors, "LIFE073", f"{label} approved status requires selected_option or decision_outcome")
 
 
 def validate_evidence(records, errors):
