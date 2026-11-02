@@ -208,9 +208,10 @@ def validate_root_index(execution, indexes, errors):
         seen = set()
         for index, value in enumerate(values):
             label = f"execution.record_refs.{field}[{index}]"
-            if value in seen:
-                add(errors, "REF020", f"{label} duplicates {value}")
-            seen.add(value)
+            if is_non_empty(value):
+                if value in seen:
+                    add(errors, "REF020", f"{label} duplicates {value}")
+                seen.add(value)
             resolve(value, kind, indexes, label, errors)
     closure_id = refs.get("closure_id")
     if closure_id is not None:
@@ -246,13 +247,13 @@ def validate_activation_work_items(indexes, errors):
                 add(errors, "REF023", f"Work item {work_item_id}.assigned_role does not match activation {activation_id}.role_id")
             state = work_item.get("state")
             activation_status = activation.get("activation_status")
-            if state in {"in_progress", "blocked", "in_review", "changes_requested"} and activation_status != "active":
+            if state in {"in_progress", "in_review", "changes_requested"} and activation_status != "active":
                 add(errors, "REF024", f"Work item {work_item_id} in state {state!r} requires active role activation {activation_id}")
             if state in {"not_started", "ready"} and activation_status not in {"planned", "active"}:
                 add(errors, "REF024", f"Work item {work_item_id} in state {state!r} has incompatible activation status {activation_status!r}")
             if state == "completed" and activation_status not in {"active", "completed"}:
                 add(errors, "REF024", f"Completed work item {work_item_id} has incompatible activation status {activation_status!r}")
-            if state == "cancelled" and activation_status not in {"planned", "active", "completed", "deactivated"}:
+            if state == "cancelled" and activation_status not in {"planned", "active", "completed", "deactivated", "not_activated"}:
                 add(errors, "REF024", f"Cancelled work item {work_item_id} has incompatible activation status {activation_status!r}")
 
 
@@ -393,7 +394,7 @@ def validate_typed_reference(reference, indexes, artifacts, label, errors):
     ref_type = reference.get("reference_type")
     ref_id = reference.get("reference_id")
     if ref_type == "artifact":
-        if ref_id not in artifacts:
+        if not is_non_empty(ref_id) or ref_id not in artifacts:
             add(errors, "REF044", f"{label} references unknown artifact {ref_id}")
     elif ref_type == "work_item":
         resolve(ref_id, "work_items", indexes, label, errors)
@@ -498,7 +499,7 @@ def validate_replans(indexes, artifacts, errors):
             if decision and status in {"approved", "in_progress", "completed"} and decision.get("decision_status") != "approved":
                 add(errors, "REF049", f"Replan {replan_id} in status {status!r} must reference an approved decision")
         for index, artifact_id in enumerate(as_list(replan.get("affected_artifact_ids"), f"replan {replan_id}.affected_artifact_ids", errors)):
-            if artifact_id not in artifacts:
+            if not is_non_empty(artifact_id) or artifact_id not in artifacts:
                 add(errors, "REF050", f"Replan {replan_id}.affected_artifact_ids[{index}] references unknown artifact {artifact_id}")
         for index, change in enumerate(as_list(replan.get("changes"), f"replan {replan_id}.changes", errors, required=True)):
             if not isinstance(change, dict):
@@ -531,9 +532,10 @@ def validate_closure(indexes, artifacts, errors):
     for field, kind in fields.items():
         seen = set()
         for index, ref in enumerate(as_list(refs.get(field), f"closure {closure_id}.required_record_refs.{field}", errors, required=True)):
-            if ref in seen:
-                add(errors, "REF058", f"closure {closure_id}.required_record_refs.{field} contains duplicate {ref}")
-            seen.add(ref)
+            if is_non_empty(ref):
+                if ref in seen:
+                    add(errors, "REF058", f"closure {closure_id}.required_record_refs.{field} contains duplicate {ref}")
+                seen.add(ref)
             resolve(ref, kind, indexes, f"closure {closure_id}.required_record_refs.{field}[{index}]", errors)
     # Release references are intentionally external to the ten canonical YAML record types.
     as_list(refs.get("release_record_refs"), f"closure {closure_id}.required_record_refs.release_record_refs", errors, required=True)
