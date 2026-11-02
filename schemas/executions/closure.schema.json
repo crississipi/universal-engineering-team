@@ -240,8 +240,7 @@
                 "type": "object",
                 "properties": {
                   "exception_id": {
-                    "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString",
-                    "pattern": "^EXC-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                    "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
                   },
                   "category": {
                     "type": "string",
@@ -463,10 +462,42 @@
                     ]
                   },
                   "previous_value": {
-                    "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "object"
+                      },
+                      {
+                        "type": "array"
+                      }
+                    ]
                   },
                   "new_value": {
-                    "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "object"
+                      },
+                      {
+                        "type": "array"
+                      }
+                    ]
                   },
                   "reason": {
                     "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
