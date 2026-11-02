@@ -183,14 +183,19 @@ Responsibilities:
 - Verify records belong to the same execution when required.
 - Verify canonical role and artifact references.
 - Verify work-item and role-activation relationships.
-- Verify dependency references.
-- Verify handoff execution and submission references.
-- Verify decision and evidence references.
+- Verify dependency references and dependency-graph acyclicity.
+- Verify handoff execution, submission, contract, and decision references.
+- Verify decision and evidence references, including supersession chains.
 - Verify blocker and replanning references.
-- Verify closure references.
-- Verify required bidirectional relationships where specified.
+- Verify closure references and work-item classification consistency.
+- Verify bidirectional relationships only where the governing specification
+  explicitly requires them.
 
-Cross-record checks must follow the canonical record specifications.
+The Phase 1.4.7.3 implementation is
+`scripts/validate-execution-references.py`, documented in
+`docs/team/cross-record-validation-rules.md`. Cross-record checks must
+follow the canonical record specifications and must not infer optional
+relationships.
 
 ### 5.4 Layer 4 — Lifecycle and Governance Validation
 
@@ -283,6 +288,11 @@ The prescribed execution order is:
 5. Validate cross-record relationships.
 6. Validate lifecycle and governance rules.
 7. Produce the consolidated report.
+
+The cross-record reference validator may also be invoked independently for
+one execution directory during development. An independent pass reports
+only the cross-record checks implemented by that command; it does not
+represent a full execution-validation pass.
 
 A layer must not rely on data that an earlier layer failed to parse or validate safely.
 
@@ -401,3 +411,22 @@ Phase 1.4.7.2 is complete when:
 - Remaining cross-record and lifecycle rules are explicitly left to the later validator subphases.
 
 The existence of a schema file alone does not establish that it has been exercised against real execution records. Schema meta-validation, representative fixtures, and end-to-end validator tests are addressed by the subsequent implementation and test subphases.
+
+### 13.3 Phase 1.4.7.3 — Cross-Record Validation
+
+Phase 1.4.7.3 is complete when:
+
+- A deterministic Python validator checks the ten canonical execution YAML files.
+- Root and child execution identity relationships are checked.
+- Canonical role and artifact references are resolved.
+- Work-item and role-activation relationships are checked.
+- Dependency references resolve and the dependency graph is checked for cycles.
+- Handoff contracts, submissions, and decision references are checked.
+- Decision, evidence, blocker, and replan references are checked.
+- Closure references and completion/verification work-item classifications are checked.
+- Conditional and external references are not incorrectly forced into internal record resolution.
+- The validator is read-only and reports stable finding codes.
+- The validator's documented scope and limitations are explicit.
+
+This subphase does not complete JSON Schema validation, lifecycle transition
+validation, test-fixture coverage, or the unified validator entry point.
