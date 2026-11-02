@@ -275,6 +275,8 @@ The validator enforces the closure transition table in
 
 A closed execution requires:
 
+- Completion status `complete` or `complete_with_exceptions`.
+- Verification status `passed` or `passed_with_exceptions`.
 - An approved `execution_closure` decision.
 - UTC `closed_at`.
 - A `closure_status_changed` history event whose new value is `closed`.
