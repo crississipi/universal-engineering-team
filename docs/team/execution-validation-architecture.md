@@ -8,7 +8,7 @@ It establishes how YAML execution records are parsed, structurally validated, ch
 
 This document is the architectural reference for Phase 1.4.7.
 
-It does not define the individual JSON Schemas or implement the validators. Those are delivered through the subsequent Phase 1.4.7 subphases.
+The individual JSON Schemas are maintained under `schemas/executions/` and are delivered through Phase 1.4.7.2. The cross-record and lifecycle validators remain subsequent implementation work.
 
 ## 2. Scope
 
@@ -375,6 +375,8 @@ No later subphase should be considered complete until its implementation and val
 
 ## 13. Completion Criteria
 
+### 13.1 Phase 1.4.7.1 — Architecture
+
 Phase 1.4.7.1 is complete when:
 
 - The validation architecture is documented.
@@ -385,4 +387,17 @@ Phase 1.4.7.1 is complete when:
 - Testing requirements are established.
 - The architecture does not contradict existing governance specifications.
 
-The schemas, scripts, and test fixtures are intentionally deferred to the subsequent subphases.
+### 13.2 Phase 1.4.7.2 — JSON Schemas
+
+Phase 1.4.7.2 is complete when:
+
+- One primary Draft 2020-12 JSON Schema exists for each of the ten canonical execution record files.
+- Shared definitions cover canonical identifiers, timestamps, and common field values.
+- Schema wrappers and field names match the canonical YAML record specifications.
+- Required, optional, and conditional fields follow the shared omission/null policy.
+- Controlled values and identifier formats match the governing documents.
+- Local schema references resolve and schema files are valid JSON.
+- No undocumented record fields or wrapper structures are introduced.
+- Remaining cross-record and lifecycle rules are explicitly left to the later validator subphases.
+
+The existence of a schema file alone does not establish that it has been exercised against real execution records. Schema meta-validation, representative fixtures, and end-to-end validator tests are addressed by the subsequent implementation and test subphases.
