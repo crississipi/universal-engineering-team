@@ -310,6 +310,7 @@ def validate_handoffs(indexes, artifacts, contracts, errors, warnings):
     if handoffs and not contracts:
         warnings.append("Handoff execution records exist, but docs/team/ownership.yml declares no reusable handoff contracts; contract-level consistency could not be checked.")
 
+    seen_submission_ids = set()
     for handoff_id, handoff in handoffs.items():
         contract_id = handoff.get("handoff_contract_id")
         contract = contracts.get(contract_id) if isinstance(contract_id, str) else None
@@ -347,6 +348,9 @@ def validate_handoffs(indexes, artifacts, contracts, errors, warnings):
                 continue
             if submission_id in submission_index:
                 add(errors, "REF036", f"Handoff {handoff_id} has duplicate submission_id {submission_id}")
+            if submission_id in seen_submission_ids:
+                add(errors, "REF036", f"Submission ID {submission_id} is duplicated across handoff executions")
+            seen_submission_ids.add(submission_id)
             submission_index[submission_id] = submission
 
             decision_id = submission.get("decision_id")
@@ -375,6 +379,10 @@ def validate_handoffs(indexes, artifacts, contracts, errors, warnings):
                 submission_decision = submission_index[current_submission_id].get("decision_id")
                 if submission_decision and submission_decision != current_decision_id:
                     add(errors, "REF041", f"Handoff {handoff_id}.current_decision_id does not match the current submission decision")
+            if decision:
+                expected_outcome = handoff.get("current_status")
+                if expected_outcome in {"accepted", "partially_accepted", "rejected", "blocked"} and decision.get("decision_outcome") != expected_outcome:
+                    add(errors, "REF057", f"Handoff {handoff_id}.current_status does not match current decision outcome")
 
         for dependency_id in as_list(handoff.get("dependency_ids"), f"handoff {handoff_id}.dependency_ids", errors):
             dependency = resolve(dependency_id, "dependencies", indexes, f"handoff {handoff_id}.dependency_ids", errors)
@@ -434,6 +442,38 @@ def validate_common_record_references(indexes, artifacts, errors):
                 if artifact_id and artifact_id not in artifacts:
                     add(errors, "REF047", f"{label}.{field} references unknown artifact {artifact_id}")
 
+            for field in ("dependency_ids",):
+                if field in record:
+                    for index, dependency_id in enumerate(as_list(record.get(field), f"{label}.{field}", errors)):
+                        dependency = resolve(dependency_id, "dependencies", indexes, f"{label}.{field}[{index}]", errors)
+                        if dependency and record_id not in {
+                            dependency.get("predecessor_work_item_id"),
+                            dependency.get("successor_work_item_id"),
+                        }:
+                            add(errors, "REF056", f"{label}.{field}[{index}] references a dependency that does not involve this work item")
+
+            if kind == "work_items":
+                for field in ("input_refs", "output_refs"):
+                    for index, reference in enumerate(as_list(record.get(field), f"{label}.{field}", errors)):
+                        validate_typed_reference(reference, indexes, artifacts, f"{label}.{field}[{index}]", errors)
+
+            if kind == "closure":
+                for field in ("closure_checks", "exceptions"):
+                    for nested_index, nested in enumerate(as_list(record.get(field), f"{label}.{field}", errors)):
+                        if not isinstance(nested, dict):
+                            continue
+                        nested_label = f"{label}.{field}[{nested_index}]"
+                        for ref_field in ("related_record_refs", "affected_record_refs"):
+                            for ref_index, ref in enumerate(as_list(nested.get(ref_field), f"{nested_label}.{ref_field}", errors)):
+                                resolve_id_by_prefix(ref, indexes, artifacts, f"{nested_label}.{ref_field}[{ref_index}]", errors)
+                        for ref_field in ("evidence_refs",):
+                            for ref_index, ref in enumerate(as_list(nested.get(ref_field), f"{nested_label}.{ref_field}", errors)):
+                                resolve(ref, "evidence", indexes, f"{nested_label}.{ref_field}[{ref_index}]", errors)
+                        if nested.get("accepted_by_decision_id"):
+                            decision = resolve(nested["accepted_by_decision_id"], "decisions", indexes, f"{nested_label}.accepted_by_decision_id", errors)
+                            if decision and decision.get("decision_status") != "approved":
+                                add(errors, "REF054", f"{nested_label}.accepted_by_decision_id must reference an approved decision")
+
             for field in ("supersedes_decision_id",):
                 if record.get(field):
                     resolve(record[field], "decisions", indexes, f"{label}.{field}", errors)
@@ -492,7 +532,11 @@ def validate_closure(indexes, artifacts, errors):
         "replan_ids": "replans",
     }
     for field, kind in fields.items():
+        seen = set()
         for index, ref in enumerate(as_list(refs.get(field), f"closure {closure_id}.required_record_refs.{field}", errors, required=True)):
+            if ref in seen:
+                add(errors, "REF058", f"closure {closure_id}.required_record_refs.{field} contains duplicate {ref}")
+            seen.add(ref)
             resolve(ref, kind, indexes, f"closure {closure_id}.required_record_refs.{field}[{index}]", errors)
     # Release references are intentionally external to the ten canonical YAML record types.
     as_list(refs.get("release_record_refs"), f"closure {closure_id}.required_record_refs.release_record_refs", errors, required=True)
