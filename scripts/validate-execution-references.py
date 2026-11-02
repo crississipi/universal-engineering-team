@@ -641,7 +641,9 @@ def validate_closure(indexes, artifacts, errors):
             if work_item_id not in in_scope_work_items:
                 add(errors, "REF069", f"Closure {closure_id}.{classification} includes {work_item_id}, which is absent from required_record_refs.work_item_ids")
 
-    for exception_index, exception in enumerate(as_list(closure_record.get("exceptions"), f"closure {closure_id}.exceptions", errors, required=True)):
+    exceptions = as_list(closure_record.get("exceptions"), f"closure {closure_id}.exceptions", errors, required=True)
+    approved_exceptions = 0
+    for exception_index, exception in enumerate(exceptions):
         if not isinstance(exception, dict):
             continue
         decision_ref = exception.get("accepted_by_decision_id")
@@ -649,6 +651,17 @@ def validate_closure(indexes, artifacts, errors):
             decision = resolve(decision_ref, "decisions", indexes, f"closure exception[{exception_index}].accepted_by_decision_id", errors)
             if decision and decision.get("decision_status") != "approved":
                 add(errors, "REF054", f"Closure exception {exception.get('exception_id')} must reference an approved decision")
+        if exception.get("status") == "approved" and decision_ref:
+            approved_exceptions += 1
+
+    if completion.get("status") == "complete_with_exceptions" and approved_exceptions == 0:
+        add(errors, "REF073", f"Closure {closure_id} claims complete_with_exceptions without an approved exception")
+    if verification.get("status") == "passed" and (
+        verification_lists["failed_work_item_ids"] or verification_lists["not_verified_work_item_ids"]
+    ):
+        add(errors, "REF074", f"Closure {closure_id} cannot claim verification status 'passed' while failed or not-verified work items remain")
+    if verification.get("status") == "passed_with_exceptions" and approved_exceptions == 0:
+        add(errors, "REF075", f"Closure {closure_id} claims passed_with_exceptions without an approved exception")
 
 
 def validate_execution(directory):
