@@ -116,6 +116,7 @@
                 "type": "array",
                 "items": {
                   "type": "object",
+                  "additionalProperties": false,
                   "properties": {
                     "reference_type": {
                       "type": "string",
@@ -133,10 +134,14 @@
                       ]
                     },
                     "reference_id": {
-                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "\\S"
                     },
                     "description": {
-                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "\\S"
                     },
                     "uri": {
                       "type": "string",
@@ -146,8 +151,7 @@
                   "required": [
                     "reference_type",
                     "reference_id"
-                  ],
-                  "additionalProperties": false
+                  ]
                 },
                 "minItems": 0
               },
@@ -155,6 +159,7 @@
                 "type": "array",
                 "items": {
                   "type": "object",
+                  "additionalProperties": false,
                   "properties": {
                     "reference_type": {
                       "type": "string",
@@ -172,10 +177,14 @@
                       ]
                     },
                     "reference_id": {
-                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "\\S"
                     },
                     "description": {
-                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "\\S"
                     },
                     "uri": {
                       "type": "string",
@@ -185,8 +194,7 @@
                   "required": [
                     "reference_type",
                     "reference_id"
-                  ],
-                  "additionalProperties": false
+                  ]
                 },
                 "minItems": 0
               },
