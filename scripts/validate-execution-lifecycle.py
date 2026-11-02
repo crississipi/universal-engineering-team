@@ -126,6 +126,12 @@ BLOCKER_STATUSES = set(BLOCKER_TRANSITIONS)
 REPLAN_STATUSES = set(REPLAN_TRANSITIONS)
 CLOSURE_STATUSES = set(CLOSURE_TRANSITIONS)
 WORK_ITEM_STATES = set(WORK_ITEM_TRANSITIONS)
+HANDOFF_DECISION_OUTCOMES = {"accepted", "partially_accepted", "rejected", "blocked"}
+HANDOFF_REJECTION_CODES = {
+    "missing_output", "incomplete_output", "failed_acceptance_check",
+    "invalid_or_inconsistent_output", "missing_required_context",
+    "unsupported_claim", "unsafe_or_prohibited_content", "scope_mismatch",
+}
 
 
 def add(errors, code, message):
@@ -193,6 +199,8 @@ def validate_history(record, label, current_updated_at, errors):
     if not isinstance(history, list):
         add(errors, "LIFE007", f"{label}.history must be an array")
         return []
+    if not history:
+        add(errors, "LIFE007", f"{label}.history must contain the initial record-creation event")
     parsed = []
     for index, entry in enumerate(history):
         entry_label = f"{label}.history[{index}]"
@@ -226,50 +234,22 @@ def check_transition(label, old, new, allowed, errors, code):
     if old == new:
         add(errors, code, f"{label} records a status transition that does not change state ({old!r})")
         return
-    if old not in allowed:
+    if not isinstance(old, str) or old not in allowed:
         add(errors, code, f"{label} has unknown previous state {old!r}")
         return
-    if new not in allowed:
+    if not isinstance(new, str) or new not in allowed:
         add(errors, code, f"{label} has unknown new state {new!r}")
         return
     if new not in allowed[old]:
         add(errors, code, f"{label} has prohibited transition {old!r} -> {new!r}")
 
 
-def validate_status_history(record, label, current, history, allowed, errors,
-                            code, extractor):
-    transitions = []
-    for index, entry in enumerate(history):
-        pair = extractor(entry)
-        if pair is None:
-            continue
-        old, new = pair
-        check_transition(f"{label}.history[{index}]", old, new, allowed, errors, code)
-        transitions.append((index, new))
-    if transitions and transitions[-1][1] != current:
-        add(errors, code, f"{label}.{extractor.field_name} does not match the latest recorded history value")
-    return transitions
-
-
-def extract_previous_new(entry, previous_key, new_key, field=None):
-    if field:
-        return history_value(entry, previous_key, field), history_value(entry, new_key, field)
-    return entry.get(previous_key), entry.get(new_key)
-
-
 def check_status(record, label, field, allowed, errors, code):
     value = record.get(field)
-    if value not in allowed:
+    if not isinstance(value, str) or value not in allowed:
         add(errors, code, f"{label}.{field} has unsupported value {value!r}")
         return None
     return value
-
-
-def validate_history_shape_and_order(records, kind, errors):
-    id_field = RECORD_FILES[kind][3]
-    for index, record in enumerate(records):
-        label = f"{kind}[{index}] ({record.get(id_field, 'unknown')})"
-        validate_history(record, label, record.get("updated_at"), errors)
 
 
 def validate_execution_lifecycle(execution, errors):
@@ -280,27 +260,28 @@ def validate_execution_lifecycle(execution, errors):
         "intake", "qualification", "solution_framing", "planning", "execution",
         "integration_and_review", "verification", "release_readiness_and_release", "closure",
     }
-    if stage not in valid_stages:
+    if not isinstance(stage, str) or stage not in valid_stages:
         add(errors, "LIFE021", f"{label}.workflow_stage has unsupported value {stage!r}")
     history = validate_history(execution, label, execution.get("updated_at"), errors)
     transitions = []
     stage_history = []
+    last_non_blocked_status = None
     for index, entry in enumerate(history):
         old = history_value(entry, "previous_values", "workflow_status")
         new = history_value(entry, "new_values", "workflow_status")
         if new is not None:
             if old is not None:
                 if old == "blocked":
-                    previous_active = next(
-                        (value for value in reversed(transitions) if value != "blocked"),
-                        None,
-                    )
-                    if previous_active is None or new != previous_active:
+                    if last_non_blocked_status is None or new != last_non_blocked_status:
                         add(errors, "LIFE022", f"{label}.history[{index}] must resume the most recent non-blocked workflow status after blocked")
                 else:
                     check_transition(f"{label}.history[{index}].workflow_status", old, new, WORKFLOW_TRANSITIONS, errors, "LIFE022")
                     if transitions and old != transitions[-1]:
                         add(errors, "LIFE022", f"{label}.history[{index}] previous workflow status does not match the preceding recorded status")
+                    if new == "blocked":
+                        last_non_blocked_status = old
+                    elif old == "blocked":
+                        last_non_blocked_status = None
             transitions.append(new)
         old_stage = history_value(entry, "previous_values", "workflow_stage")
         new_stage = history_value(entry, "new_values", "workflow_stage")
@@ -325,7 +306,8 @@ def validate_execution_lifecycle(execution, errors):
         add(errors, "LIFE023", f"{label}.final_disposition is present before a terminal workflow disposition")
 
 
-def validate_work_items(records, errors):
+def validate_work_items(records, decisions, errors):
+    decision_index = {item.get("decision_id"): item for item in decisions if nonempty(item.get("decision_id"))}
     for record in records:
         label = f"work item {record.get('work_item_id', 'unknown')}"
         current = check_status(record, label, "state", WORK_ITEM_STATES, errors, "LIFE030")
@@ -350,8 +332,21 @@ def validate_work_items(records, errors):
         if planned is not None and parse_timestamp(planned) is None:
             add(errors, "LIFE033", f"{label}.planned_completion_at must be a UTC timestamp when present")
         completed = parse_timestamp(record.get("completed_at"))
-        if completed is not None and parse_timestamp(record.get("created_at")) is not None and completed < parse_timestamp(record.get("created_at")):
+        created = parse_timestamp(record.get("created_at"))
+        if completed is not None and created is not None and completed < created:
             add(errors, "LIFE033", f"{label}.completed_at precedes created_at")
+        updated = parse_timestamp(record.get("updated_at"))
+        if completed is not None and updated is not None and completed > updated:
+            add(errors, "LIFE033", f"{label}.completed_at is later than updated_at")
+        if current == "cancelled":
+            related = record.get("related_decision_ids", [])
+            authorized = [
+                decision_index.get(decision_id)
+                for decision_id in related
+                if isinstance(related, list) and isinstance(decision_id, str) and decision_id in decision_index
+            ] if isinstance(related, list) else []
+            if not any(item and item.get("decision_status") == "approved" for item in authorized):
+                add(errors, "LIFE034", f"{label} cancelled state requires a related approved scope or planning decision")
 
 
 def validate_role_activations(records, errors):
@@ -359,7 +354,7 @@ def validate_role_activations(records, errors):
         label = f"role activation {record.get('activation_id', 'unknown')}"
         classification = record.get("classification")
         status = check_status(record, label, "activation_status", ROLE_STATUSES, errors, "LIFE040")
-        if classification not in ROLE_CLASSIFICATIONS:
+        if not isinstance(classification, str) or classification not in ROLE_CLASSIFICATIONS:
             add(errors, "LIFE041", f"{label}.classification has unsupported value {classification!r}")
         elif status not in ROLE_COMPATIBILITY[classification]:
             add(errors, "LIFE041", f"{label} classification {classification!r} is incompatible with status {status!r}")
@@ -377,6 +372,18 @@ def validate_role_activations(records, errors):
             add(errors, "LIFE043", f"{label} completed status requires completed_at")
         if status == "deactivated" and not parse_timestamp(record.get("deactivated_at")):
             add(errors, "LIFE043", f"{label} deactivated status requires deactivated_at")
+        created = parse_timestamp(record.get("created_at"))
+        activated = parse_timestamp(record.get("activated_at"))
+        completed = parse_timestamp(record.get("completed_at"))
+        deactivated = parse_timestamp(record.get("deactivated_at"))
+        if created and activated and activated < created:
+            add(errors, "LIFE043", f"{label}.activated_at precedes created_at")
+        if activated and completed and completed < activated:
+            add(errors, "LIFE043", f"{label}.completed_at precedes activated_at")
+        if activated and deactivated and deactivated < activated:
+            add(errors, "LIFE043", f"{label}.deactivated_at precedes activated_at")
+        if completed and deactivated and deactivated < completed:
+            add(errors, "LIFE043", f"{label}.deactivated_at precedes completed_at")
         history = validate_history(record, label, record.get("updated_at"), errors)
         # Activation history uses previous_values/new_values maps. Governance
         # explicitly permits reactivation but does not define a full transition
@@ -478,13 +485,22 @@ def validate_decisions(records, errors):
                 transitions.append(new)
         if transitions and current != transitions[-1]:
             add(errors, "LIFE071", f"{label}.decision_status does not match its latest recorded history value")
-        if current in {"approved", "rejected"}:
+        if current in {"approved", "rejected", "superseded"}:
             if not parse_timestamp(record.get("decided_at")):
                 add(errors, "LIFE072", f"{label} status {current!r} requires decided_at")
             if not nonempty(record.get("decided_by_role")):
                 add(errors, "LIFE072", f"{label} status {current!r} requires decided_by_role")
         elif current in {"proposed", "under_review", "withdrawn"} and record.get("decided_at") is not None:
             add(errors, "LIFE072", f"{label}.decided_at must be omitted before a decision is approved or rejected")
+        if current == "approved" and not nonempty(record.get("selected_option")) and not nonempty(record.get("decision_outcome")):
+            add(errors, "LIFE073", f"{label} approved status requires selected_option or decision_outcome")
+        if record.get("decision_type") == "handoff_acceptance":
+            outcome = record.get("decision_outcome")
+            if not isinstance(outcome, str) or outcome not in HANDOFF_DECISION_OUTCOMES:
+                add(errors, "LIFE074", f"{label} handoff_acceptance decision requires a valid decision_outcome")
+            rejection_code = record.get("rejection_code")
+            if outcome == "rejected" and (not isinstance(rejection_code, str) or rejection_code not in HANDOFF_REJECTION_CODES):
+                add(errors, "LIFE074", f"{label} rejected handoff outcome requires a valid rejection_code")
 
 
 def validate_evidence(records, errors):
@@ -499,16 +515,30 @@ def validate_evidence(records, errors):
                 if old is not None and values and old != values[-1]:
                     add(errors, "LIFE081", f"{label} history previous status {old!r} does not match preceding recorded status {values[-1]!r}")
                 values.append(new)
-            if old is not None and old not in EVIDENCE_STATUSES:
+            if old is not None and (not isinstance(old, str) or old not in EVIDENCE_STATUSES):
                 add(errors, "LIFE081", f"{label} history contains unknown previous verification status {old!r}")
-            if new is not None and new not in EVIDENCE_STATUSES:
+            if new is not None and (not isinstance(new, str) or new not in EVIDENCE_STATUSES):
                 add(errors, "LIFE081", f"{label} history contains unknown new verification status {new!r}")
         if values and current != values[-1]:
             add(errors, "LIFE081", f"{label}.verification_status does not match its latest recorded history value")
+        if current == "verified" and not nonempty(record.get("verified_by_role")):
+            add(errors, "LIFE082", f"{label} verified status requires verified_by_role")
         if current in {"verified", "invalid"} and not nonempty(record.get("verification_notes")):
             add(errors, "LIFE082", f"{label} status {current!r} requires verification_notes")
+        evidence_id = record.get("evidence_id")
+        replacement_id = record.get("supersedes_evidence_id")
+        if replacement_id:
+            replacement = next(
+                (other for other in records if other.get("evidence_id") == replacement_id),
+                None,
+            )
+            if replacement is None:
+                add(errors, "LIFE083", f"{label}.supersedes_evidence_id references a missing replacement {replacement_id}")
+            elif replacement_id == evidence_id:
+                add(errors, "LIFE083", f"{label} cannot supersede itself")
+            elif replacement.get("verification_status") != "superseded":
+                add(errors, "LIFE083", f"{label}.supersedes_evidence_id references {replacement_id}, but the previous evidence record is not marked superseded")
         if current == "superseded":
-            evidence_id = record.get("evidence_id")
             replacements = [
                 other for other in records
                 if other.get("supersedes_evidence_id") == evidence_id
@@ -544,7 +574,7 @@ def validate_blockers(records, decisions, errors):
         if current == "deferred":
             refs = record.get("related_decision_ids", [])
             authorized = [
-                decision_index.get(ref) for ref in refs if ref in decision_index
+                decision_index.get(ref) for ref in refs if isinstance(ref, str) and ref in decision_index
             ] if isinstance(refs, list) else []
             if not any(d and d.get("decision_status") == "approved" for d in authorized):
                 add(errors, "LIFE093", f"{label} deferred status requires a related approved decision")
@@ -568,7 +598,7 @@ def validate_replans(records, decisions, errors):
         if transitions and current != transitions[-1]:
             add(errors, "LIFE101", f"{label}.status does not match its latest recorded history value")
         decision_id = record.get("decision_id")
-        decision = decision_index.get(decision_id)
+        decision = decision_index.get(decision_id) if isinstance(decision_id, str) else None
         if current in {"approved", "in_progress", "completed"}:
             if not decision or decision.get("decision_status") != "approved":
                 add(errors, "LIFE102", f"{label} status {current!r} requires its approved authorizing decision")
@@ -597,10 +627,13 @@ def validate_closure(record, decisions, errors):
         add(errors, "LIFE111", f"{label}.closure_status does not match its latest recorded status history")
     decision_index = {r.get("decision_id"): r for r in decisions if nonempty(r.get("decision_id"))}
     decision_id = record.get("closure_decision_id")
-    decision = decision_index.get(decision_id)
+    decision = decision_index.get(decision_id) if isinstance(decision_id, str) else None
     if current == "closed":
         if not decision or decision.get("decision_type") != "execution_closure" or decision.get("decision_status") != "approved":
             add(errors, "LIFE112", f"{label} closed status requires an approved execution_closure decision")
+        authorized_role = record.get("closure_authorized_by_role")
+        if authorized_role and decision and authorized_role != decision.get("decided_by_role"):
+            add(errors, "LIFE112", f"{label}.closure_authorized_by_role must match the approved closure decision's decided_by_role")
         closed_at = parse_timestamp(record.get("closed_at"))
         if closed_at is None:
             add(errors, "LIFE112", f"{label} closed status requires UTC closed_at")
@@ -640,14 +673,22 @@ def validate_closure(record, decisions, errors):
             add(errors, "LIFE113", f"{label} cancelled status requires a cancellation history event")
     completion = record.get("completion", {})
     verification = record.get("verification", {})
-    if isinstance(completion, dict) and completion.get("status") == "complete_with_exceptions":
-        exceptions = record.get("exceptions", [])
-        if not any(isinstance(item, dict) and item.get("status") == "approved" for item in exceptions if isinstance(exceptions, list)):
-            add(errors, "LIFE114", f"{label} complete_with_exceptions requires an approved exception")
-    if isinstance(verification, dict) and verification.get("status") == "passed_with_exceptions":
-        exceptions = record.get("exceptions", [])
-        if not any(isinstance(item, dict) and item.get("status") == "approved" for item in exceptions if isinstance(exceptions, list)):
-            add(errors, "LIFE114", f"{label} passed_with_exceptions requires an approved exception")
+    exceptions = record.get("exceptions", [])
+    approved_exceptions = (
+        any(isinstance(item, dict) and item.get("status") == "approved" for item in exceptions)
+        if isinstance(exceptions, list) else False
+    )
+    if current == "closed":
+        completion_status = completion.get("status") if isinstance(completion, dict) else None
+        verification_status = verification.get("status") if isinstance(verification, dict) else None
+        if completion_status not in {"complete", "complete_with_exceptions"}:
+            add(errors, "LIFE115", f"{label} closed status requires complete or complete_with_exceptions completion")
+        if verification_status not in {"passed", "passed_with_exceptions"}:
+            add(errors, "LIFE115", f"{label} closed status requires passed or passed_with_exceptions verification")
+    if isinstance(completion, dict) and completion.get("status") == "complete_with_exceptions" and not approved_exceptions:
+        add(errors, "LIFE114", f"{label} complete_with_exceptions requires an approved exception")
+    if isinstance(verification, dict) and verification.get("status") == "passed_with_exceptions" and not approved_exceptions:
+        add(errors, "LIFE114", f"{label} passed_with_exceptions requires an approved exception")
 
 
 def validate_execution(directory):
@@ -660,7 +701,7 @@ def validate_execution(directory):
         add(errors, "LIFE000", "Execution directory name must match execution.execution_id")
 
     validate_execution_lifecycle(execution, errors)
-    validate_work_items(records["work_items"], errors)
+    validate_work_items(records["work_items"], records["decisions"], errors)
     validate_role_activations(records["role_activations"], errors)
     validate_dependencies(records["dependencies"], errors)
     validate_handoffs(records["handoff_executions"], errors)
