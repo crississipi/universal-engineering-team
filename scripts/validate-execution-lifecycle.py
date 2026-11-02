@@ -498,7 +498,8 @@ def validate_decisions(records, errors):
             outcome = record.get("decision_outcome")
             if not isinstance(outcome, str) or outcome not in HANDOFF_DECISION_OUTCOMES:
                 add(errors, "LIFE074", f"{label} handoff_acceptance decision requires a valid decision_outcome")
-            if outcome == "rejected" and record.get("rejection_code") not in HANDOFF_REJECTION_CODES:
+            rejection_code = record.get("rejection_code")
+            if outcome == "rejected" and (not isinstance(rejection_code, str) or rejection_code not in HANDOFF_REJECTION_CODES):
                 add(errors, "LIFE074", f"{label} rejected handoff outcome requires a valid rejection_code")
 
 
