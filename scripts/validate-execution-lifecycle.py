@@ -193,6 +193,8 @@ def validate_history(record, label, current_updated_at, errors):
     if not isinstance(history, list):
         add(errors, "LIFE007", f"{label}.history must be an array")
         return []
+    if not history:
+        add(errors, "LIFE007", f"{label}.history must contain the initial record-creation event")
     parsed = []
     for index, entry in enumerate(history):
         entry_label = f"{label}.history[{index}]"
