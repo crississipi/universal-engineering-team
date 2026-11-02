@@ -189,3 +189,8 @@ The canonical execution record architecture is defined in:
 Execution records document actual project and change activity. They
 must preserve artifact ownership, workflow status distinctions,
 formal handoff governance, and traceable verification evidence.
+
+The identity hierarchy and traceability requirements for projects,
+changes, and execution instances are defined in:
+
+`docs/team/execution-identity-and-traceability.md`

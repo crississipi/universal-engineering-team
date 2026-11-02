@@ -94,7 +94,7 @@ It will not introduce a separate event-processing platform or require every mino
 
 ## 3. Execution Record Architecture
 
-An execution represents one identifiable project, change, engineering initiative, or independently managed unit of work.
+An execution represents one identifiable coordinated attempt to perform work for a specific change within a project.
 
 It acts as the root record for all related execution information.
 
@@ -131,6 +131,34 @@ The canonical execution architecture contains nine record categories:
 
 Each category has a distinct responsibility and must not duplicate the authoritative purpose of another category.
 
+### 3.3 Project, Change, and Execution Identity
+
+Every execution must identify its parent project and change using stable
+identifiers.
+
+The canonical identity hierarchy, identifier formats, generation rules, external references, and traceability requirements are defined in:
+
+`docs/team/execution-identity-and-traceability.md`
+
+Every `execution.yml` record must contain:
+
+- `project_id`
+- `change_id`
+- `execution_id`
+
+The execution directory name must match `execution_id`.
+
+A project may contain multiple changes, and a change may have multiple
+execution instances. Each execution instance has its own directory and
+must retain its relationship to the correct project and change.
+
+Child records inherit project and change context from their execution.
+They must reference their execution explicitly and must not introduce
+conflicting identity relationships.
+
+Exact YAML schemas and automated identity validation are deferred to
+Phase 1.4.7.
+
 ## 4. Canonical Record Types
 
 ### 4.1 Execution Record
@@ -143,7 +171,7 @@ It represents the root of the execution record structure.
 
 Its responsibilities include:
 
-- Identifying the project or change.
+- Identifying the parent project, change, and execution.
 - Describing the intended outcome.
 - Establishing scope and boundaries.
 - Identifying the relevant overall workflow stage and status.
