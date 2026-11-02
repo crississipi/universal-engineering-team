@@ -195,6 +195,11 @@ Approved and rejected decisions require `decided_at` and
 must not carry `decided_at`. A superseded decision retains its original
 decision timestamp and authority information.
 
+A `handoff_acceptance` decision must use one of the canonical outcomes
+`accepted`, `partially_accepted`, `rejected`, or `blocked`. A rejected
+outcome requires a rejection code from
+`handoff-acceptance-rules.md`.
+
 Decision authority itself is not inferred from the role slug. It remains
 governed by the applicable responsibility and decision-authority rules.
 
