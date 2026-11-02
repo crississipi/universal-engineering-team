@@ -103,9 +103,14 @@ Each recorded transition must have a previous and new state, must be
 permitted, and must continue from the preceding recorded state.
 
 A work item in `completed` state requires UTC `completed_at`. The
-timestamp must not precede `created_at`. `completed_at` must be omitted
-for other current states. Optional `planned_completion_at`, when present,
-must be a UTC timestamp.
+timestamp must not precede `created_at` or be later than `updated_at`.
+`completed_at` must be omitted for other current states. Optional
+`planned_completion_at`, when present, must be a UTC timestamp.
+
+A work item in `cancelled` state must reference at least one related
+approved scope or planning decision. The validator checks that the decision
+is approved; it does not infer that the decision-maker had authority beyond
+the canonical decision-authority governance.
 
 ## 6. Role Activation
 
@@ -203,7 +208,8 @@ The validator checks that evidence uses one of the canonical values:
 - `superseded`
 
 It checks status history continuity and current-state agreement.
-`verified` and `invalid` evidence require non-empty
+`verified` evidence requires `verified_by_role` and non-empty
+`verification_notes`. `invalid` evidence requires non-empty
 `verification_notes`.
 
 A superseded evidence record must be referenced by a newer record through
@@ -278,6 +284,9 @@ A closed execution requires:
 A cancelled execution requires an approved cancellation decision and a
 `closure_cancelled` or status-change history event recording cancellation.
 A cancelled execution is not represented as successfully completed.
+When `closure_authorized_by_role` is supplied for a closed execution, it
+must match the approved closure decision's `decided_by_role`; the matching
+role identifier does not independently prove decision authority.
 
 Completion and verification exceptions must be represented by approved
 exception records. The cross-record validator separately resolves their
