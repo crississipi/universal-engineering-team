@@ -325,6 +325,8 @@ def validate_handoffs(indexes, artifacts, contracts, errors, warnings):
     seen_submission_ids = set()
     for handoff_id, handoff in handoffs.items():
         contract_id = handoff.get("handoff_contract_id")
+        if not is_non_empty(contract_id):
+            add(errors, "REF068", f"Handoff execution {handoff_id}.handoff_contract_id must be a non-empty contract identifier")
         contract = contracts.get(contract_id) if isinstance(contract_id, str) else None
         if contract_id and contracts and contract is None:
             add(errors, "REF029", f"Handoff execution {handoff_id} references unknown handoff contract {contract_id}")
@@ -349,7 +351,7 @@ def validate_handoffs(indexes, artifacts, contracts, errors, warnings):
         if consumer_artifact and consumer_artifact not in artifacts:
             add(errors, "REF034", f"Handoff {handoff_id} references unknown consumer artifact {consumer_artifact}")
 
-        submissions = handoff.get("submissions", [])
+        submissions = as_list(handoff.get("submissions"), f"handoff {handoff_id}.submissions", errors, required=True)
         submission_index = {}
         for index, submission in enumerate(submissions):
             if not isinstance(submission, dict):
@@ -615,13 +617,21 @@ def validate_closure(indexes, artifacts, errors):
         (verification, "verified_work_item_ids", "work_items"),
         (verification, "failed_work_item_ids", "work_items"),
         (verification, "not_verified_work_item_ids", "work_items"),
-        (completion, "completion_evidence_refs", "evidence"),
         (verification, "evidence_refs", "evidence"),
     ):
         for index, ref in enumerate(as_list(section.get(field), f"closure {closure_id}.{field}", errors, required=True)):
             resolve(ref, kind, indexes, f"closure {closure_id}.{field}[{index}]", errors)
 
-    for exception_index, exception in enumerate(closure_record.get("exceptions", [])):
+    for index, ref in enumerate(as_list(completion.get("completion_evidence_refs"), f"closure {closure_id}.completion.completion_evidence_refs", errors)):
+        resolve(ref, "evidence", indexes, f"closure {closure_id}.completion.completion_evidence_refs[{index}]", errors)
+
+    in_scope_work_items = set(as_list(refs.get("work_item_ids"), f"closure {closure_id}.required_record_refs.work_item_ids", errors, required=True))
+    for classification, ids in {**completion_lists, **verification_lists}.items():
+        for work_item_id in ids:
+            if work_item_id not in in_scope_work_items:
+                add(errors, "REF069", f"Closure {closure_id}.{classification} includes {work_item_id}, which is absent from required_record_refs.work_item_ids")
+
+    for exception_index, exception in enumerate(as_list(closure_record.get("exceptions"), f"closure {closure_id}.exceptions", errors, required=True)):
         if not isinstance(exception, dict):
             continue
         decision_ref = exception.get("accepted_by_decision_id")
