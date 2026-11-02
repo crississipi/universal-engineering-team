@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://crississipi.github.io/universal-engineering-team/schemas/executions/definitions/identifiers.schema.json",
+  "$defs": {
+    "prjId": {
+      "type": "string",
+      "pattern": "^PRJ-^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$$"
+    },
+    "chgId": {
+      "type": "string",
+      "pattern": "^CHG-^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$$"
+    },
+    "exeId": {
+      "type": "string",
+      "pattern": "^EXE-^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$$"
+    },
+    "actId": {
+      "type": "string",
+      "pattern": "^ACT-^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$$"
+    },
+    "wiId": {
+      "type": "string",
+      "pattern": "^WI-^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$$"
+    },
+    "depId": {
+      "type": "string",
+      "pattern": "^DEP-^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$$"
+    },
+    "hexId": {
+      "type": "string",
+      "pattern": "^HEX-^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$$"
+    },
+    "subId": {
+      "type": "string",
+      "pattern": "^SUB-^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$$"
+    },
+    "decId": {
+      "type": "string",
+      "pattern": "^DEC-^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$$"
+    },
+    "evdId": {
+      "type": "string",
+      "pattern": "^EVD-^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$$"
+    },
+    "blkId": {
+      "type": "string",
+      "pattern": "^BLK-^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$$"
+    },
+    "rplId": {
+      "type": "string",
+      "pattern": "^RPL-^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$$"
+    },
+    "clsId": {
+      "type": "string",
+      "pattern": "^CLS-^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$$"
+    }
+  }
+}
