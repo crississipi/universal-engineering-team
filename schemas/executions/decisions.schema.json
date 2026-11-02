@@ -250,8 +250,7 @@
                 "then": {
                   "required": [
                     "decided_by_role",
-                    "decided_at",
-                    "selected_option"
+                    "decided_at"
                   ]
                 }
               },
@@ -263,6 +262,27 @@
                     }
                   },
                   "required": [
+                    "decision_outcome"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "rejection_code"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "decision_type": {
+                      "const": "handoff_acceptance"
+                    },
+                    "decision_outcome": {
+                      "const": "rejected"
+                    }
+                  },
+                  "required": [
+                    "decision_type",
                     "decision_outcome"
                   ]
                 },
