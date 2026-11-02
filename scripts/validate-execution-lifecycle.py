@@ -300,7 +300,8 @@ def validate_execution_lifecycle(execution, errors):
         add(errors, "LIFE023", f"{label}.final_disposition is present before a terminal workflow disposition")
 
 
-def validate_work_items(records, errors):
+def validate_work_items(records, decisions, errors):
+    decision_index = {item.get("decision_id"): item for item in decisions if nonempty(item.get("decision_id"))}
     for record in records:
         label = f"work item {record.get('work_item_id', 'unknown')}"
         current = check_status(record, label, "state", WORK_ITEM_STATES, errors, "LIFE030")
@@ -331,6 +332,15 @@ def validate_work_items(records, errors):
         updated = parse_timestamp(record.get("updated_at"))
         if completed is not None and updated is not None and completed > updated:
             add(errors, "LIFE033", f"{label}.completed_at is later than updated_at")
+        if current == "cancelled":
+            related = record.get("related_decision_ids", [])
+            authorized = [
+                decision_index.get(decision_id)
+                for decision_id in related
+                if isinstance(related, list) and decision_id in decision_index
+            ] if isinstance(related, list) else []
+            if not any(item and item.get("decision_status") == "approved" for item in authorized):
+                add(errors, "LIFE034", f"{label} cancelled state requires a related approved scope or planning decision")
 
 
 def validate_role_activations(records, errors):
@@ -666,7 +676,7 @@ def validate_execution(directory):
         add(errors, "LIFE000", "Execution directory name must match execution.execution_id")
 
     validate_execution_lifecycle(execution, errors)
-    validate_work_items(records["work_items"], errors)
+    validate_work_items(records["work_items"], records["decisions"], errors)
     validate_role_activations(records["role_activations"], errors)
     validate_dependencies(records["dependencies"], errors)
     validate_handoffs(records["handoff_executions"], errors)
