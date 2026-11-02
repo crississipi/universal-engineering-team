@@ -1,8 +1,3 @@
-
-## 2. New validation scripts
-
-### A. Shared validation helpers
-
 """Shared helpers for repository governance validators."""
 
 from pathlib import Path, PurePosixPath
