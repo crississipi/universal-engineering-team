@@ -1,0 +1,255 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://crississipi.github.io/universal-engineering-team/schemas/executions/replans.schema.json",
+  "$ref": "#/$defs/document",
+  "$defs": {
+    "document": {
+      "type": "object",
+      "properties": {
+        "replans": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "replan_id": {
+                "$ref": "./definitions/identifiers.schema.json#/$defs/rplId"
+              },
+              "execution_id": {
+                "$ref": "./definitions/identifiers.schema.json#/$defs/exeId"
+              },
+              "title": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+              },
+              "reason": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+              },
+              "trigger_type": {
+                "type": "string",
+                "enum": [
+                  "blocker",
+                  "dependency_change",
+                  "handoff_outcome",
+                  "new_evidence",
+                  "decision_change",
+                  "scope_change",
+                  "risk_change",
+                  "resource_change",
+                  "external_change",
+                  "other"
+                ]
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "proposed",
+                  "under_review",
+                  "approved",
+                  "rejected",
+                  "in_progress",
+                  "completed",
+                  "withdrawn"
+                ]
+              },
+              "proposed_by_role": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/roleId"
+              },
+              "coordinated_by_role": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/roleId"
+              },
+              "decision_id": {
+                "$ref": "./definitions/identifiers.schema.json#/$defs/decId"
+              },
+              "affected_work_item_ids": {
+                "type": "array",
+                "items": {
+                  "$ref": "./definitions/identifiers.schema.json#/$defs/wiId"
+                },
+                "minItems": 1
+              },
+              "affected_dependency_ids": {
+                "type": "array",
+                "items": {
+                  "$ref": "./definitions/identifiers.schema.json#/$defs/depId"
+                },
+                "minItems": 0
+              },
+              "affected_role_activation_ids": {
+                "type": "array",
+                "items": {
+                  "$ref": "./definitions/identifiers.schema.json#/$defs/actId"
+                },
+                "minItems": 0
+              },
+              "affected_handoff_execution_ids": {
+                "type": "array",
+                "items": {
+                  "$ref": "./definitions/identifiers.schema.json#/$defs/hexId"
+                },
+                "minItems": 0
+              },
+              "affected_blocker_ids": {
+                "type": "array",
+                "items": {
+                  "$ref": "./definitions/identifiers.schema.json#/$defs/blkId"
+                },
+                "minItems": 0
+              },
+              "affected_artifact_ids": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/stringArray"
+              },
+              "changes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "change_type": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                    },
+                    "target_record_ref": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                    },
+                    "previous_value": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                    },
+                    "proposed_value": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                    },
+                    "reason": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                    }
+                  },
+                  "required": [
+                    "change_type",
+                    "target_record_ref",
+                    "proposed_value",
+                    "reason"
+                  ],
+                  "additionalProperties": false
+                },
+                "minItems": 1
+              },
+              "impact_summary": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+              },
+              "evidence_refs": {
+                "type": "array",
+                "items": {
+                  "$ref": "./definitions/identifiers.schema.json#/$defs/evdId"
+                },
+                "minItems": 0
+              },
+              "created_at": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
+              },
+              "updated_at": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
+              },
+              "implemented_at": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
+              },
+              "history": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "changed_at": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
+                    },
+                    "changed_by_role": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/roleId"
+                    },
+                    "change_type": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                    },
+                    "reason": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                    },
+                    "previous_status": {
+                      "type": "string"
+                    },
+                    "new_status": {
+                      "type": "string"
+                    },
+                    "changed_fields": {
+                      "$ref": "./definitions/common-values.schema.json#/$defs/stringArray"
+                    }
+                  },
+                  "required": [
+                    "changed_at",
+                    "changed_by_role",
+                    "change_type",
+                    "reason"
+                  ],
+                  "additionalProperties": false
+                },
+                "minItems": 1
+              }
+            },
+            "required": [
+              "replan_id",
+              "execution_id",
+              "title",
+              "reason",
+              "trigger_type",
+              "status",
+              "proposed_by_role",
+              "coordinated_by_role",
+              "affected_work_item_ids",
+              "changes",
+              "impact_summary",
+              "created_at",
+              "updated_at",
+              "history"
+            ],
+            "additionalProperties": false,
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "status": {
+                      "enum": [
+                        "approved",
+                        "in_progress",
+                        "completed"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "status"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "decision_id"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "status": {
+                      "const": "completed"
+                    }
+                  },
+                  "required": [
+                    "status"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "implemented_at"
+                  ]
+                }
+              }
+            ]
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "replans"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
