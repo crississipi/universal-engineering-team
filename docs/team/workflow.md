@@ -73,6 +73,21 @@ A blocked prerequisite must only prevent the work items or progression gates tha
 
 Dependency coordination does not transfer artifact ownership or replace formal handoff acceptance.
 
+Actual dependency relationships and their execution status must be
+recorded in the canonical `dependencies.yml` collection within the
+applicable execution directory.
+
+The record structure, identifiers, status transitions, evidence
+references, and validation requirements are defined in:
+
+`docs/team/dependency-execution-records.md`
+
+The canonical dependency records are authoritative for predecessor,
+successor, relationship type, activation condition, and current
+dependency status. Planning notes and work-item references must not
+create competing dependency identities or independently redefine
+dependency status.
+
 ## Orchestration and coordination
 
 Cross-role orchestration and coordination responsibilities are governed by:
@@ -84,6 +99,7 @@ Coordination must occur at the lowest level that can manage the work effectively
 Coordination does not transfer artifact ownership, override specialist authority, or constitute approval of required verification and acceptance evidence.
 
 ## Change packet
+
 Each task has: ID, objective, acceptance criteria, owner, reviewers, affected components, interfaces, test plan, documentation targets, risk, status.
 
 ## Workflow and work-item states
@@ -104,6 +120,7 @@ Do not treat workflow status, work-item state, and handoff decision
 as interchangeable.
 
 ## Handoff format
+
 - **Outcome / handoff decision**
 - **Changed surfaces**
 - **Contracts and decisions**

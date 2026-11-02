@@ -228,7 +228,7 @@ When applicable, a work-item record may also contain:
 - Related artifact package ID.
 - Scope boundaries.
 - Contributor roles.
-- Explicit dependency work-item IDs.
+- Dependency record IDs (`dependency_ids`).
 - Input references.
 - Output references.
 - Evidence references.
@@ -347,7 +347,9 @@ A work item may be assigned to a contributor role while the accountable package 
 
 ## 7. Relationship to Dependencies and Handoffs
 
-Work-item dependencies must reference explicit work-item IDs within the applicable execution.
+Work-item dependencies must be represented by explicit dependency records within the applicable execution.
+
+Work items may reference their associated dependency records through `dependency_ids`. The dependency records remain the authoritative source for predecessor, successor, relationship type, condition, and dependency status.
 
 Dependency relationships must follow:
 

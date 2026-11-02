@@ -256,6 +256,7 @@ The record must distinguish:
 
 Activation does not automatically create a formal handoff or transfer ownership.
 
+
 ### 4.4 Dependency Records
 
 **File:** `dependencies.yml`
@@ -264,14 +265,20 @@ Activation does not automatically create a formal handoff or transfer ownership.
 
 Its responsibilities include:
 
-- Identifying the dependent and prerequisite work items.
-- Recording the dependency relationship.
-- Identifying the affected outputs or scope.
+- Identifying the predecessor and successor work items.
+- Recording the dependency relationship type.
+- Explaining the purpose and condition of the dependency.
 - Recording activation conditions when applicable.
-- Identifying the current dependency condition.
-- Recording resolution or reconciliation references.
+- Maintaining the current dependency execution status.
+- Recording satisfaction evidence and related decision references.
+- Recording related blocker and formal handoff execution references.
+- Preserving material changes and status transitions in history.
 
-Dependency relationships must follow:
+Dependency records must follow:
+
+`docs/team/dependency-execution-records.md`
+
+Reusable dependency governance rules remain defined in:
 
 `docs/team/dependency-execution-rules.md`
 
@@ -280,6 +287,8 @@ The execution dependency graph must remain acyclic.
 Feedback and collaboration relationships may be cyclic when permitted by the governing rules.
 
 A dependency record must not automatically block unrelated work.
+
+Controlled provisional work may proceed only under the conditions defined in the dependency execution rules.
 
 ### 4.5 Handoff Execution Records
 

@@ -449,7 +449,18 @@ For tasks with meaningful cross-role dependencies, record the following in the t
 | `owner` | Accountable owner of the prerequisite output, when applicable. |
 | `notes` | Assumptions, limitations, or reconciliation requirements. |
 
-This is a planning aid, not a new canonical artifact ownership or handoff schema.
+This is a planning aid, not a separate canonical execution-record schema.
+
+When a project or change execution uses canonical dependency records,
+the `dependency_id` must follow the identifier and execution-scoping
+rules in `docs/team/dependency-execution-records.md`.
+
+Planning notes must reference the canonical dependency identifier
+when one exists. They must not create competing dependency identities
+or independently redefine dependency status.
+
+Dependency readiness descriptions are planning information and must
+not replace the canonical dependency status recorded in `dependencies.yml`.
 
 Do not add dependency records to `ownership.yml` solely to track task execution.
 
