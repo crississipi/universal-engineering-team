@@ -137,10 +137,26 @@
                       "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
                     },
                     "previous_status": {
-                      "type": "string"
+                      "type": "string",
+                      "enum": [
+                        "open",
+                        "in_progress",
+                        "blocked",
+                        "resolved",
+                        "deferred",
+                        "cancelled"
+                      ]
                     },
                     "new_status": {
-                      "type": "string"
+                      "type": "string",
+                      "enum": [
+                        "open",
+                        "in_progress",
+                        "blocked",
+                        "resolved",
+                        "deferred",
+                        "cancelled"
+                      ]
                     },
                     "changed_fields": {
                       "$ref": "./definitions/common-values.schema.json#/$defs/stringArray"
