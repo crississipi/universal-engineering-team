@@ -136,7 +136,7 @@
                   ],
                   "additionalProperties": false
                 },
-                "minItems": 1
+                "minItems": 0
               },
               "created_at": {
                 "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
