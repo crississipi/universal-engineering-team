@@ -103,7 +103,21 @@
                   "type": "object",
                   "properties": {
                     "change_type": {
-                      "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
+                      "type": "string",
+                      "enum": [
+                        "work_item_assignment",
+                        "work_item_status",
+                        "work_item_scope",
+                        "work_item_sequence",
+                        "work_item_addition",
+                        "work_item_cancellation",
+                        "dependency_change",
+                        "role_activation",
+                        "handoff_plan",
+                        "artifact_scope",
+                        "workflow_schedule",
+                        "other"
+                      ]
                     },
                     "target_record_ref": {
                       "$ref": "./definitions/common-values.schema.json#/$defs/nonEmptyString"
