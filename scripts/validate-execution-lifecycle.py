@@ -507,8 +507,8 @@ def validate_evidence(records, errors):
                 add(errors, "LIFE083", f"{label}.supersedes_evidence_id references a missing replacement {replacement_id}")
             elif replacement_id == evidence_id:
                 add(errors, "LIFE083", f"{label} cannot supersede itself")
-            elif replacement.get("supersedes_evidence_id") != evidence_id:
-                add(errors, "LIFE083", f"{label}.supersedes_evidence_id is not reciprocated by replacement {replacement_id}")
+            elif replacement.get("verification_status") != "superseded":
+                add(errors, "LIFE083", f"{label}.supersedes_evidence_id references {replacement_id}, but the previous evidence record is not marked superseded")
         if current == "superseded":
             replacements = [
                 other for other in records
