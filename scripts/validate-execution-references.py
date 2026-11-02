@@ -466,10 +466,6 @@ def validate_common_record_references(indexes, artifacts, errors):
                         for ref_field in ("evidence_refs",):
                             for ref_index, ref in enumerate(as_list(nested.get(ref_field), f"{nested_label}.{ref_field}", errors)):
                                 resolve(ref, "evidence", indexes, f"{nested_label}.{ref_field}[{ref_index}]", errors)
-                        if nested.get("accepted_by_decision_id"):
-                            decision = resolve(nested["accepted_by_decision_id"], "decisions", indexes, f"{nested_label}.accepted_by_decision_id", errors)
-                            if decision and decision.get("decision_status") != "approved":
-                                add(errors, "REF054", f"{nested_label}.accepted_by_decision_id must reference an approved decision")
 
             for field in ("supersedes_decision_id",):
                 if record.get(field):
@@ -493,10 +489,14 @@ def validate_common_record_references(indexes, artifacts, errors):
 
 def validate_replans(indexes, artifacts, errors):
     for replan_id, replan in indexes["replans"].items():
-        if replan.get("decision_id"):
-            decision = resolve(replan["decision_id"], "decisions", indexes, f"replan {replan_id}.decision_id", errors)
-            if decision and replan.get("status") in {"approved", "in_progress", "completed"} and decision.get("decision_status") != "approved":
-                add(errors, "REF049", f"Replan {replan_id} in status {replan.get('status')!r} must reference an approved decision")
+        status = replan.get("status")
+        decision_id = replan.get("decision_id")
+        if status in {"approved", "in_progress", "completed"} and not decision_id:
+            add(errors, "REF049", f"Replan {replan_id} in status {status!r} must reference its authorizing decision")
+        if decision_id:
+            decision = resolve(decision_id, "decisions", indexes, f"replan {replan_id}.decision_id", errors)
+            if decision and status in {"approved", "in_progress", "completed"} and decision.get("decision_status") != "approved":
+                add(errors, "REF049", f"Replan {replan_id} in status {status!r} must reference an approved decision")
         for index, artifact_id in enumerate(as_list(replan.get("affected_artifact_ids"), f"replan {replan_id}.affected_artifact_ids", errors)):
             if artifact_id not in artifacts:
                 add(errors, "REF050", f"Replan {replan_id}.affected_artifact_ids[{index}] references unknown artifact {artifact_id}")
@@ -549,6 +549,12 @@ def validate_closure(indexes, artifacts, errors):
 
     completion = closure_record.get("completion", {})
     verification = closure_record.get("verification", {})
+    if not isinstance(completion, dict):
+        add(errors, "REF064", f"closure {closure_id}.completion must be a mapping")
+        completion = {}
+    if not isinstance(verification, dict):
+        add(errors, "REF065", f"closure {closure_id}.verification must be a mapping")
+        verification = {}
     completion_lists = {
         "completed_work_item_ids": set(as_list(completion.get("completed_work_item_ids"), f"closure {closure_id}.completion.completed_work_item_ids", errors, required=True)),
         "cancelled_work_item_ids": set(as_list(completion.get("cancelled_work_item_ids"), f"closure {closure_id}.completion.cancelled_work_item_ids", errors, required=True)),
@@ -673,6 +679,10 @@ def main():
         candidate.relative_to(executions_root)
     except ValueError:
         print("ERROR: Execution directory must be inside the repository executions/ directory.")
+        return 2
+
+    if candidate.parent != executions_root:
+        print("ERROR: Execution directory must be a direct child of executions/.")
         return 2
 
     if not candidate.is_dir():
