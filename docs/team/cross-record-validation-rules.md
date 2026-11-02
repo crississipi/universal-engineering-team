@@ -147,10 +147,17 @@ The validator checks:
 - Release references remain external to the ten canonical execution record
   files and are not incorrectly resolved as internal record IDs.
 - Completion and verification work-item lists resolve.
+- Every work item in the closure's in-scope work-item index appears in
+  exactly one completion classification.
 - Completion classifications agree with canonical work-item states:
   completed items are completed, cancelled items are cancelled, and
-  outstanding items are not already completed or cancelled.
+  outstanding items use a non-terminal work-item state.
 - Completion classifications do not overlap.
+- A `complete` conclusion has no outstanding work items.
+- A `complete_with_exceptions` or `passed_with_exceptions` conclusion has
+  at least one approved exception with an approved decision.
+- A `passed` verification conclusion has no failed or not-verified work
+  items.
 - Verification classifications do not overlap.
 - Completion and verification evidence references resolve.
 - Closure-check and exception references to records and evidence resolve.
