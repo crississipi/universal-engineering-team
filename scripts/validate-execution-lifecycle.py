@@ -269,15 +269,15 @@ def validate_execution_lifecycle(execution, errors):
     label = f"execution ({execution.get('execution_id', 'unknown')})"
     status = check_status(execution, label, "workflow_status", WORKFLOW_STATUSES, errors, "LIFE020")
     stage = execution.get("workflow_stage")
-    stages = {
+    valid_stages = {
         "intake", "qualification", "solution_framing", "planning", "execution",
         "integration_and_review", "verification", "release_readiness_and_release", "closure",
     }
-    if stage not in stages:
+    if stage not in valid_stages:
         add(errors, "LIFE021", f"{label}.workflow_stage has unsupported value {stage!r}")
     history = validate_history(execution, label, execution.get("updated_at"), errors)
     transitions = []
-    stages = []
+    stage_history = []
     for index, entry in enumerate(history):
         old = history_value(entry, "previous_values", "workflow_status")
         new = history_value(entry, "new_values", "workflow_status")
@@ -298,12 +298,12 @@ def validate_execution_lifecycle(execution, errors):
         old_stage = history_value(entry, "previous_values", "workflow_stage")
         new_stage = history_value(entry, "new_values", "workflow_stage")
         if new_stage is not None:
-            if old_stage is not None and stages and old_stage != stages[-1]:
+            if old_stage is not None and stage_history and old_stage != stage_history[-1]:
                 add(errors, "LIFE024", f"{label}.history[{index}] previous workflow stage does not match the preceding recorded stage")
-            stages.append(new_stage)
+            stage_history.append(new_stage)
     if transitions and status != transitions[-1]:
         add(errors, "LIFE022", f"{label}.workflow_status does not match its latest recorded history value")
-    if stages and stage != stages[-1]:
+    if stage_history and stage != stage_history[-1]:
         add(errors, "LIFE024", f"{label}.workflow_stage does not match its latest recorded history value")
     final = execution.get("final_disposition")
     if status in {"verified", "released", "deferred", "cancelled"}:
@@ -324,8 +324,11 @@ def validate_work_items(records, errors):
         for index, entry in enumerate(history):
             old = history_value(entry, "previous_values", "state")
             new = history_value(entry, "new_values", "state")
-            if old is not None and new is not None:
-                check_transition(f"{label}.history[{index}].state", old, new, WORK_ITEM_TRANSITIONS, errors, "LIFE031")
+            if new is not None:
+                if old is not None:
+                    check_transition(f"{label}.history[{index}].state", old, new, WORK_ITEM_TRANSITIONS, errors, "LIFE031")
+                    if transitions and old != transitions[-1]:
+                        add(errors, "LIFE031", f"{label}.history[{index}] previous state {old!r} does not match preceding recorded state {transitions[-1]!r}")
                 transitions.append(new)
         if transitions and current != transitions[-1]:
             add(errors, "LIFE031", f"{label}.state does not match its latest recorded history value")
@@ -436,8 +439,11 @@ def validate_handoffs(records, errors):
                 submission_times.append(stamp)
         if any(later < earlier for earlier, later in zip(submission_times, submission_times[1:])):
             add(errors, "LIFE062", f"{label}.submissions must be chronological")
-        if current == "accepted" and not nonempty(record.get("current_decision_id")):
-            add(errors, "LIFE063", f"{label} accepted status requires current_decision_id")
+        if current in {"submitted", "partially_accepted", "accepted", "rejected"}:
+            if not nonempty(record.get("current_submission_id")):
+                add(errors, "LIFE063", f"{label} status {current!r} requires current_submission_id")
+        if current in {"partially_accepted", "accepted", "rejected"} and not nonempty(record.get("current_decision_id")):
+            add(errors, "LIFE063", f"{label} status {current!r} requires current_decision_id")
 
 
 def validate_decisions(records, errors):
