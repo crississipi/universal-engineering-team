@@ -207,11 +207,18 @@ def validate_history(record, label, current_updated_at, errors):
     for previous, current in zip(parsed, parsed[1:]):
         if current[0] < previous[0]:
             add(errors, "LIFE009", f"{label}.history is not chronological at entry {current[1]}")
+    created = parse_timestamp(record.get("created_at"))
+    if created is None:
+        add(errors, "LIFE010", f"{label}.created_at must be a valid UTC timestamp")
     updated = parse_timestamp(current_updated_at)
     if updated is None:
-        add(errors, "LIFE010", f"{label}.updated_at must be a valid timezone-aware timestamp")
+        add(errors, "LIFE010", f"{label}.updated_at must be a valid UTC timestamp")
+    elif created is not None and updated < created:
+        add(errors, "LIFE011", f"{label}.updated_at precedes created_at")
     elif parsed and updated < parsed[-1][0]:
         add(errors, "LIFE011", f"{label}.updated_at precedes its latest history entry")
+    if created is not None and parsed and parsed[0][0] < created:
+        add(errors, "LIFE011", f"{label}.history begins before created_at")
     return [entry for _, _, entry in parsed]
 
 
@@ -309,8 +316,11 @@ def validate_execution_lifecycle(execution, errors):
     if status in {"verified", "released", "deferred", "cancelled"}:
         if not isinstance(final, dict):
             add(errors, "LIFE023", f"{label} terminal workflow status requires final_disposition")
-        elif final.get("status") != status:
-            add(errors, "LIFE023", f"{label}.final_disposition.status must match workflow_status")
+        else:
+            if final.get("status") != status:
+                add(errors, "LIFE023", f"{label}.final_disposition.status must match workflow_status")
+            if not nonempty(final.get("summary")) or not parse_timestamp(final.get("recorded_at")):
+                add(errors, "LIFE025", f"{label}.final_disposition requires a summary and UTC recorded_at timestamp")
     elif final is not None:
         add(errors, "LIFE023", f"{label}.final_disposition is present before a terminal workflow disposition")
 
@@ -336,6 +346,12 @@ def validate_work_items(records, errors):
             add(errors, "LIFE032", f"{label} in completed state requires completed_at")
         if current != "completed" and record.get("completed_at") is not None:
             add(errors, "LIFE032", f"{label}.completed_at is only valid when state is completed")
+        planned = record.get("planned_completion_at")
+        if planned is not None and parse_timestamp(planned) is None:
+            add(errors, "LIFE033", f"{label}.planned_completion_at must be a UTC timestamp when present")
+        completed = parse_timestamp(record.get("completed_at"))
+        if completed is not None and parse_timestamp(record.get("created_at")) is not None and completed < parse_timestamp(record.get("created_at")):
+            add(errors, "LIFE033", f"{label}.completed_at precedes created_at")
 
 
 def validate_role_activations(records, errors):
