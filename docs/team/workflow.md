@@ -298,6 +298,30 @@ Approved changes must be applied to the relevant canonical execution records. Th
 
 The Delivery Lead may coordinate cross-role replanning but is not a universal approval authority.
 
+## Completion, Verification, and Closure Records
+
+Each execution must maintain a canonical closure record at `executions/<execution-id>/closure.yml`, as defined in `closure-records.md`.
+
+The closure process distinguishes three separate conclusions:
+
+1. **Completion:** Approved in-scope work has been completed or formally dispositioned.
+2. **Verification:** Applicable acceptance criteria have been evaluated using sufficient, traceable evidence.
+3. **Closure:** Required closure conditions have been evaluated and an authorized decision has formally ended the execution.
+
+Entering the Closure workflow stage does not mean that the execution is already closed. Closure may remain in preparation, under review, or blocked while required conditions are resolved.
+
+Before closure approval, the execution must account for its approved scope, role activations, work items, dependencies, handoff executions, decisions, evidence, blockers, replanning records, and release records when applicable.
+
+Unresolved conditions must be resolved or explicitly accepted through authorized exceptions where existing governance permits. Exceptions must document their impact, residual risk, approving decision, and follow-up references. They must not be used to bypass mandatory safety, security, privacy, or policy requirements.
+
+Closure approval must be recorded in `decisions.yml` using the `execution_closure` decision type and referenced by the canonical closure record. The decision-maker must have the applicable authority under existing governance. The Delivery Lead may coordinate closure but is not automatically the universal closure approver.
+
+A closed or cancelled execution is terminal and cannot be reopened. Additional work must be tracked in a new change and execution. The closure record preserves the final assessment, approval, residual risks, follow-up references, and audit history.
+
+When release is applicable, release readiness and release activity must be evaluated before closure. When release is not applicable, that determination must be documented rather than creating an unnecessary release activity.
+
+The detailed closure requirements and record structure are defined in `closure-records.md`. Schema validation and automated tests are deferred to Phase 1.4.7.
+
 ## Role activation and work-item records
 
 Role activation and work-item records are governed by:

@@ -97,8 +97,15 @@ Use the following controlled vocabulary:
 - `accessibility`
 - `handoff_acceptance`
 - `release`
+- execution_closure
 - `delivery`
 - `other`
+
+`execution_closure`: Formal approval or rejection of an execution's closure after completion, verification, and applicable closure requirements have been assessed.
+
+An execution closure decision must reference the execution's canonical closure record. Approval must not be granted solely because the execution has reached the Closure workflow stage. The decision-maker must have the applicable authority under existing governance.
+
+The closure record references this decision through `closure_decision_id`. A successful closure requires the decision status to be `approved`. A rejected or withdrawn closure decision does not authorize closure.
 
 The `other` classification requires a meaningful explanation.
 

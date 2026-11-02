@@ -325,6 +325,14 @@ delivery evidence is available.
 A task must not be represented as successfully completed when
 required work remains unresolved.
 
+The Closure workflow stage represents the process of preparing, reviewing, and formally ending an execution. Entering this stage does not automatically mean the execution is closed.
+
+The execution's canonical closure record determines its closure status. The execution is considered formally closed only when the closure record has `closure_status: closed` and references an approved `execution_closure` decision.
+
+If release is applicable, the applicable release readiness and release activities must be addressed before closure. If release is not applicable, the reason must be documented in the closure assessment.
+
+An execution that is cancelled under authorized governance must be recorded as cancelled rather than represented as successfully completed or released. Closed and cancelled executions are terminal. Additional work requires a new change and execution.
+
 ## 4. Workflow Stage Adaptation
 
 The lifecycle is a standard reference, not a mandatory waterfall.

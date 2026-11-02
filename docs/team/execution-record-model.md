@@ -436,27 +436,25 @@ Approved changes must be applied to the relevant work-item, dependency, role-act
 
 A re-planning proposal must not be treated as authorization to implement its proposed changes.
 
-### 4.10 Closure Record
+### 4.10 Completion, Verification, and Closure Records
 
-**File:** `closure.yml`
+The canonical closure record is stored in `executions/<execution-id>/closure.yml`.
 
-**Purpose:** Record the final disposition of an engineering execution.
+Each execution has one closure record, identified by `CLS-<UUID>`. It references the execution root and the canonical work-item, role activation, dependency, handoff execution, decision, evidence, blocker, replanning, and release records relevant to closure.
 
-Its responsibilities include:
+The closure record separates three conclusions:
 
-- Confirming the final overall workflow status.
-- Recording the final execution outcome.
-- Confirming applicable work-item dispositions.
-- Confirming required handoff resolution.
-- Referencing required verification evidence.
-- Recording unresolved limitations and accepted risks.
-- Recording outstanding follow-up work.
-- Identifying the closure decision authority.
-- Recording the closure date and relevant references.
+- Completion: whether approved in-scope work has been completed or formally dispositioned.
+- Verification: whether applicable acceptance criteria have been checked and supported by sufficient evidence.
+- Closure: whether required closure conditions have been evaluated and formal closure has been authorized.
 
-Closure must follow the applicable workflow gates and release requirements.
+The record includes completion and verification assessments, closure lifecycle status, closure checks, authorized exceptions, required record references, the canonical closure decision reference, summary information, residual risks, follow-up references, timestamps, and append-only history.
 
-A closure record must not imply successful completion when required work or verification remains unresolved.
+Closure approval must reference an approved `execution_closure` decision in `decisions.yml`. A closed or cancelled execution is terminal and must not be reopened. Additional work requires a new change and execution.
+
+The detailed field definitions, closure requirements, lifecycle rules, exception handling, integrity rules, and future validator requirements are defined in `closure-records.md`.
+
+Schemas, deterministic validators, and automated tests for closure records are deferred to Phase 1.4.7.
 
 ## 5. Record Relationships
 
