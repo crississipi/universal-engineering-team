@@ -91,6 +91,19 @@ def as_list(value, label, errors, required=False):
     return value
 
 
+def string_set(value, label, errors):
+    values = as_list(value, label, errors, required=True)
+    result = set()
+    for index, item in enumerate(values):
+        if not is_non_empty(item):
+            add(errors, "REF066", f"{label}[{index}] must be a non-empty string")
+            continue
+        if item in result:
+            add(errors, "REF067", f"{label} contains duplicate {item}")
+        result.add(item)
+    return result
+
+
 def load_execution_document(path, wrapper, collection, errors):
     if not path.is_file():
         add(errors, "REF002", f"Required execution record file is missing: {path.relative_to(ROOT)}")
@@ -363,11 +376,16 @@ def validate_handoffs(indexes, artifacts, contracts, errors, warnings):
                     validate_typed_reference(reference, indexes, artifacts, f"handoff {handoff_id} submission {submission_id}.{field}[{ref_index}]", errors)
 
         current_submission_id = handoff.get("current_submission_id")
-        if current_submission_id:
-            if current_submission_id not in submission_index:
+        if current_submission_id is not None:
+            if not is_non_empty(current_submission_id) or current_submission_id not in submission_index:
                 add(errors, "REF038", f"Handoff {handoff_id}.current_submission_id does not resolve to one of its submissions")
-            elif submissions and current_submission_id != submissions[-1].get("submission_id"):
-                add(errors, "REF039", f"Handoff {handoff_id}.current_submission_id must identify the latest submission")
+            else:
+                valid_submission_ids = [
+                    item.get("submission_id") for item in submissions
+                    if isinstance(item, dict) and is_non_empty(item.get("submission_id"))
+                ]
+                if valid_submission_ids and current_submission_id != valid_submission_ids[-1]:
+                    add(errors, "REF039", f"Handoff {handoff_id}.current_submission_id must identify the latest submission")
 
         current_decision_id = handoff.get("current_decision_id")
         if current_decision_id:
@@ -476,7 +494,11 @@ def validate_common_record_references(indexes, artifacts, errors):
 
     # Supersession chains must not contain cycles.
     for kind, field in (("decisions", "supersedes_decision_id"), ("evidence", "supersedes_evidence_id")):
-        graph = {record_id: record.get(field) for record_id, record in indexes[kind].items() if record.get(field)}
+        graph = {
+            record_id: record.get(field)
+            for record_id, record in indexes[kind].items()
+            if is_non_empty(record.get(field))
+        }
         for start in graph:
             seen = set()
             current = start
@@ -558,14 +580,12 @@ def validate_closure(indexes, artifacts, errors):
         add(errors, "REF065", f"closure {closure_id}.verification must be a mapping")
         verification = {}
     completion_lists = {
-        "completed_work_item_ids": set(as_list(completion.get("completed_work_item_ids"), f"closure {closure_id}.completion.completed_work_item_ids", errors, required=True)),
-        "cancelled_work_item_ids": set(as_list(completion.get("cancelled_work_item_ids"), f"closure {closure_id}.completion.cancelled_work_item_ids", errors, required=True)),
-        "outstanding_work_item_ids": set(as_list(completion.get("outstanding_work_item_ids"), f"closure {closure_id}.completion.outstanding_work_item_ids", errors, required=True)),
+        field: string_set(completion.get(field), f"closure {closure_id}.completion.{field}", errors)
+        for field in ("completed_work_item_ids", "cancelled_work_item_ids", "outstanding_work_item_ids")
     }
     verification_lists = {
-        "verified_work_item_ids": set(as_list(verification.get("verified_work_item_ids"), f"closure {closure_id}.verification.verified_work_item_ids", errors, required=True)),
-        "failed_work_item_ids": set(as_list(verification.get("failed_work_item_ids"), f"closure {closure_id}.verification.failed_work_item_ids", errors, required=True)),
-        "not_verified_work_item_ids": set(as_list(verification.get("not_verified_work_item_ids"), f"closure {closure_id}.verification.not_verified_work_item_ids", errors, required=True)),
+        field: string_set(verification.get(field), f"closure {closure_id}.verification.{field}", errors)
+        for field in ("verified_work_item_ids", "failed_work_item_ids", "not_verified_work_item_ids")
     }
     for label, groups in (("completion", completion_lists), ("verification", verification_lists)):
         seen_ids = set()
