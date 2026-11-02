@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 import argparse
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 import re
 import sys
@@ -106,8 +106,9 @@ WORKFLOW_TRANSITIONS = {
     "in_review": {"verified", "blocked", "in_progress", "deferred", "cancelled"},
     "verified": {"released"},
     "released": set(),
-    "deferred": {"planned", "in_progress"},
+    "deferred": {"planned"},
     "cancelled": set(),
+    "blocked": {"proposed", "planned", "in_progress", "in_review"},
 }
 
 ROLE_STATUSES = {"planned", "active", "completed", "deactivated", "not_activated"}
@@ -143,7 +144,7 @@ def parse_timestamp(value):
         parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
     except ValueError:
         return None
-    if parsed.tzinfo is None:
+    if parsed.tzinfo is None or parsed.utcoffset() != timezone.utc.utcoffset(parsed):
         return None
     return parsed
 
@@ -200,6 +201,8 @@ def validate_history(record, label, current_updated_at, errors):
             add(errors, "LIFE008", f"{entry_label} must be a mapping")
             continue
         timestamp = history_time(entry, entry_label, errors)
+        if not nonempty(entry.get("reason")):
+            add(errors, "LIFE012", f"{entry_label}.reason must be a non-empty explanation")
         if timestamp is not None:
             parsed.append((timestamp, index, entry))
     for previous, current in zip(parsed, parsed[1:]):
@@ -279,7 +282,15 @@ def validate_execution_lifecycle(execution, errors):
         old = history_value(entry, "previous_values", "workflow_status")
         new = history_value(entry, "new_values", "workflow_status")
         if old is not None and new is not None:
-            check_transition(f"{label}.history[{index}].workflow_status", old, new, WORKFLOW_TRANSITIONS, errors, "LIFE022")
+            if old == "blocked":
+                previous_active = next(
+                    (value for value in reversed(transitions) if value != "blocked"),
+                    None,
+                )
+                if previous_active is None or new != previous_active:
+                    add(errors, "LIFE022", f"{label}.history[{index}] must resume the most recent non-blocked workflow status after blocked")
+            else:
+                check_transition(f"{label}.history[{index}].workflow_status", old, new, WORKFLOW_TRANSITIONS, errors, "LIFE022")
             transitions.append(new)
     if transitions and status != transitions[-1]:
         add(errors, "LIFE022", f"{label}.workflow_status does not match its latest recorded transition")
@@ -411,8 +422,6 @@ def validate_handoffs(records, errors):
             add(errors, "LIFE062", f"{label}.submissions must be chronological")
         if current == "accepted" and not nonempty(record.get("current_decision_id")):
             add(errors, "LIFE063", f"{label} accepted status requires current_decision_id")
-        if current in {"planned", "in_progress"} and submissions:
-            add(errors, "LIFE064", f"{label} status {current!r} is inconsistent with an existing submitted record; evaluate the latest submission state")
 
 
 def validate_decisions(records, errors):
