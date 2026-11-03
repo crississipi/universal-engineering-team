@@ -11,7 +11,9 @@ SCRIPTS = ROOT / "scripts"
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
-spec = importlib.util.spec_from_file_location("validate_manifest", SCRIPTS / "validate-manifest.py")
+spec = importlib.util.spec_from_file_location(
+    "validate_manifest", SCRIPTS / "validate-manifest.py"
+)
 validator = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(validator)
 
@@ -58,11 +60,12 @@ class ManifestValidationTests(unittest.TestCase):
             ],
             "handoffs": [],
         }
+        tick = chr(96)
         self.matrix = (
             "| Producer | Consumer | Output | Relationship | Trigger / boundary |\n"
             "|---|---|---|---|---|\n"
-            "| \`ART-BACKEND\` | \`ART-QUALITY-EVIDENCE\` | Backend tests | "
-            "\`required_input\` | Required for verification. |"
+            f"| {tick}ART-BACKEND{tick} | {tick}ART-QUALITY-EVIDENCE{tick} | Backend tests | "
+            f"{tick}required_input{tick} | Required for verification. |"
         )
         self.schema = {
             "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -73,8 +76,35 @@ class ManifestValidationTests(unittest.TestCase):
                 "version": {"const": 1},
                 "sources": {"type": "object"},
                 "roles": {"type": "array"},
-                "artifacts": {"type": "array"},
-                "relationships": {"type": "array"},
+                "artifacts": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "additionalProperties": False,
+                        "properties": {
+                            "id": {"type": "string"},
+                            "name": {"type": "string"},
+                            "owner": {"type": "string"},
+                            "primary_producer": {"type": "string"},
+                            "contributors": {"type": "array"},
+                        },
+                    },
+                },
+                "relationships": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "additionalProperties": False,
+                        "properties": {
+                            "id": {"type": "string"},
+                            "producer_artifact_id": {"type": "string"},
+                            "consumer_artifact_id": {"type": "string"},
+                            "relationship_type": {"type": "string"},
+                            "output": {"type": "string"},
+                            "condition": {"type": "string"},
+                        },
+                    },
+                },
                 "handoffs": {"type": "array"},
             },
         }
@@ -135,13 +165,25 @@ class ManifestValidationTests(unittest.TestCase):
         self.assertTrue(any("from_role must own producer artifact" in error for error in errors))
         self.assertTrue(any("from_role must be the primary producer" in error for error in errors))
 
+    def test_handoff_consumer_must_own_consumer_artifact(self):
+        self.manifest["handoffs"] = [{
+            "id": "HOF-BACKEND-QA-001", "contract_version": "1.0",
+            "from_role": "backend-developer", "to_role": "backend-developer",
+            "artifact_id": "ART-BACKEND", "consumer_artifact_id": "ART-QUALITY-EVIDENCE",
+            "relationship_type": "required_input", "purpose": "Verify backend work.",
+            "required_outputs": ["Backend tests"], "required_context": [],
+            "acceptance_checks": ["Tests pass."], "status": "proposed",
+        }]
+        self.ownership["handoffs"] = copy.deepcopy(self.manifest["handoffs"])
+        self.assertTrue(any("to_role must own consumer artifact" in error for error in self.validate()))
+
     def test_feedback_does_not_block_progress(self):
         self.assertFalse(validator.relationship_requires_input("feedback"))
         self.assertFalse(validator.relationship_requires_input("conditional_input"))
         self.assertTrue(validator.relationship_requires_input("conditional_input", activated=True))
         self.assertTrue(validator.relationship_requires_input("required_input"))
 
-    def test_relationship_cannot_add_unsupported_acceptance_required_field(self):
+    def test_relationship_rejects_unsupported_acceptance_field(self):
         self.manifest["relationships"][0]["acceptance_required"] = True
         self.assertTrue(any("Additional properties are not allowed" in error for error in self.validate()))
 
