@@ -1,0 +1,70 @@
+id: SCEN-DELIVERY-CROSSROLE-WEBHOOK
+role: delivery-lead
+status: draft
+title: Coordinate a cross-role order-webhook delivery
+purpose: Evaluate role selection, ownership, dependency sequencing, blocker discipline, and evidence-based closeout.
+task_prompt: |
+  Coordinate a proposed feature: accept order webhooks from an external commerce
+  provider, validate and persist each order, and expose a small operational view
+  showing recent processing outcomes.
+
+  Confirmed facts:
+  - The provider sends signed webhook requests and may retry deliveries.
+  - The application has an existing backend service and relational database.
+  - The provider's exact signature algorithm and retry schedule have not yet been
+    supplied.
+  - The operational view is in scope, but its exact filters and retention period
+    are not yet specified.
+  - No production deployment is authorized as part of this task.
+  - There is no approved formal handoff contract for this feature.
+
+  Produce a delivery plan that:
+  - Separates confirmed facts, assumptions, open questions, and decisions needed.
+  - Selects only roles justified by scope and applies required/conditional/
+    optional/not_activated classifications with reasons.
+  - Assigns one accountable owner to each artifact/workstream using canonical
+    ownership; contributors must not become co-owners.
+  - Sequences API/provider contract discovery, architecture/security decisions,
+    persistence, backend implementation, UI work, verification, and documentation.
+  - Identifies which missing inputs block only dependent work and what independent
+    work can continue safely.
+  - Defines observable acceptance criteria and evidence expectations.
+  - Records security, privacy, idempotency, duplicate delivery, failure/retry,
+    observability, and release constraints.
+  - Does not invent formal handoffs, role IDs, artifact IDs, lifecycle states,
+    approvals, or production authorization.
+  - Provides a concise delivery ledger with owner, dependency, status, evidence
+    expectation, blocker, and next action.
+required_requirements:
+  - REQ-DELIVERY-01
+criteria:
+  - id: ROLE-ACTIVATION
+    description: Classifies relevant roles using canonical activation rules and explains why roles are required, conditional, optional, or inactive.
+    weight: 20
+    critical: true
+    requirement_ref: REQ-DELIVERY-01
+  - id: OWNERSHIP
+    description: Assigns one accountable owner per workstream/artifact and does not transfer ownership to contributors.
+    weight: 15
+    critical: true
+    requirement_ref: REQ-DELIVERY-01
+  - id: DEPENDENCY-SEQUENCING
+    description: Sequences work around provider/API, architecture, data, implementation, verification, and documentation dependencies while allowing safe independent work.
+    weight: 20
+    critical: true
+    requirement_ref: REQ-DELIVERY-01
+  - id: BLOCKER-DISCIPLINE
+    description: Distinguishes missing inputs from blockers, scopes their impact to dependent work, and identifies the exact next owner/action.
+    weight: 15
+    critical: false
+    requirement_ref: REQ-DELIVERY-01
+  - id: GOVERNANCE-ACCURACY
+    description: Uses only canonical role/artifact/state vocabulary and does not invent formal handoffs, approvals, or release authority.
+    weight: 15
+    critical: true
+    requirement_ref: REQ-DELIVERY-01
+  - id: ACCEPTANCE-AND-EVIDENCE
+    description: Defines observable acceptance criteria and concrete evidence expectations for implementation, independent verification, and closeout.
+    weight: 15
+    critical: false
+    requirement_ref: REQ-DELIVERY-01
