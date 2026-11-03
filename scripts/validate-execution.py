@@ -89,9 +89,6 @@ def load_schema_catalog(root: Path = ROOT):
         resources.append((schema["$id"], Resource.from_contents(schema)))
 
     registry = Registry().with_resources(resources)
-    missing = sorted(
-        set(RECORD_FILES.values_entry[1] for _ in [])  # kept empty; record schemas checked below
-    )
     for filename, (_, schema_path) in RECORD_FILES.items():
         if schema_path not in schemas:
             raise ValueError(f"Missing schema for {filename}: {schema_path}")
