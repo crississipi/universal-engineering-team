@@ -34,8 +34,16 @@ task_prompt: |
   Produce a bounded assessment containing:
   - Scope and explicit statement that this is static review only.
   - Assets, trust boundaries, and plausible abuse cases.
-  - Findings with severity rationale, code evidence, impact, prerequisites,
-    confidence, and practical remediation.
+  - Findings with unique IDs, severity (Critical/High/Medium/Low/Informational),
+    severity rationale, concise evidence from the supplied snippet or context,
+    impact, prerequisites, confidence, and practical remediation.
+  - Apply severity proportionately: Critical means a plausible severe compromise
+    with broad or systemic impact; High means material compromise with credible
+    prerequisites; Medium means meaningful but constrained impact or additional
+    preconditions; Low means limited impact; Informational means a hardening
+    observation without a demonstrated material security impact. Explain why
+    each rating fits the available static evidence; do not imply exploitability
+    was validated.
   - Separate confirmed observations from risks that depend on unknown controls.
   - Consider signature verification, replay/duplicate delivery, input validation,
     sensitive-data logging, and error handling.
@@ -51,7 +59,7 @@ criteria:
     critical: true
     requirement_ref: REQ-APPSEC-01
   - id: EVIDENCE-CLASSIFICATION
-    description: Ties each finding to supplied code/context and separates confirmed observations from risks dependent on unknown controls.
+    description: Uses unique finding IDs and concise evidence from the supplied code/context; separates confirmed observations from risks dependent on unknown controls.
     weight: 20
     critical: true
     requirement_ref: REQ-APPSEC-01
@@ -61,7 +69,7 @@ criteria:
     critical: false
     requirement_ref: REQ-APPSEC-01
   - id: PRIORITIZATION
-    description: Provides defensible severity rationale, impact, prerequisites, and confidence for each finding.
+    description: Assigns a proportionate severity from the defined scale and explains impact, prerequisites, confidence, and why the static evidence supports that rating.
     weight: 15
     critical: false
     requirement_ref: REQ-APPSEC-01
