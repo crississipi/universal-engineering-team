@@ -54,8 +54,10 @@
                   "open",
                   "in_progress",
                   "blocked",
-                  "resolved",
+                  "escalated",
                   "deferred",
+                  "resolved",
+                  "closed",
                   "cancelled"
                 ]
               },
@@ -142,8 +144,10 @@
                         "open",
                         "in_progress",
                         "blocked",
-                        "resolved",
+                        "escalated",
                         "deferred",
+                        "resolved",
+                        "closed",
                         "cancelled"
                       ]
                     },
@@ -153,8 +157,10 @@
                         "open",
                         "in_progress",
                         "blocked",
-                        "resolved",
+                        "escalated",
                         "deferred",
+                        "resolved",
+                        "closed",
                         "cancelled"
                       ]
                     },
@@ -171,6 +177,9 @@
                   "additionalProperties": false
                 },
                 "minItems": 1
+              },
+              "closed_at": {
+                "$ref": "./definitions/common-values.schema.json#/$defs/timestamp"
               }
             },
             "required": [
@@ -206,6 +215,31 @@
                     "resolution_summary",
                     "resolved_at"
                   ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "status": {
+                      "const": "closed"
+                    }
+                  },
+                  "required": [
+                    "status"
+                  ]
+                },
+                "then": {
+                  "required": [
+                    "resolution_summary",
+                    "resolution_evidence_refs",
+                    "resolved_at",
+                    "closed_at"
+                  ],
+                  "properties": {
+                    "resolution_evidence_refs": {
+                      "minItems": 1
+                    }
+                  }
                 }
               }
             ]

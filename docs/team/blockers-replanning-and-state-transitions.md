@@ -227,19 +227,32 @@ The blocker record must not contain secrets, access tokens, passwords, or other 
 
 ### 4.5 Blocker statuses
 
-Use the following blocker statuses:
+The canonical blocker status vocabulary is defined in
+`docs/team/blocker-records.md` and implemented by
+`schemas/executions/blockers.schema.json`. The complete vocabulary is:
 
-| Status | Meaning |
-|---|---|
-| `open` | Blocker is identified and awaiting investigation or action. |
-| `in_progress` | Resolution work is actively underway. |
-| `escalated` | The blocker has been referred to an appropriate higher authority. |
-| `resolved` | The blocking condition has been addressed and supporting evidence is recorded. |
-| `closed` | Resolution has been verified, affected work has been reassessed, and no further blocker action is required. |
+- `open`
+- `in_progress`
+- `blocked`
+- `escalated`
+- `deferred`
+- `resolved`
+- `closed`
+- `cancelled`
 
-A blocker must not be marked `resolved` merely because someone has proposed a solution.
+These are blocker-record statuses only. They must not be substituted for
+work-item states, workflow statuses, dependency statuses, or handoff
+decisions.
 
-A blocker must not be marked `closed` until the affected work owner confirms that the blocking condition no longer prevents safe and correct execution.
+`escalated` records referral to the appropriate authority; it does not mean
+the blocker is resolved or that affected work may resume.
+`deferred` requires an authorized decision and does not imply resolution.
+`resolved` records that the impediment has been addressed with resolution
+information. `closed` is permitted only after verification and reassessment
+of affected work. `cancelled` is terminal and must retain its rationale.
+
+The permitted transitions and status-specific record requirements are
+defined in `docs/team/blocker-records.md`.
 
 ### 4.6 Blocker ownership
 

@@ -61,6 +61,7 @@ Each blocker record must contain:
 | `created_at` | Yes | Record creation timestamp |
 | `updated_at` | Yes | Last material update timestamp |
 | `resolved_at` | Conditional | Actual resolution timestamp |
+| `closed_at` | Conditional | Timestamp when verified closure was recorded |
 | `history` | Yes | Material change history |
 
 Required collections may be empty only when their absence is valid under the applicable rules. A blocker must identify at least one affected work item.
@@ -108,55 +109,85 @@ A critical blocker does not automatically grant an individual role authority bey
 
 ## 7. Blocker Status
 
-Use the following statuses:
+The blocker lifecycle uses one canonical vocabulary across this specification,
+the blocker overview, and the JSON Schema:
 
 | Status | Description |
 |---|---|
 | `open` | Reported and awaiting assessment or action |
 | `in_progress` | Resolution activities are actively underway |
 | `blocked` | Resolution cannot currently proceed because another condition prevents it |
-| `resolved` | The impediment has been resolved and supporting information recorded |
+| `escalated` | Referred to the appropriate higher or specialist authority for a decision or intervention |
 | `deferred` | Resolution has been intentionally postponed through an authorized decision |
+| `resolved` | The impediment has been addressed and resolution information is recorded; affected work still requires reassessment |
+| `closed` | Resolution has been verified, affected work reassessed, and no further blocker action is required |
 | `cancelled` | The blocker is no longer applicable or was recorded in error |
+
+Escalation does not mean the impediment is resolved or that affected work may
+resume. The affected work remains blocked whenever its required conditions
+remain unsatisfied.
 
 ### 7.1 Status Transitions
 
-Permitted transitions:
+Only the following transitions are permitted:
 
 | Current status | Permitted next statuses |
 |---|---|
-| `open` | `in_progress`, `blocked`, `resolved`, `deferred`, `cancelled` |
-| `in_progress` | `blocked`, `resolved`, `deferred`, `cancelled` |
-| `blocked` | `open`, `in_progress`, `deferred`, `cancelled` |
-| `deferred` | `open`, `in_progress`, `cancelled` |
-| `resolved` | Terminal |
+| `open` | `in_progress`, `blocked`, `escalated`, `resolved`, `deferred`, `cancelled` |
+| `in_progress` | `blocked`, `escalated`, `resolved`, `deferred`, `cancelled` |
+| `blocked` | `open`, `in_progress`, `escalated`, `resolved`, `deferred`, `cancelled` |
+| `escalated` | `in_progress`, `blocked`, `resolved`, `deferred`, `cancelled` |
+| `deferred` | `open`, `in_progress`, `blocked`, `escalated`, `resolved`, `cancelled` |
+| `resolved` | `closed` |
+| `closed` | Terminal |
 | `cancelled` | Terminal |
 
-If an apparently resolved or cancelled blocker recurs, create a new blocker record and reference the earlier record through a related record reference or history entry.
+A blocker may be escalated directly from `open`, `in_progress`, or
+`blocked`; urgent risks must not wait for ordinary resolution attempts.
+An escalated blocker may return to active resolution when the relevant
+authority provides direction.
 
-Do not silently reopen a terminal record.
+A blocker must reach `resolved` before it can be `closed`. Closing requires
+verification and reassessment of affected work, not merely a proposed fix.
 
-### 7.2 Resolution Requirements
+If a closed or cancelled blocker recurs, create a new blocker record and
+reference the earlier record through a related record reference or history
+entry. Do not silently reopen a terminal record.
+
+### 7.2 Resolution and Closure Requirements
 
 A blocker marked `resolved` must contain:
 
 - `resolution_summary`
-- `resolution_evidence_refs`, when verifiable evidence is available
 - `resolved_at`
+- `resolution_evidence_refs`, when verifiable evidence is available
 
-The resolution summary must describe what changed and why the impediment no longer prevents the affected work.
+A blocker marked `closed` must contain:
 
-A blocker must not be marked resolved merely because someone has started working on it.
+- `resolution_summary`
+- `resolved_at`
+- `closed_at`
+- At least one `resolution_evidence_refs` entry supporting verification
 
-If resolution cannot be independently demonstrated, record the limitation and retain the appropriate nonterminal status.
+The resolution summary must describe what changed and why the impediment no
+longer prevents the affected work. Closure evidence must support verification
+that the resolution is effective and the affected work has been reassessed.
 
-### 7.3 Deferred Blockers
+A blocker must not be marked resolved merely because someone has started
+working on it. If resolution cannot be demonstrated, retain an appropriate
+nonterminal status. A resolved blocker must not be closed until the affected
+work owner confirms that the blocking condition no longer prevents safe and
+correct execution.
 
-A blocker marked `deferred` must reference an authorized decision through `related_decision_ids`.
+### 7.3 Deferred and Cancelled Blockers
 
-The decision must establish the rationale and any applicable conditions for deferral.
+A blocker marked `deferred` must reference an authorized decision through
+`related_decision_ids`. The decision must establish the rationale and any
+applicable conditions for deferral. Deferral does not imply resolution.
 
-Deferral does not imply resolution.
+A blocker marked `cancelled` must retain a history entry explaining why it
+is no longer applicable or why it was recorded in error. Cancellation is
+terminal and must not be used as a substitute for resolution.
 
 ## 8. Responsibility and Escalation
 
@@ -334,11 +365,12 @@ The future blocker validator must enforce:
 14. Status transitions follow the permitted transition rules.
 15. Resolved blockers include resolution information and a resolution timestamp.
 16. Deferred blockers reference an authorized decision.
-17. Material status changes have corresponding history entries.
-18. Terminal records are not silently reopened.
-19. A blocker does not independently change dependency or work-item status.
-20. Resolution does not automatically imply dependency satisfaction or work-item completion.
-21. Historical records are not silently overwritten or deleted.
+17. Closed blockers include closure timestamp and verification evidence.
+18. Material status changes have corresponding history entries.
+19. Terminal records are not silently reopened.
+20. A blocker does not independently change dependency or work-item status.
+21. Resolution does not automatically imply dependency satisfaction or work-item completion.
+22. Historical records are not silently overwritten or deleted.
 
 ## 15. Implementation Boundary
 
