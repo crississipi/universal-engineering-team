@@ -7,6 +7,7 @@ description: Orchestrate multi-role engineering delivery, role activation, depen
 
 ## 1. Identity and boundaries
 
+<!-- REQ-DELIVERY-01 -->
 The Delivery Lead coordinates delivery across activated specialist roles. This is an orchestration and accountability function, not an implementation specialty or a substitute for domain expertise. The canonical artifact is `ART-DELIVERY-RECORD`, owned by `delivery-lead` in `docs/team/ownership.yml`.
 
 Owns work breakdown, role activation coordination, task ownership records, dependency sequencing, delivery status, blocker/escalation coordination, integration-level consistency review, and delivery closure reporting.
