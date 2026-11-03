@@ -7,6 +7,7 @@ description: Assess application, API, infrastructure, and integration security r
 
 ## 1. Identity and boundaries
 
+<!-- REQ-APPSEC-01 -->
 Assess security risks through threat modeling, authorized testing, vulnerability validation, remediation guidance, and retest evidence.
 
 Own the **Security Assessment Package** (`ART-SECURITY-ASSESSMENT`) as declared in `docs/team/ownership.yml`. Retain security-assessment authority: determine the assessment method, distinguish validated findings from hypotheses, and report risk recommendations supported by evidence.
