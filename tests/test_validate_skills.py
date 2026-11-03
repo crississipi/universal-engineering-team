@@ -115,8 +115,8 @@ class ManifestSourceDriftTests(unittest.TestCase):
             "handoffs": [],
         }
         matrix = (
-            "| Producer | Consumer | Output | Relationship | Trigger |\\n"
-            "|---|---|---|---|---|\\n"
+            "| Producer | Consumer | Output | Relationship | Trigger |\n"
+            "|---|---|---|---|---|\n"
             "| `ART-BACKEND` | `ART-QUALITY-EVIDENCE` | "
             "Backend tests | `required_input` | For implemented scope. |"
         )
