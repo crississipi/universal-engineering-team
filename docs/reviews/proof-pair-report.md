@@ -2,9 +2,24 @@
 
 ## Status
 
-**Implementation status:** Drafted on `phase-2b/backend-qa-proof-pair`.
+**Implementation status:** Completed for the Backend Developer / QA Manager proof pair.
 
-**Validation status:** Repository source review completed. Local automated validation and provider/agent execution have not yet been run for this phase. This report does not claim that the proof pair has passed those checks.
+**Repository validation:** Passed. The repository test suite completed with 19 passing tests. Skill validation passed for all 17 expected roles. Artifact validation passed with 0 warnings. Handoff and scenario validators passed with their documented expected warnings. Generated AGENTS content was synchronized, and `git diff --check` reported no issues.
+
+**Controlled-run status:** The Backend–QA proof cycle was completed and locally verified.
+
+- Backend test suite: 12 tests passed.
+- Independent QA test suite: 10 tests passed.
+- QA independently identified defects, recorded findings, and requested Backend-owned corrections.
+- Backend corrected the identified issues and added regression coverage.
+- QA independently re-verified the corrections.
+- The final oversized-quantity regression, including a quantity exceeding 4,300 decimal digits, passed after correction.
+
+**Evidence:** The proof implementation, Backend tests, QA tests, and verification report are included in `proof-pair-lab/`.
+
+**Remaining gate:** Conditional dependency activation, feedback-only relationships, three materially different correction attempts, and immediate escalation behavior remain unverified or deferred. The repository currently declares no formal handoff contracts.
+
+**Overall Phase 2B acceptance:** Pending completion or explicit disposition of the remaining proof scenarios.
 
 ## Scope
 
@@ -89,14 +104,31 @@ The current `docs/team/ownership.yml` contains no approved formal handoff contra
 - Aligned work-item, handoff-decision, and acceptance-check vocabulary to existing governance.
 - Added this report with explicit proof scenarios and evidence requirements.
 
-### Not yet performed
+## Remaining Unverified or Deferred Work
 
-- Local unit tests and repository validators on this branch.
-- Manifest/role-index/skill-policy validation of the revised skill files.
-- A controlled agent execution of PP-01 through PP-12.
-- A measured multi-run evaluation or provider compatibility test.
+The controlled Backend–QA run verifies the core producer-to-verifier workflow, but it does not establish that every collaboration and escalation rule has been exercised.
 
-No test pass, agent run, acceptance decision, or provider compatibility result is claimed here.
+The following scenarios remain outstanding:
+
+1. **Conditional dependencies:** Verify that conditional consumers become blocking only when their activation conditions are satisfied and the relationship is required.
+
+2. **Feedback-only relationships:** Verify that feedback relationships do not block work-item closure unless explicitly required by the task's acceptance criteria.
+
+3. **Three materially different correction attempts:** Verify that the correction limit counts materially different attempts against the same unresolved increment rather than repeated command executions or identical retries.
+
+4. **Immediate escalation:** Verify that critical infrastructure, permission, and authorization blockers are escalated immediately without waiting for the normal correction-attempt limit.
+
+5. **Formal handoff contracts:** No formal handoff contracts are currently declared in `docs/team/ownership.yml`. Formal handoff acceptance behavior therefore remains unverified. The completed proof demonstrates a package-level producer–verifier relationship, not formal handoff-contract execution.
+
+6. **Broader role coverage:** The proof pair covers Backend Developer and QA Manager only. It does not establish that the same collaboration behavior has been validated across all 17 roles.
+
+### Historical Findings and Resolution
+
+Earlier QA runs identified defects involving Decimal exponent limits and extremely large integer quantities. Backend corrected these defects, added regression coverage, and submitted the updated implementation for independent QA verification.
+
+The final QA verification passed for the oversized-quantity defect and its associated regression cases. Earlier failed findings remain part of the evidence history and must not be removed or rewritten as if they never occurred.
+
+These outstanding scenarios must be explicitly tested or formally deferred with documented rationale. No unexecuted scenario should be reported as passed.
 
 ## Phase gate
 
