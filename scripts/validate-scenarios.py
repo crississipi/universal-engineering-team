@@ -28,7 +28,7 @@ REVIEW_DECISIONS = {"pass", "needs_changes", "blocked"}
 def display_path(path):
     """Format repository paths while remaining safe for isolated test fixtures."""
     try:
-        return display_path(path).as_posix()
+        return path.relative_to(ROOT).as_posix()
     except ValueError:
         return path.as_posix()
 
