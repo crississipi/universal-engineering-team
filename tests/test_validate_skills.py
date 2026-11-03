@@ -98,5 +98,96 @@ class ParseSkillTests(unittest.TestCase):
         self.assertIn("missing or invalid 'description'", errors[0])
 
 
+class ManifestSourceDriftTests(unittest.TestCase):
+    def setUp(self):
+        validator.errors.clear()
+
+    def fixtures(self):
+        roles = {"roles": ["backend-developer"]}
+        ownership = {
+            "artifacts": [{
+                "id": "ART-BACKEND",
+                "name": "Backend Package",
+                "owner": "backend-developer",
+                "primary_producer": "backend-developer",
+                "contributors": ["qa-manager"],
+            }],
+            "handoffs": [],
+        }
+        matrix = (
+            "| Producer | Consumer | Output | Relationship | Trigger |\\n"
+            "|---|---|---|---|---|\\n"
+            "| `ART-BACKEND` | `ART-QUALITY-EVIDENCE` | "
+            "Backend tests | `required_input` | For implemented scope. |"
+        )
+        manifest = {
+            "version": 1,
+            "sources": {
+                "roles": "docs/team/expected-roles.yml",
+                "artifacts": "docs/team/ownership.yml",
+                "handoffs": "docs/team/ownership.yml",
+                "relationships": "docs/team/producer-consumer-matrix.md",
+                "handoff_contract": "docs/team/handoff-contract-schema.md",
+                "handoff_acceptance": "docs/team/handoff-acceptance-rules.md",
+                "handoff_escalation": "docs/team/handoff-escalation-rules.md",
+                "workflow_lifecycle": "docs/team/workflow-lifecycle.md",
+                "execution_records": "docs/team/execution-record-model.md",
+            },
+            "roles": [{
+                "id": "backend-developer",
+                "skill": "skills/backend-developer/SKILL.md",
+            }],
+            "artifacts": [{
+                "id": "ART-BACKEND",
+                "name": "Backend Package",
+                "owner": "backend-developer",
+                "primary_producer": "backend-developer",
+                "contributors": ["qa-manager"],
+            }],
+            "relationships": [{
+                "id": "REL-ART-BACKEND--ART-QUALITY-EVIDENCE",
+                "producer_artifact_id": "ART-BACKEND",
+                "consumer_artifact_id": "ART-QUALITY-EVIDENCE",
+                "relationship_type": "required_input",
+                "output": "Backend tests",
+                "condition": "For implemented scope.",
+            }],
+            "handoffs": [],
+        }
+        return manifest, roles, ownership, matrix
+
+    def test_matching_manifest_sources_have_no_drift(self):
+        self.assertEqual(
+            validator.compare_manifest_sources(*self.fixtures()),
+            [],
+        )
+
+    def test_artifact_owner_drift_is_reported(self):
+        manifest, roles, ownership, matrix = self.fixtures()
+        manifest["artifacts"][0]["owner"] = "delivery-lead"
+        problems = validator.compare_manifest_sources(
+            manifest, roles, ownership, matrix
+        )
+        self.assertTrue(any("artifact ownership projection drifts" in x for x in problems))
+
+    def test_relationship_drift_is_reported(self):
+        manifest, roles, ownership, matrix = self.fixtures()
+        manifest["relationships"][0]["relationship_type"] = "feedback"
+        problems = validator.compare_manifest_sources(
+            manifest, roles, ownership, matrix
+        )
+        self.assertTrue(any("producer-consumer relationships drift" in x for x in problems))
+
+    def test_formal_handoff_drift_is_reported(self):
+        manifest, roles, ownership, matrix = self.fixtures()
+        manifest["handoffs"].append({"id": "HOF-EXAMPLE"})
+        problems = validator.compare_manifest_sources(
+            manifest, roles, ownership, matrix
+        )
+        self.assertTrue(any("formal handoffs drift" in x for x in problems))
+
+
+
+
 if __name__ == "__main__":
     unittest.main()
