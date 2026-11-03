@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate skill metadata, expected roles, role index, and local Markdown links."""
+"""Validate skills, role inventory, manifest source drift, and local Markdown links."""
 
 from pathlib import Path
 import re
@@ -101,6 +101,108 @@ def parse_skill(path):
 
     return metadata
 
+
+
+def compare_manifest_sources(manifest, role_data, ownership_data, matrix_content):
+    """Return semantic drift errors between the derived manifest and its sources."""
+    problems = []
+    if not isinstance(manifest, dict):
+        return ["skills/manifest.yml must contain a YAML mapping"]
+
+    expected_sources = {
+        "roles": "docs/team/expected-roles.yml",
+        "artifacts": "docs/team/ownership.yml",
+        "handoffs": "docs/team/ownership.yml",
+        "relationships": "docs/team/producer-consumer-matrix.md",
+        "handoff_contract": "docs/team/handoff-contract-schema.md",
+        "handoff_acceptance": "docs/team/handoff-acceptance-rules.md",
+        "handoff_escalation": "docs/team/handoff-escalation-rules.md",
+        "workflow_lifecycle": "docs/team/workflow-lifecycle.md",
+        "execution_records": "docs/team/execution-record-model.md",
+    }
+    if manifest.get("version") != 1:
+        problems.append("skills/manifest.yml: version must be 1")
+    if manifest.get("sources") != expected_sources:
+        problems.append("skills/manifest.yml: canonical source references drift")
+
+    source_roles = role_data.get("roles", []) if isinstance(role_data, dict) else []
+    expected_roles = [
+        {"id": role, "skill": f"skills/{role}/SKILL.md"}
+        for role in source_roles
+    ]
+    if manifest.get("roles") != expected_roles:
+        problems.append("skills/manifest.yml: role inventory or skill paths drift")
+
+    source_artifacts = ownership_data.get("artifacts", [])
+    expected_artifacts = []
+    for artifact in source_artifacts:
+        if not isinstance(artifact, dict):
+            problems.append("ownership.yml: artifact entry must be a mapping")
+            continue
+        expected_artifacts.append({
+            "id": artifact.get("id"),
+            "owner": artifact.get("owner"),
+            "primary_producer": artifact.get("primary_producer"),
+            "contributors": artifact.get("contributors", []),
+        })
+    if manifest.get("artifacts") != expected_artifacts:
+        problems.append("skills/manifest.yml: artifact ownership projection drifts")
+
+    if manifest.get("handoffs") != ownership_data.get("handoffs", []):
+        problems.append("skills/manifest.yml: formal handoffs drift from ownership.yml")
+
+    source_relationships = []
+    for line in matrix_content.splitlines():
+        if not line.startswith("| \`ART-"):
+            continue
+        columns = [column.strip() for column in line.split("|")[1:-1]]
+        if len(columns) != 5:
+            problems.append("producer-consumer-matrix.md: malformed relationship row")
+            continue
+        producer, consumer, output, relationship_type, condition = columns
+        producer = producer.strip("\`")
+        consumer = consumer.strip("\`")
+        source_relationships.append({
+            "id": f"REL-{producer}--{consumer}",
+            "producer_artifact_id": producer,
+            "consumer_artifact_id": consumer,
+            "relationship_type": relationship_type.strip("\`"),
+            "output": output,
+            "condition": condition,
+        })
+
+    declared = manifest.get("relationships")
+    if not isinstance(declared, list):
+        problems.append("skills/manifest.yml: relationships must be a list")
+    elif len(declared) != len(source_relationships):
+        problems.append("skills/manifest.yml: relationship count drifts from matrix")
+    else:
+        source_by_id = {item["id"]: item for item in source_relationships}
+        manifest_by_id = {
+            item.get("id"): item for item in declared if isinstance(item, dict)
+        }
+        if manifest_by_id != source_by_id:
+            problems.append("skills/manifest.yml: producer-consumer relationships drift")
+
+    return problems
+
+
+def validate_manifest_sources():
+    manifest = load_yaml(ROOT / "skills/manifest.yml")
+    ownership = load_yaml(ROOT / "docs/team/ownership.yml")
+    role_data = load_yaml(ROLES_PATH)
+    matrix_path = ROOT / "docs/team/producer-consumer-matrix.md"
+    try:
+        matrix_content = matrix_path.read_text(encoding="utf-8")
+    except (OSError, UnicodeError) as exc:
+        errors.append(f"Cannot read docs/team/producer-consumer-matrix.md: {exc}")
+        return
+    if not isinstance(ownership, dict):
+        errors.append("docs/team/ownership.yml must contain a YAML mapping")
+        return
+    errors.extend(
+        compare_manifest_sources(manifest, role_data, ownership, matrix_content)
+    )
 
 def validate_markdown_links():
     link_re = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
@@ -312,6 +414,7 @@ def main():
         for unexpected in sorted(links - expected_links):
             errors.append(f"ROLE-INDEX.md: invalid skill link {unexpected}")
 
+    validate_manifest_sources()
     validate_markdown_links()
 
     for warning in warnings:
