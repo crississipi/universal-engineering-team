@@ -141,6 +141,7 @@ def compare_manifest_sources(manifest, role_data, ownership_data, matrix_content
             continue
         expected_artifacts.append({
             "id": artifact.get("id"),
+            "name": artifact.get("name"),
             "owner": artifact.get("owner"),
             "primary_producer": artifact.get("primary_producer"),
             "contributors": artifact.get("contributors", []),
