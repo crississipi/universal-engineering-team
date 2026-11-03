@@ -29,6 +29,9 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -r requirements-dev.txt
 
+      - name: Run validator unit tests
+        run: python -m unittest discover -s tests -p "test_*.py" -v
+
       - name: Validate skills and role inventory
         run: python scripts/validate-skills.py
 
