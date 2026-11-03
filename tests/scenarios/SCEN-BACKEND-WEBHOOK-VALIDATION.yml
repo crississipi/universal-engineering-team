@@ -1,0 +1,65 @@
+id: SCEN-BACKEND-WEBHOOK-VALIDATION
+role: backend-developer
+status: draft
+title: Implement bounded order-webhook validation
+rubric_version: pilot-v1
+purpose: Evaluate whether the Backend Developer skill produces a small, correct, testable server-side implementation without expanding scope.
+task_prompt: |
+  Implement a small, framework-independent Python module that validates and normalizes
+  incoming order webhook payloads. Treat the supplied payload as untrusted input.
+
+  Required behavior:
+  - Accept a mapping with order_id (non-empty string), customer_email (valid basic
+    email shape), currency (exactly three uppercase ASCII letters), and items
+    (non-empty list).
+  - Each item must contain sku (non-empty string), quantity (positive integer but
+    not bool), and unit_price (non-negative decimal-compatible value).
+  - Reject bool values where numeric values are expected. Reject NaN and infinities.
+  - Return a normalized structure with trimmed identifiers, lowercased email,
+    uppercase currency, and Decimal unit prices.
+  - Do not perform network calls, database writes, logging, authentication, or
+    persistence. Do not invent fields or silently coerce malformed values.
+  - Include focused tests for valid input, missing fields, malformed email,
+    bool quantity, zero/negative quantity, negative price, non-finite price,
+    malformed currency, and empty items.
+  - Explain any deliberate validation boundary and provide exact test command/output
+    only if actually run.
+
+  Use only the Python standard library. Keep the implementation small and typed.
+required_requirements:
+  - REQ-BACKEND-01
+criteria:
+  - id: SCOPE-CONTROL
+    description: Implements only the requested pure validation/normalization behavior and avoids network, persistence, logging, authentication, or unrelated abstractions.
+    weight: 15
+    critical: true
+    requirement_ref: REQ-BACKEND-01
+  - id: INPUT-VALIDATION
+    description: Validates all required fields and rejects malformed identifiers, email, currency, item collections, and item shapes without silently accepting invalid input.
+    weight: 20
+    critical: true
+    requirement_ref: REQ-BACKEND-01
+  - id: NUMERIC-SAFETY
+    description: Rejects booleans, non-positive quantities, negative prices, NaN, and infinities; uses Decimal for normalized unit prices.
+    weight: 20
+    critical: true
+    requirement_ref: REQ-BACKEND-01
+  - id: NORMALIZATION
+    description: Applies the specified trimming and case normalization consistently while preserving valid business values.
+    weight: 10
+    critical: false
+    requirement_ref: REQ-BACKEND-01
+  - id: TEST-COVERAGE
+    description: Supplies focused positive, negative, and boundary tests for every enumerated validation requirement.
+    weight: 20
+    critical: true
+    requirement_ref: REQ-BACKEND-01
+  - id: EVIDENCE-AND-ACCURACY
+    description: Clearly separates implemented behavior from unrun checks and reports commands/results without fabricating execution.
+    weight: 15
+    critical: false
+    requirement_ref: REQ-BACKEND-01
+review_record: null
+evidence:
+  - path: skills/backend-developer/SKILL.md
+    commit: e86d6910b4c4fa754058d6113bc9ecf4e30da147

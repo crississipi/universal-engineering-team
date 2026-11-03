@@ -25,7 +25,7 @@ python scripts/build-agents-section.py --check
 The unit tests cover deterministic validator behavior, including manifest
 declarations, handoff contracts, malformed skill frontmatter, blocker
 lifecycle synchronization, integrated execution-validation orchestration,
-resolver alignment with canonical role-activation triggers, and generated consolidated role-skill synchronization.
+resolver alignment with canonical role-activation triggers, generated consolidated role-skill synchronization, and scenario approval/post-run review lifecycle.
 The same unit-test command runs in GitHub Actions.
 
 The execution schema check meta-validates all ten record schemas and their
