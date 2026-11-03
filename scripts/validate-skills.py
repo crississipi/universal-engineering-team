@@ -28,33 +28,62 @@ def load_yaml(path):
         return yaml.safe_load(path.read_text(encoding="utf-8"))
     except FileNotFoundError:
         errors.append(f"Missing required file: {path.relative_to(ROOT)}")
+    except (OSError, UnicodeError) as exc:
+        errors.append(
+            f"Cannot read {path.relative_to(ROOT)}: {exc}"
+        )
     except yaml.YAMLError as exc:
         errors.append(f"Invalid YAML in {path.relative_to(ROOT)}: {exc}")
     return None
 
 
 def parse_skill(path):
-    content = path.read_text(encoding="utf-8")
+    """Parse one skill's YAML frontmatter without leaking parser exceptions."""
+    relative_path = path.relative_to(ROOT).as_posix()
 
-    if not content.startswith("---\n"):
+    try:
+        content = path.read_text(encoding="utf-8")
+    except (OSError, UnicodeError) as exc:
+        errors.append(f"{relative_path}: cannot read skill file: {exc}")
+        return None
+
+    lines = content.splitlines()
+
+    if not lines or lines[0].strip() != "---":
         errors.append(
-            f"{path.relative_to(ROOT)}: missing YAML frontmatter opener"
+            f"{relative_path}: missing YAML frontmatter opener"
         )
         return None
 
-    end = content.find("\n---", 4)
+    closing_index = next(
+        (
+            index
+            for index, line in enumerate(lines[1:], start=1)
+            if line.strip() == "---"
+        ),
+        None,
+    )
 
-    if end < 0:
+    if closing_index is None:
         errors.append(
-            f"{path.relative_to(ROOT)}: missing YAML frontmatter closer"
+            f"{relative_path}: missing YAML frontmatter closer"
         )
         return None
 
-    metadata = yaml.safe_load(content[4:end])
+    frontmatter = "\n".join(lines[1:closing_index])
+
+    try:
+        metadata = yaml.safe_load(frontmatter)
+    except yaml.YAMLError as exc:
+        problem = getattr(exc, "problem", None) or str(exc)
+        errors.append(
+            f"{relative_path}: invalid YAML frontmatter: {problem}"
+        )
+        return None
 
     if not isinstance(metadata, dict):
         errors.append(
-            f"{path.relative_to(ROOT)}: frontmatter must be a YAML mapping"
+            f"{relative_path}: frontmatter must be a YAML mapping"
         )
         return None
 
@@ -63,14 +92,14 @@ def parse_skill(path):
 
         if not isinstance(value, str) or not value.strip():
             errors.append(
-                f"{path.relative_to(ROOT)}: missing or invalid {field!r}"
+                f"{relative_path}: missing or invalid {field!r}"
             )
 
     return metadata
 
 
 def validate_markdown_links():
-    link_re = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
+    link_re = re.compile(r"!?[[^\]]*\]\(([^)]+)\)")
     fenced_code_re = re.compile(r"```.*?```|~~~.*?~~~", re.DOTALL)
 
     for markdown_file in ROOT.rglob("*.md"):
