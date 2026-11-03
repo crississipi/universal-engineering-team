@@ -14,6 +14,7 @@ except ImportError:
     sys.exit(2)
 
 ROOT = Path(__file__).resolve().parents[1]
+BACKTICK = chr(96)
 
 
 def read_yaml(path):
@@ -35,19 +36,23 @@ def parse_matrix_relationships(content):
     relationships = {}
     errors = []
     for line_number, line in enumerate(content.splitlines(), start=1):
-        if not line.startswith("| \`ART-"):
+        if not line.startswith("| " + BACKTICK + "ART-"):
             continue
         columns = [column.strip() for column in line.split("|")[1:-1]]
         if len(columns) != 5:
-            errors.append(f"producer-consumer-matrix.md:{line_number}: expected five relationship columns")
+            errors.append(
+                f"producer-consumer-matrix.md:{line_number}: expected five relationship columns"
+            )
             continue
         producer, consumer, output, relationship_type, condition = columns
-        producer = producer.strip("\`")
-        consumer = consumer.strip("\`")
-        relationship_type = relationship_type.strip("\`")
+        producer = producer.strip(BACKTICK)
+        consumer = consumer.strip(BACKTICK)
+        relationship_type = relationship_type.strip(BACKTICK)
         edge = (producer, consumer)
         if edge in relationships:
-            errors.append(f"producer-consumer-matrix.md:{line_number}: duplicate relationship edge {producer} -> {consumer}")
+            errors.append(
+                f"producer-consumer-matrix.md:{line_number}: duplicate relationship edge {producer} -> {consumer}"
+            )
             continue
         relationships[edge] = {
             "id": f"REL-{producer}--{consumer}",
@@ -82,11 +87,10 @@ def validate_manifest(manifest, schema, role_data, ownership, matrix_content,
     try:
         Draft202012Validator.check_schema(schema)
         schema_validator = Draft202012Validator(schema)
-        schema_errors = sorted(
+        for error in sorted(
             schema_validator.iter_errors(manifest),
             key=lambda item: list(map(str, item.absolute_path)),
-        )
-        for error in schema_errors:
+        ):
             location = ".".join(str(part) for part in error.absolute_path) or "<root>"
             errors.append(f"skills/manifest.yml:{location}: {error.message}")
     except Exception as exc:
@@ -100,7 +104,6 @@ def validate_manifest(manifest, schema, role_data, ownership, matrix_content,
     if len(canonical_roles) != len(set(canonical_roles)):
         errors.append("expected-roles.yml: duplicate role IDs")
     role_ids = set(canonical_roles)
-
     if ownership.get("roles", []) != canonical_roles:
         errors.append("ownership.yml: role inventory differs from expected-roles.yml")
 
@@ -137,30 +140,38 @@ def validate_manifest(manifest, schema, role_data, ownership, matrix_content,
         for field in ("owner", "primary_producer"):
             role_id = artifact.get(field)
             if role_id not in role_ids:
-                errors.append(f"ownership.yml: artifact {artifact_id!r} has unknown {field} role {role_id!r}")
+                errors.append(
+                    f"ownership.yml: artifact {artifact_id!r} has unknown {field} role {role_id!r}"
+                )
         contributors = artifact.get("contributors", [])
         if not isinstance(contributors, list):
             errors.append(f"ownership.yml: artifact {artifact_id!r} contributors must be a list")
         else:
-            if len(contributors) != len(set(contributors)):
+            if any(not isinstance(role, str) for role in contributors):
+                errors.append(f"ownership.yml: artifact {artifact_id!r} contributors must be role IDs")
+            elif len(contributors) != len(set(contributors)):
                 errors.append(f"ownership.yml: artifact {artifact_id!r} has duplicate contributors")
             for role_id in contributors:
                 if role_id not in role_ids:
-                    errors.append(f"ownership.yml: artifact {artifact_id!r} has unknown contributor role {role_id!r}")
+                    errors.append(
+                        f"ownership.yml: artifact {artifact_id!r} has unknown contributor role {role_id!r}"
+                    )
 
-    manifest_artifact_by_id = {}
+    manifest_artifact_ids = set()
     for index, artifact in enumerate(manifest.get("artifacts", [])):
         if not isinstance(artifact, dict):
             continue
         artifact_id = artifact.get("id")
-        if artifact_id in manifest_artifact_by_id:
+        if artifact_id in manifest_artifact_ids:
             errors.append(f"artifacts[{index}]: duplicate artifact ID {artifact_id!r}")
-        manifest_artifact_by_id[artifact_id] = artifact
+        manifest_artifact_ids.add(artifact_id)
         if artifact_id not in source_artifact_by_id:
             errors.append(f"artifacts[{index}]: unknown artifact reference {artifact_id!r}")
         for field in ("owner", "primary_producer"):
             if artifact.get(field) not in role_ids:
-                errors.append(f"artifacts[{index}]: unknown {field} role {artifact.get(field)!r}")
+                errors.append(
+                    f"artifacts[{index}]: unknown {field} role {artifact.get(field)!r}"
+                )
         for role_id in artifact.get("contributors", []):
             if role_id not in role_ids:
                 errors.append(f"artifacts[{index}]: unknown contributor role {role_id!r}")
@@ -180,7 +191,9 @@ def validate_manifest(manifest, schema, role_data, ownership, matrix_content,
             errors.append(f"relationships[{index}]: duplicate relationship ID {relationship_id!r}")
         relationship_ids.add(relationship_id)
         if edge in relationship_by_edge:
-            errors.append(f"relationships[{index}]: conflicting duplicate declaration for {producer!r} -> {consumer!r}")
+            errors.append(
+                f"relationships[{index}]: conflicting duplicate declaration for {producer!r} -> {consumer!r}"
+            )
         relationship_by_edge[edge] = relationship
         for artifact_id in edge:
             if artifact_id not in source_artifact_by_id:
@@ -189,20 +202,30 @@ def validate_manifest(manifest, schema, role_data, ownership, matrix_content,
             errors.append(f"relationships[{index}]: producer and consumer artifacts must differ")
         if relationship_id != f"REL-{producer}--{consumer}":
             errors.append(f"relationships[{index}]: ID does not match its producer-consumer edge")
-        if relationship.get("relationship_type") not in {"required_input", "conditional_input", "feedback"}:
-            errors.append(f"relationships[{index}]: unsupported relationship type {relationship.get('relationship_type')!r}")
+        if relationship.get("relationship_type") not in {
+            "required_input", "conditional_input", "feedback"
+        }:
+            errors.append(
+                f"relationships[{index}]: unsupported relationship type {relationship.get('relationship_type')!r}"
+            )
         condition = relationship.get("condition")
         if not isinstance(condition, str) or not condition.strip():
             errors.append(f"relationships[{index}]: condition must not be blank")
         source_edge = source_relationships.get(edge)
         if source_edge is None:
-            errors.append(f"relationships[{index}]: missing mirror edge in producer-consumer-matrix.md")
+            errors.append(
+                f"relationships[{index}]: missing mirror edge in producer-consumer-matrix.md"
+            )
         elif relationship != source_edge:
-            errors.append(f"relationships[{index}]: declaration conflicts with producer-consumer-matrix.md")
+            errors.append(
+                f"relationships[{index}]: declaration conflicts with producer-consumer-matrix.md"
+            )
 
     for producer, consumer in source_relationships:
         if (producer, consumer) not in relationship_by_edge:
-            errors.append(f"skills/manifest.yml: missing relationship mirror for {producer} -> {consumer}")
+            errors.append(
+                f"skills/manifest.yml: missing relationship mirror for {producer} -> {consumer}"
+            )
 
     handoffs = manifest.get("handoffs", [])
     source_handoffs = ownership.get("handoffs", [])
@@ -225,7 +248,9 @@ def validate_manifest(manifest, schema, role_data, ownership, matrix_content,
         consumer_id = handoff.get("consumer_artifact_id")
         edge = (producer_id, consumer_id)
         if edge in handoff_edges:
-            errors.append(f"handoffs[{index}]: conflicting duplicate handoff for {producer_id!r} -> {consumer_id!r}")
+            errors.append(
+                f"handoffs[{index}]: conflicting duplicate handoff for {producer_id!r} -> {consumer_id!r}"
+            )
         handoff_edges.add(edge)
         producer_artifact = source_artifact_by_id.get(producer_id)
         consumer_artifact = source_artifact_by_id.get(consumer_id)
@@ -241,20 +266,32 @@ def validate_manifest(manifest, schema, role_data, ownership, matrix_content,
             errors.append(f"handoffs[{index}]: unknown consumer role {to_role!r}")
         if producer_artifact is not None:
             if from_role != producer_artifact.get("owner"):
-                errors.append(f"handoffs[{index}]: from_role must own producer artifact {producer_id!r}")
+                errors.append(
+                    f"handoffs[{index}]: from_role must own producer artifact {producer_id!r}"
+                )
             if from_role != producer_artifact.get("primary_producer"):
-                errors.append(f"handoffs[{index}]: from_role must be the primary producer of {producer_id!r}")
+                errors.append(
+                    f"handoffs[{index}]: from_role must be the primary producer of {producer_id!r}"
+                )
         if consumer_artifact is not None and to_role != consumer_artifact.get("owner"):
-            errors.append(f"handoffs[{index}]: to_role must own consumer artifact {consumer_id!r}")
+            errors.append(
+                f"handoffs[{index}]: to_role must own consumer artifact {consumer_id!r}"
+            )
         relationship = relationship_by_edge.get(edge)
         if relationship is None:
-            errors.append(f"handoffs[{index}]: missing producer-consumer relationship mirror for {producer_id!r} -> {consumer_id!r}")
+            errors.append(
+                f"handoffs[{index}]: missing producer-consumer relationship mirror for {producer_id!r} -> {consumer_id!r}"
+            )
         elif handoff.get("relationship_type") != relationship.get("relationship_type"):
-            errors.append(f"handoffs[{index}]: relationship_type conflicts with the producer-consumer matrix")
+            errors.append(
+                f"handoffs[{index}]: relationship_type conflicts with the producer-consumer matrix"
+            )
         if handoff.get("relationship_type") == "conditional_input":
             activation = handoff.get("activation_condition")
             if not isinstance(activation, str) or not activation.strip():
-                errors.append(f"handoffs[{index}]: conditional handoff requires a non-empty activation_condition")
+                errors.append(
+                    f"handoffs[{index}]: conditional handoff requires a non-empty activation_condition"
+                )
 
     return errors
 
@@ -277,13 +314,18 @@ def main():
         print(f"ERROR: Cannot read producer-consumer matrix: {exc}")
         return 1
 
-    errors = validate_manifest(manifest, schema, role_data, ownership, matrix, root=root)
+    errors = validate_manifest(
+        manifest, schema, role_data, ownership, matrix, root=root
+    )
     if errors:
         for error in errors:
             print(f"ERROR: {error}")
         print(f"\nManifest validation failed: {len(errors)} error(s).")
         return 1
-    print("Manifest validation passed: schema, role/artifact references, relationship mirrors, handoff ownership, and declaration uniqueness.")
+    print(
+        "Manifest validation passed: schema, role/artifact references, "
+        "relationship mirrors, handoff ownership, and declaration uniqueness."
+    )
     return 0
 
 
