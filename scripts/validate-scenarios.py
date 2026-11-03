@@ -286,8 +286,8 @@ def main():
 
     if not scenario_paths and not review_paths:
         warnings.append(
-            "No scenarios or review records exist yet. This is valid during "
-            "Phase 0; do not fabricate evaluation data."
+            "No scenarios or review records exist yet; evaluation has not been "
+            "initialized. Do not fabricate evaluation data."
         )
 
     return report(errors, warnings, "Scenario validation")
