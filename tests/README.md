@@ -11,23 +11,19 @@ python -m pip install -r requirements-dev.txt
 ## Run repository validation
 
 ```powershell
+python -m unittest discover -s tests -p "test_*.py" -v
 python scripts/validate-skills.py
+python scripts/validate-manifest.py
 python scripts/validate-artifacts.py
 python scripts/validate-handoffs.py
 python scripts/validate-scenarios.py
 python scripts/build-agents-section.py --check
 ```
 
-## Run validator unit tests
-
-```powershell
-python -m unittest discover -s tests -p "test_*.py" -v
-```
-
-The focused tests cover deterministic validator behavior, including valid
-handoff contracts, malformed skill frontmatter, and synchronization between
-the canonical blocker lifecycle specification and its JSON Schema. The same
-unit-test command runs in the GitHub Actions validation workflow.
+The unit tests cover deterministic validator behavior, including manifest
+declarations, handoff contracts, malformed skill frontmatter, and
+synchronization between the canonical blocker lifecycle specification and
+its JSON Schema. The same unit-test command runs in GitHub Actions.
 
 The blocker governance regression tests can also be run independently:
 
@@ -39,11 +35,17 @@ python -m unittest discover -s tests -p "test_blocker_status_governance.py" -v
 
 | Validator | Responsibility |
 |---|---|
-| `validate-skills.py` | Skill inventory, frontmatter, role index, manifest/source drift, and local Markdown links |
+| `validate-skills.py` | Skill inventory, frontmatter, role index, manifest/source projection drift, and local Markdown links |
+| `validate-manifest.py` | Manifest schema, declaration references, relationship mirrors, handoff role/artifact ownership, and declaration uniqueness |
 | `validate-artifacts.py` | Artifact package ownership |
 | `validate-handoffs.py` | Formal handoff contract governance |
 | `validate-scenarios.py` | Scenario and review-record structure |
 | `build-agents-section.py --check` | Generated `AGENTS.md` section synchronization |
+
+The manifest validator complements the source-projection check in
+`validate-skills.py`; it does not replace that check or make the manifest
+a new source of truth. Canonical roles, artifact ownership, relationships,
+and formal handoffs remain in their existing governance files.
 
 These validators check declared structure and consistency. They do not
 replace independent technical review or prove subjective quality, evidence
