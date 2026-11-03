@@ -48,23 +48,190 @@ roles:
     skill: skills/delivery-lead/SKILL.md
 
 artifacts:
-  - id: ART-PRODUCT-REQUIREMENTS
-  - id: ART-ARCHITECTURE
-  - id: ART-API-CONTRACT
-  - id: ART-BACKEND
-  - id: ART-FRONTEND
-  - id: ART-UX-DESIGN
-  - id: ART-DATA-MODEL
-  - id: ART-INTEGRATION
-  - id: ART-DATA-PIPELINE
-  - id: ART-QUALITY-EVIDENCE
-  - id: ART-SECURITY-ASSESSMENT
-  - id: ART-OPERATIONS
-  - id: ART-PERFORMANCE-EVIDENCE
-  - id: ART-ACCESSIBILITY-ASSESSMENT
-  - id: ART-KNOWLEDGE-DOCS
-  - id: ART-RELEASE-PACKAGE
-  - id: ART-DELIVERY-RECORD
+  - id:  ART-PRODUCT-REQUIREMENTS
+    owner: product-analyst
+    primary_producer: product-analyst
+    contributors:
+      - on-architect
+      - designer
+      - ager
+      - ation-tester
+      - ngineer
+      - -sre
+  - id:  ART-ARCHITECTURE
+    owner: solution-architect
+    primary_producer: solution-architect
+    contributors:
+      - t-analyst
+      - nager
+      - ation-engineer
+      - se-manager
+      - d-developer
+      - nd-developer
+      - -sre
+      - ation-tester
+      - ager
+  - id:  ART-API-CONTRACT
+    owner: api-manager
+    primary_producer: api-manager
+    contributors:
+      - d-developer
+      - nd-developer
+      - ation-engineer
+      - ation-tester
+      - ager
+      - on-architect
+  - id:  ART-BACKEND
+    owner: backend-developer
+    primary_producer: backend-developer
+    contributors:
+      - nager
+      - se-manager
+      - ation-engineer
+      - ation-tester
+      - ager
+      - -sre
+  - id:  ART-FRONTEND
+    owner: frontend-developer
+    primary_producer: frontend-developer
+    contributors:
+      - designer
+      - nager
+      - d-developer
+      - ibility-specialist
+      - ager
+      - mance-engineer
+  - id:  ART-UX-DESIGN
+    owner: ux-ui-designer
+    primary_producer: ux-ui-designer
+    contributors:
+      - t-analyst
+      - nd-developer
+      - ibility-specialist
+      - ager
+  - id:  ART-DATA-MODEL
+    owner: database-manager
+    primary_producer: database-manager
+    contributors:
+      - d-developer
+      - ngineer
+      - -sre
+      - ation-tester
+      - ager
+  - id:  ART-INTEGRATION
+    owner: integration-engineer
+    primary_producer: integration-engineer
+    contributors:
+      - nager
+      - d-developer
+      - ngineer
+      - se-manager
+      - -sre
+      - ation-tester
+      - ager
+  - id:  ART-DATA-PIPELINE
+    owner: data-engineer
+    primary_producer: data-engineer
+    contributors:
+      - se-manager
+      - ation-engineer
+      - t-analyst
+      - -sre
+      - ation-tester
+      - ager
+  - id:  ART-QUALITY-EVIDENCE
+    owner: qa-manager
+    primary_producer: qa-manager
+    contributors:
+      - t-analyst
+      - d-developer
+      - nd-developer
+      - se-manager
+      - ation-engineer
+      - ation-tester
+      - -sre
+      - mance-engineer
+      - ibility-specialist
+      - e-manager
+  - id:  ART-SECURITY-ASSESSMENT
+    owner: penetration-tester
+    primary_producer: penetration-tester
+    contributors:
+      - on-architect
+      - d-developer
+      - nager
+      - -sre
+      - se-manager
+      - ager
+      - e-manager
+  - id:  ART-OPERATIONS
+    owner: devops-sre
+    primary_producer: devops-sre
+    contributors:
+      - on-architect
+      - d-developer
+      - ation-engineer
+      - se-manager
+      - ation-tester
+      - ager
+      - e-manager
+  - id:  ART-PERFORMANCE-EVIDENCE
+    owner: performance-engineer
+    primary_producer: performance-engineer
+    contributors:
+      - nd-developer
+      - d-developer
+      - se-manager
+      - ngineer
+      - -sre
+      - ager
+      - t-analyst
+  - id:  ART-ACCESSIBILITY-ASSESSMENT
+    owner: accessibility-specialist
+    primary_producer: accessibility-specialist
+    contributors:
+      - t-analyst
+      - designer
+      - nd-developer
+      - ager
+      - cal-writer-knowledge-engineer
+  - id:  ART-KNOWLEDGE-DOCS
+    owner: technical-writer-knowledge-engineer
+    primary_producer: technical-writer-knowledge-engineer
+    contributors:
+      - t-analyst
+      - on-architect
+      - nager
+      - d-developer
+      - nd-developer
+      - designer
+      - se-manager
+      - ation-engineer
+      - ngineer
+      - ager
+      - ation-tester
+      - -sre
+      - mance-engineer
+      - ibility-specialist
+      - e-manager
+      - ry-lead
+  - id:  ART-RELEASE-PACKAGE
+    owner: release-manager
+    primary_producer: release-manager
+    contributors:
+      - ager
+      - -sre
+      - ation-tester
+      - on-architect
+      - t-analyst
+  - id:  ART-DELIVERY-RECORD
+    owner: delivery-lead
+    primary_producer: delivery-lead
+    contributors:
+      - on-architect
+      - ager
+      - cal-writer-knowledge-engineer
+      - e-manager
 
 relationships:
   - id: REL-ART-PRODUCT-REQUIREMENTS--ART-ARCHITECTURE
