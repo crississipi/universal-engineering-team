@@ -154,20 +154,20 @@ def compare_manifest_sources(manifest, role_data, ownership_data, matrix_content
 
     source_relationships = []
     for line in matrix_content.splitlines():
-        if not line.startswith("| \`ART-"):
+        if not line.startswith("| `ART-"):
             continue
         columns = [column.strip() for column in line.split("|")[1:-1]]
         if len(columns) != 5:
             problems.append("producer-consumer-matrix.md: malformed relationship row")
             continue
         producer, consumer, output, relationship_type, condition = columns
-        producer = producer.strip("\`")
-        consumer = consumer.strip("\`")
+        producer = producer.strip("`")
+        consumer = consumer.strip("`")
         source_relationships.append({
             "id": f"REL-{producer}--{consumer}",
             "producer_artifact_id": producer,
             "consumer_artifact_id": consumer,
-            "relationship_type": relationship_type.strip("\`"),
+            "relationship_type": relationship_type.strip("`"),
             "output": output,
             "condition": condition,
         })
