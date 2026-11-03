@@ -39,7 +39,7 @@ Use a proportionate change packet. Do not invent missing requirements, approvals
 ## 3. Map collaboration and dependencies
 
 Use the producer-consumer matrix as package-level guidance:
-- `required_input`: the dependent work cannot be finalized until the needed accepted input is available; unrelated work may continue.
+- `required_input`: the dependent work cannot be finalized until the needed input is available and sufficiently verified; unrelated work may continue.
 - `conditional_input`: activate only when its documented condition applies.
 - `feedback`: findings or recommendations may cause reassessment or rework, but do not automatically block the receiving package from starting or completing.
 
