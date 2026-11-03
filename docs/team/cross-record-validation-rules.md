@@ -28,9 +28,9 @@ Collection files must contain arrays, including empty arrays when no records
 exist. The execution and closure files must contain one mapping each.
 
 The validator uses the existing `validation_common.py` helpers and PyYAML.
-It does not add a runtime dependency. JSON Schema validation and lifecycle
-transition validation remain separate layers and are not claimed by this
-command.
+It remains independently runnable for focused development. It does not perform
+JSON Schema validation or lifecycle transition validation. Use
+`scripts/validate-execution.py` for the complete validation sequence.
 
 ## 3. Identity and Record Scope
 
