@@ -87,12 +87,15 @@ def validate_manifest(manifest, schema, role_data, ownership, matrix_content,
     try:
         Draft202012Validator.check_schema(schema)
         schema_validator = Draft202012Validator(schema)
-        for error in sorted(
+        schema_errors = sorted(
             schema_validator.iter_errors(manifest),
             key=lambda item: list(map(str, item.absolute_path)),
-        ):
+        )
+        for error in schema_errors:
             location = ".".join(str(part) for part in error.absolute_path) or "<root>"
             errors.append(f"skills/manifest.yml:{location}: {error.message}")
+        if schema_errors:
+            return errors
     except Exception as exc:
         errors.append(f"schemas/manifest.schema.json is invalid: {exc}")
         return errors
