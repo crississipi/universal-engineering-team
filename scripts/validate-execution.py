@@ -65,6 +65,17 @@ def load_yaml_document(path: Path):
 def load_schema_catalog(root: Path = ROOT):
     """Load and meta-validate all execution schemas and local references."""
     schema_paths = sorted((root / "schemas/executions").rglob("*.schema.json"))
+    required_paths = {
+        *[schema_path for _, schema_path in RECORD_FILES.values()],
+        "schemas/executions/definitions/common-values.schema.json",
+        "schemas/executions/definitions/identifiers.schema.json",
+        "schemas/executions/definitions/timestamps.schema.json",
+    }
+    discovered_paths = {path.relative_to(root).as_posix() for path in schema_paths}
+    missing_paths = sorted(required_paths - discovered_paths)
+    if missing_paths:
+        raise ValueError("Missing required execution schemas: " + ", ".join(missing_paths))
+
     schemas = {}
     resources = []
 
@@ -91,6 +102,28 @@ def load_schema_catalog(root: Path = ROOT):
         resources.append((schema["$id"], Resource.from_contents(schema)))
 
     registry = Registry().with_resources(resources)
+
+    def iter_references(value):
+        if isinstance(value, dict):
+            reference = value.get("$ref")
+            if isinstance(reference, str):
+                yield reference
+            for child in value.values():
+                yield from iter_references(child)
+        elif isinstance(value, list):
+            for child in value:
+                yield from iter_references(child)
+
+    for relative, schema in schemas.items():
+        resolver = registry.resolver(base_uri=schema["$id"])
+        for reference in iter_references(schema):
+            try:
+                resolver.lookup(reference)
+            except Exception as exc:
+                raise ValueError(
+                    f"Unresolved schema reference in {relative}: {reference} ({exc})"
+                ) from exc
+
     for filename, (_, schema_path) in RECORD_FILES.items():
         if schema_path not in schemas:
             raise ValueError(f"Missing schema for {filename}: {schema_path}")
