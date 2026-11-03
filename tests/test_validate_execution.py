@@ -59,6 +59,14 @@ class IntegratedExecutionValidationTests(unittest.TestCase):
         self.assertTrue(any("[EXV002]" in error for error in errors))
         self.assertTrue(any("[EXV003]" in error for error in errors))
 
+    def test_invalid_record_shape_produces_schema_finding(self):
+        self.write_records()
+        records, parse_errors = validator.parse_execution_documents(self.directory)
+        catalog, registry = validator.load_schema_catalog()
+        self.assertEqual(parse_errors, [])
+        errors = validator.validate_documents(self.directory, records, catalog, registry)
+        self.assertTrue(any("[EXV005]" in error for error in errors))
+
     def test_schema_failure_skips_cross_record_and_lifecycle(self):
         self.write_records()
         catalog, registry = validator.load_schema_catalog()
