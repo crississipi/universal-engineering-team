@@ -49,6 +49,7 @@ roles:
 
 artifacts:
   - id: ART-PRODUCT-REQUIREMENTS
+    name: "Product Requirements Package"
     owner: product-analyst
     primary_producer: product-analyst
     contributors:
@@ -59,6 +60,7 @@ artifacts:
       - data-engineer
       - devops-sre
   - id: ART-ARCHITECTURE
+    name: "System Architecture Package"
     owner: solution-architect
     primary_producer: solution-architect
     contributors:
@@ -72,6 +74,7 @@ artifacts:
       - penetration-tester
       - qa-manager
   - id: ART-API-CONTRACT
+    name: "API and Event Contract Package"
     owner: api-manager
     primary_producer: api-manager
     contributors:
@@ -82,6 +85,7 @@ artifacts:
       - qa-manager
       - solution-architect
   - id: ART-BACKEND
+    name: "Backend Implementation Package"
     owner: backend-developer
     primary_producer: backend-developer
     contributors:
@@ -92,6 +96,7 @@ artifacts:
       - qa-manager
       - devops-sre
   - id: ART-FRONTEND
+    name: "Frontend Implementation Package"
     owner: frontend-developer
     primary_producer: frontend-developer
     contributors:
@@ -102,6 +107,7 @@ artifacts:
       - qa-manager
       - performance-engineer
   - id: ART-UX-DESIGN
+    name: "UX and Design Package"
     owner: ux-ui-designer
     primary_producer: ux-ui-designer
     contributors:
@@ -110,6 +116,7 @@ artifacts:
       - accessibility-specialist
       - qa-manager
   - id: ART-DATA-MODEL
+    name: "Data Model and Database Package"
     owner: database-manager
     primary_producer: database-manager
     contributors:
@@ -119,6 +126,7 @@ artifacts:
       - penetration-tester
       - qa-manager
   - id: ART-INTEGRATION
+    name: "Integration Engineering Package"
     owner: integration-engineer
     primary_producer: integration-engineer
     contributors:
@@ -130,6 +138,7 @@ artifacts:
       - penetration-tester
       - qa-manager
   - id: ART-DATA-PIPELINE
+    name: "Data Engineering Package"
     owner: data-engineer
     primary_producer: data-engineer
     contributors:
@@ -140,6 +149,7 @@ artifacts:
       - penetration-tester
       - qa-manager
   - id: ART-QUALITY-EVIDENCE
+    name: "Quality Assurance Package"
     owner: qa-manager
     primary_producer: qa-manager
     contributors:
@@ -154,6 +164,7 @@ artifacts:
       - accessibility-specialist
       - release-manager
   - id: ART-SECURITY-ASSESSMENT
+    name: "Security Assessment Package"
     owner: penetration-tester
     primary_producer: penetration-tester
     contributors:
@@ -165,6 +176,7 @@ artifacts:
       - qa-manager
       - release-manager
   - id: ART-OPERATIONS
+    name: "Infrastructure and Operations Package"
     owner: devops-sre
     primary_producer: devops-sre
     contributors:
@@ -176,6 +188,7 @@ artifacts:
       - qa-manager
       - release-manager
   - id: ART-PERFORMANCE-EVIDENCE
+    name: "Performance Engineering Package"
     owner: performance-engineer
     primary_producer: performance-engineer
     contributors:
@@ -187,6 +200,7 @@ artifacts:
       - qa-manager
       - product-analyst
   - id: ART-ACCESSIBILITY-ASSESSMENT
+    name: "Accessibility Assessment Package"
     owner: accessibility-specialist
     primary_producer: accessibility-specialist
     contributors:
@@ -196,6 +210,7 @@ artifacts:
       - qa-manager
       - technical-writer-knowledge-engineer
   - id: ART-KNOWLEDGE-DOCS
+    name: "Documentation and Knowledge Package"
     owner: technical-writer-knowledge-engineer
     primary_producer: technical-writer-knowledge-engineer
     contributors:
@@ -216,6 +231,7 @@ artifacts:
       - release-manager
       - delivery-lead
   - id: ART-RELEASE-PACKAGE
+    name: "Release Management Package"
     owner: release-manager
     primary_producer: release-manager
     contributors:
@@ -225,6 +241,7 @@ artifacts:
       - solution-architect
       - product-analyst
   - id: ART-DELIVERY-RECORD
+    name: "Delivery Coordination Package"
     owner: delivery-lead
     primary_producer: delivery-lead
     contributors:
