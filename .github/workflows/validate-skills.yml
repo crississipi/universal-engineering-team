@@ -35,6 +35,9 @@ jobs:
       - name: Validate skills and role inventory
         run: python scripts/validate-skills.py
 
+      - name: Validate manifest declarations
+        run: python scripts/validate-manifest.py
+
       - name: Validate artifact ownership
         run: python scripts/validate-artifacts.py
 
