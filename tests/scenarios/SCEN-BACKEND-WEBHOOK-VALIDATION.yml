@@ -2,26 +2,35 @@ id: SCEN-BACKEND-WEBHOOK-VALIDATION
 role: backend-developer
 status: draft
 title: Implement bounded order-webhook validation
-rubric_version: pilot-v1
+rubric_version: pilot-v2
 purpose: Evaluate whether the Backend Developer skill produces a small, correct, testable server-side implementation without expanding scope.
 task_prompt: |
   Implement a small, framework-independent Python module that validates and normalizes
   incoming order webhook payloads. Treat the supplied payload as untrusted input.
 
   Required behavior:
-  - Accept a mapping with order_id (non-empty string), customer_email (valid basic
-    email shape), currency (exactly three uppercase ASCII letters), and items
+  - Accept a mapping with order_id (string that is non-empty after trimming),
+    customer_email, currency (exactly three uppercase ASCII letters), and items
     (non-empty list).
-  - Each item must contain sku (non-empty string), quantity (positive integer but
-    not bool), and unit_price (non-negative decimal-compatible value).
-  - Reject bool values where numeric values are expected. Reject NaN and infinities.
-  - Return a normalized structure with trimmed identifiers, lowercased email,
-    uppercase currency, and Decimal unit prices.
+  - Define the basic email shape as: after trimming, exactly one "@", non-empty
+    local and domain parts, no whitespace, and at least one "." in the domain.
+    This is deliberately not full RFC email validation.
+  - Each item must be a mapping containing sku (string non-empty after trimming),
+    quantity (positive integer but not bool), and unit_price.
+  - Accept unit_price only as str, int, float, or Decimal; reject bool and all
+    other types. Parse through Decimal (for float input, use str(value) to avoid
+    importing the binary floating-point representation). Reject blank or malformed
+    decimal strings, negative values, NaN, and positive/negative infinity.
+  - Reject bool values wherever numeric values are expected.
+  - Return a normalized structure with trimmed order_id and sku, trimmed and
+    lowercased email, uppercase currency, and finite non-negative Decimal unit
+    prices. Do not quantize or round prices.
   - Do not perform network calls, database writes, logging, authentication, or
     persistence. Do not invent fields or silently coerce malformed values.
-  - Include focused tests for valid input, missing fields, malformed email,
-    bool quantity, zero/negative quantity, negative price, non-finite price,
-    malformed currency, and empty items.
+  - Include focused tests for valid input; missing order and item fields; malformed
+    email under the stated rule; non-mapping items; bool quantity and bool price;
+    zero/negative quantity; negative, malformed, and non-finite prices; unsupported
+    price types; malformed currency; and empty items.
   - Explain any deliberate validation boundary and provide exact test command/output
     only if actually run.
 
@@ -35,12 +44,12 @@ criteria:
     critical: true
     requirement_ref: REQ-BACKEND-01
   - id: INPUT-VALIDATION
-    description: Validates all required fields and rejects malformed identifiers, email, currency, item collections, and item shapes without silently accepting invalid input.
+    description: Validates required fields and item mappings; trims and rejects blank identifiers; applies the exact basic email rule in the prompt; validates uppercase ASCII currency; and rejects malformed item collections without silent coercion.
     weight: 20
     critical: true
     requirement_ref: REQ-BACKEND-01
   - id: NUMERIC-SAFETY
-    description: Rejects booleans, non-positive quantities, negative prices, NaN, and infinities; uses Decimal for normalized unit prices.
+    description: Accepts only the specified unit_price types, rejects booleans and unsupported types, parses finite non-negative Decimal values without rounding, and rejects non-positive quantities.
     weight: 20
     critical: true
     requirement_ref: REQ-BACKEND-01

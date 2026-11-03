@@ -4,7 +4,7 @@
 run_id: RUN-REPLACE-WITH-UNIQUE-ID
 scenario_id: SCEN-REPLACE-WITH-SCENARIO-ID
 role: REPLACE-WITH-CANONICAL-ROLE-ID
-rubric_version: pilot-v1
+rubric_version: pilot-v2
 run_number: 1
 started_at: "YYYY-MM-DDTHH:MM:SSZ"
 

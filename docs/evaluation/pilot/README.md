@@ -12,10 +12,16 @@ The pilot contains one draft scenario for each of the three methodology roles:
 - `SCEN-APPSEC-STATIC-WEBHOOK-REVIEW`
 - `SCEN-DELIVERY-CROSSROLE-WEBHOOK`
 
-Review each prompt and its criteria before running it. A scenario is eligible
-for execution only after a human reviewer changes its status to `approved`
-and records `approval.approved_by` and `approval.approved_at`. Do not mark a
-scenario approved merely because its YAML validates.
+The current scenario rubric version is `pilot-v2`. Review each prompt and its
+criteria before running it. A scenario is eligible for execution only after a
+human reviewer changes its status to `approved` and records
+`approval.approved_by` and `approval.approved_at`. Do not mark a scenario
+approved merely because its YAML validates or because an automated design review
+recommends approval.
+
+The three scenarios received a design review recorded in
+`docs/reviews/pilot-scenario-design-review.md`. That review is advisory and
+does not substitute for the required human approval.
 
 ## Execution matrix
 
@@ -35,7 +41,11 @@ For each run:
 4. Preserve the prompt hash, output/transcript reference, generated artifacts,
    tool behavior, and any interruption.
 5. Score every scenario criterion from 0 to 100 with a concise rationale tied
-   to observable output/evidence.
+   to observable output/evidence. Use these common anchors: 0 = absent or
+   directly contradicted; 25 = major omissions or unsafe handling; 50 = partial
+   completion with material gaps; 75 = substantially meets the criterion with
+   limited omissions; 100 = fully meets the criterion with clear evidence.
+   Use intermediate scores only with a specific evidence-based explanation.
 6. Record critical failures separately. Do not let a weighted average hide one.
 7. Redact secrets, credentials, private customer data, and unnecessary
    sensitive content before storing evidence.
@@ -74,7 +84,8 @@ version, or material settings differ.
 
 ## Current status
 
-- Scenario specifications: authored, draft, and awaiting human approval.
+- Scenario specifications: reviewed as designs, rubric version `pilot-v2`,
+  still draft and awaiting human approval.
 - Model executions: 0 of 9 recorded.
 - Post-run scenario reviews: 0 of 3 recorded.
 - Evaluation conclusions: none.
