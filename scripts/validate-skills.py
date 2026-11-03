@@ -103,7 +103,7 @@ def parse_skill(path):
 
 
 def validate_markdown_links():
-    link_re = re.compile(r"!?[[^\]]*\]\(([^)]+)\)")
+    link_re = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
     fenced_code_re = re.compile(r"```.*?```|~~~.*?~~~", re.DOTALL)
 
     for markdown_file in ROOT.rglob("*.md"):
