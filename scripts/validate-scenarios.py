@@ -148,37 +148,52 @@ def main():
                     "required_requirements"
                 )
 
+        approval = data.get("approval")
+
+        if status == "approved":
+            if not isinstance(approval, dict):
+                errors.append(
+                    f"{scenario_id}: approved scenarios require an approval mapping"
+                )
+            else:
+                approved_by = approval.get("approved_by")
+                approved_at = approval.get("approved_at")
+
+                if not isinstance(approved_by, str) or not approved_by.strip():
+                    errors.append(
+                        f"{scenario_id}: approval.approved_by must be non-empty"
+                    )
+
+                if not isinstance(approved_at, str) or not approved_at.strip():
+                    errors.append(
+                        f"{scenario_id}: approval.approved_at must be non-empty"
+                    )
+        elif approval is not None:
+            errors.append(
+                f"{scenario_id}: draft scenarios must not contain approval metadata"
+            )
+
         expected_record = f"docs/reviews/scenario-{scenario_id}.yml"
 
-        if status == "approved" and review_record != expected_record:
-            errors.append(
-                f"{scenario_id}: approved scenarios require review_record "
-                f"to equal {expected_record}"
-            )
-        elif review_record is None:
-            if status == "approved":
+        if review_record is not None:
+            if review_record != expected_record:
                 errors.append(
-                    f"{scenario_id}: approved scenarios require a review record"
+                    f"{scenario_id}: review_record must equal {expected_record}"
                 )
-        elif review_record != expected_record:
-            errors.append(
-                f"{scenario_id}: review_record must equal {expected_record} "
-                "when supplied"
-            )
-        else:
-            try:
-                review_path = safe_repo_path(
-                    review_record,
-                    required_prefix=REVIEW_DIR,
-                )
-                declared_review_paths[scenario_id] = review_path
-
-                if not review_path.is_file():
-                    errors.append(
-                        f"{scenario_id}: missing review record {review_record}"
+            else:
+                try:
+                    review_path = safe_repo_path(
+                        review_record,
+                        required_prefix=REVIEW_DIR,
                     )
-            except ValueError as exc:
-                errors.append(f"{scenario_id}: {exc}")
+                    declared_review_paths[scenario_id] = review_path
+
+                    if not review_path.is_file():
+                        errors.append(
+                            f"{scenario_id}: missing review record {review_record}"
+                        )
+                except ValueError as exc:
+                    errors.append(f"{scenario_id}: {exc}")
 
         if not isinstance(evidence, list) or not evidence:
             errors.append(f"{scenario_id}: evidence must be a non-empty list")
