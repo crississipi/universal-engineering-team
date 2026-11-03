@@ -69,3 +69,6 @@ criteria:
     weight: 15
     critical: false
     requirement_ref: REQ-DELIVERY-01
+evidence:
+  - path: skills/delivery-lead/SKILL.md
+    commit: e45d6535cd52ab44d8cfc7dd258317a977376b62
