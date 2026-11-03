@@ -25,8 +25,15 @@ python -m unittest discover -s tests -p "test_*.py" -v
 ```
 
 The focused tests cover deterministic validator behavior, including valid
-handoff contracts and malformed skill frontmatter. The same unit-test command
-runs in the GitHub Actions validation workflow.
+handoff contracts, malformed skill frontmatter, and synchronization between
+the canonical blocker lifecycle specification and its JSON Schema. The same
+unit-test command runs in the GitHub Actions validation workflow.
+
+The blocker governance regression tests can also be run independently:
+
+```powershell
+python -m unittest tests.test_blocker_status_governance -v
+```
 
 ## Validator responsibilities
 
