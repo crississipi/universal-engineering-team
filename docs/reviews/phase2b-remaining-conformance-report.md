@@ -3,7 +3,7 @@
 ## Status
 
 **Reference-probe implementation:** Added on this branch.  
-**Repository-local execution:** Pending user execution against the branch.  
+**Repository-local execution:** Passed on the user's checked-out branch.  
 **Production-agent enforcement:** Not verified; the repository contains governance documents and schemas, not a live orchestration engine.
 
 This report deliberately separates executable reference-model results from claims about production agent behavior. No live Copilot, Claude Code, Codex, or other agent run is claimed.
@@ -89,16 +89,24 @@ From `proof-pair-lab/`:
 python -m unittest discover -s governance -p "test_*.py" -v
 ```
 
-The expected result is 15 passing tests. Record the actual command output and
-Python version when validating this branch. Do not treat the expected count as
-an observed result until the command has been run.
+The user ran the command from `proof-pair-lab/` and reported:
+
+- Governance conformance scenarios: **15 passed**.
+- Backend proof-lab tests: **12 passed**.
+- Independent QA proof-lab tests: **10 passed**.
+- Total: **37 passed, 0 failures, 0 errors**.
+- `git diff --check` was included in the command sequence and produced no reported diagnostics.
+
+The Python version was not included in the supplied output and is therefore
+not recorded here.
 
 ## Acceptance assessment
 
 The reference model covers the logical outcomes for the four outstanding
 scenarios. The Phase 2B gate should not be marked fully accepted until:
 
-- The user runs the tests on this branch and confirms the actual result.
+- The local reference-model test execution is complete: 37 tests passed across
+  governance, Backend, and QA suites.
 - The blocker status vocabulary inconsistency is resolved or explicitly
   dispositioned by the appropriate governance review.
 - Any desired live-agent behavior is tested separately with traceable prompts,
