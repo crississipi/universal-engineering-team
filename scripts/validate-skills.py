@@ -433,7 +433,7 @@ def main():
 
     print(
         f"Validation passed: {len(files)} skills, expected roles, "
-        "frontmatter policy, role index, and local Markdown links checked."
+        "frontmatter policy, role index, manifest source consistency, and local Markdown links checked."
     )
     return 0
 
