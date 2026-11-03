@@ -1,0 +1,579 @@
+version: 1
+
+sources:
+  roles: docs/team/expected-roles.yml
+  artifacts: docs/team/ownership.yml
+  handoffs: docs/team/ownership.yml
+  relationships: docs/team/producer-consumer-matrix.md
+  handoff_contract: docs/team/handoff-contract-schema.md
+  handoff_acceptance: docs/team/handoff-acceptance-rules.md
+  handoff_escalation: docs/team/handoff-escalation-rules.md
+  workflow_lifecycle: docs/team/workflow-lifecycle.md
+  execution_records: docs/team/execution-record-model.md
+
+roles:
+  - id: product-analyst
+    skill: skills/product-analyst/SKILL.md
+  - id: solution-architect
+    skill: skills/solution-architect/SKILL.md
+  - id: api-manager
+    skill: skills/api-manager/SKILL.md
+  - id: backend-developer
+    skill: skills/backend-developer/SKILL.md
+  - id: frontend-developer
+    skill: skills/frontend-developer/SKILL.md
+  - id: ux-ui-designer
+    skill: skills/ux-ui-designer/SKILL.md
+  - id: database-manager
+    skill: skills/database-manager/SKILL.md
+  - id: integration-engineer
+    skill: skills/integration-engineer/SKILL.md
+  - id: data-engineer
+    skill: skills/data-engineer/SKILL.md
+  - id: qa-manager
+    skill: skills/qa-manager/SKILL.md
+  - id: penetration-tester
+    skill: skills/penetration-tester/SKILL.md
+  - id: devops-sre
+    skill: skills/devops-sre/SKILL.md
+  - id: performance-engineer
+    skill: skills/performance-engineer/SKILL.md
+  - id: accessibility-specialist
+    skill: skills/accessibility-specialist/SKILL.md
+  - id: technical-writer-knowledge-engineer
+    skill: skills/technical-writer-knowledge-engineer/SKILL.md
+  - id: release-manager
+    skill: skills/release-manager/SKILL.md
+  - id: delivery-lead
+    skill: skills/delivery-lead/SKILL.md
+
+artifacts:
+  - id: ART-PRODUCT-REQUIREMENTS
+    name: "Product Requirements Package"
+    owner: product-analyst
+    primary_producer: product-analyst
+    contributors:
+      - solution-architect
+      - ux-ui-designer
+      - qa-manager
+      - penetration-tester
+      - data-engineer
+      - devops-sre
+  - id: ART-ARCHITECTURE
+    name: "System Architecture Package"
+    owner: solution-architect
+    primary_producer: solution-architect
+    contributors:
+      - product-analyst
+      - api-manager
+      - integration-engineer
+      - database-manager
+      - backend-developer
+      - frontend-developer
+      - devops-sre
+      - penetration-tester
+      - qa-manager
+  - id: ART-API-CONTRACT
+    name: "API and Event Contract Package"
+    owner: api-manager
+    primary_producer: api-manager
+    contributors:
+      - backend-developer
+      - frontend-developer
+      - integration-engineer
+      - penetration-tester
+      - qa-manager
+      - solution-architect
+  - id: ART-BACKEND
+    name: "Backend Implementation Package"
+    owner: backend-developer
+    primary_producer: backend-developer
+    contributors:
+      - api-manager
+      - database-manager
+      - integration-engineer
+      - penetration-tester
+      - qa-manager
+      - devops-sre
+  - id: ART-FRONTEND
+    name: "Frontend Implementation Package"
+    owner: frontend-developer
+    primary_producer: frontend-developer
+    contributors:
+      - ux-ui-designer
+      - api-manager
+      - backend-developer
+      - accessibility-specialist
+      - qa-manager
+      - performance-engineer
+  - id: ART-UX-DESIGN
+    name: "UX and Design Package"
+    owner: ux-ui-designer
+    primary_producer: ux-ui-designer
+    contributors:
+      - product-analyst
+      - frontend-developer
+      - accessibility-specialist
+      - qa-manager
+  - id: ART-DATA-MODEL
+    name: "Data Model and Database Package"
+    owner: database-manager
+    primary_producer: database-manager
+    contributors:
+      - backend-developer
+      - data-engineer
+      - devops-sre
+      - penetration-tester
+      - qa-manager
+  - id: ART-INTEGRATION
+    name: "Integration Engineering Package"
+    owner: integration-engineer
+    primary_producer: integration-engineer
+    contributors:
+      - api-manager
+      - backend-developer
+      - data-engineer
+      - database-manager
+      - devops-sre
+      - penetration-tester
+      - qa-manager
+  - id: ART-DATA-PIPELINE
+    name: "Data Engineering Package"
+    owner: data-engineer
+    primary_producer: data-engineer
+    contributors:
+      - database-manager
+      - integration-engineer
+      - product-analyst
+      - devops-sre
+      - penetration-tester
+      - qa-manager
+  - id: ART-QUALITY-EVIDENCE
+    name: "Quality Assurance Package"
+    owner: qa-manager
+    primary_producer: qa-manager
+    contributors:
+      - product-analyst
+      - backend-developer
+      - frontend-developer
+      - database-manager
+      - integration-engineer
+      - penetration-tester
+      - devops-sre
+      - performance-engineer
+      - accessibility-specialist
+      - release-manager
+  - id: ART-SECURITY-ASSESSMENT
+    name: "Security Assessment Package"
+    owner: penetration-tester
+    primary_producer: penetration-tester
+    contributors:
+      - solution-architect
+      - backend-developer
+      - api-manager
+      - devops-sre
+      - database-manager
+      - qa-manager
+      - release-manager
+  - id: ART-OPERATIONS
+    name: "Infrastructure and Operations Package"
+    owner: devops-sre
+    primary_producer: devops-sre
+    contributors:
+      - solution-architect
+      - backend-developer
+      - integration-engineer
+      - database-manager
+      - penetration-tester
+      - qa-manager
+      - release-manager
+  - id: ART-PERFORMANCE-EVIDENCE
+    name: "Performance Engineering Package"
+    owner: performance-engineer
+    primary_producer: performance-engineer
+    contributors:
+      - frontend-developer
+      - backend-developer
+      - database-manager
+      - data-engineer
+      - devops-sre
+      - qa-manager
+      - product-analyst
+  - id: ART-ACCESSIBILITY-ASSESSMENT
+    name: "Accessibility Assessment Package"
+    owner: accessibility-specialist
+    primary_producer: accessibility-specialist
+    contributors:
+      - product-analyst
+      - ux-ui-designer
+      - frontend-developer
+      - qa-manager
+      - technical-writer-knowledge-engineer
+  - id: ART-KNOWLEDGE-DOCS
+    name: "Documentation and Knowledge Package"
+    owner: technical-writer-knowledge-engineer
+    primary_producer: technical-writer-knowledge-engineer
+    contributors:
+      - product-analyst
+      - solution-architect
+      - api-manager
+      - backend-developer
+      - frontend-developer
+      - ux-ui-designer
+      - database-manager
+      - integration-engineer
+      - data-engineer
+      - qa-manager
+      - penetration-tester
+      - devops-sre
+      - performance-engineer
+      - accessibility-specialist
+      - release-manager
+      - delivery-lead
+  - id: ART-RELEASE-PACKAGE
+    name: "Release Management Package"
+    owner: release-manager
+    primary_producer: release-manager
+    contributors:
+      - qa-manager
+      - devops-sre
+      - penetration-tester
+      - solution-architect
+      - product-analyst
+  - id: ART-DELIVERY-RECORD
+    name: "Delivery Coordination Package"
+    owner: delivery-lead
+    primary_producer: delivery-lead
+    contributors:
+      - solution-architect
+      - qa-manager
+      - technical-writer-knowledge-engineer
+      - release-manager
+
+relationships:
+  - id: REL-ART-PRODUCT-REQUIREMENTS--ART-ARCHITECTURE
+    producer_artifact_id: ART-PRODUCT-REQUIREMENTS
+    consumer_artifact_id: ART-ARCHITECTURE
+    relationship_type: required_input
+    output: "Approved scope, requirements, constraints, quality attributes, and acceptance criteria"
+    condition: "Required for architecture decisions addressing the requested outcome."
+  - id: REL-ART-PRODUCT-REQUIREMENTS--ART-UX-DESIGN
+    producer_artifact_id: ART-PRODUCT-REQUIREMENTS
+    consumer_artifact_id: ART-UX-DESIGN
+    relationship_type: conditional_input
+    output: "User needs, journeys, priorities, and user-facing acceptance criteria"
+    condition: "When the project includes user-facing experiences."
+  - id: REL-ART-PRODUCT-REQUIREMENTS--ART-QUALITY-EVIDENCE
+    producer_artifact_id: ART-PRODUCT-REQUIREMENTS
+    consumer_artifact_id: ART-QUALITY-EVIDENCE
+    relationship_type: required_input
+    output: "Acceptance criteria, scope boundaries, and expected outcomes"
+    condition: "Required to establish acceptance traceability for in-scope requirements."
+  - id: REL-ART-PRODUCT-REQUIREMENTS--ART-PERFORMANCE-EVIDENCE
+    producer_artifact_id: ART-PRODUCT-REQUIREMENTS
+    consumer_artifact_id: ART-PERFORMANCE-EVIDENCE
+    relationship_type: conditional_input
+    output: "Performance-related user outcomes and non-functional requirements"
+    condition: "When performance targets or measurable service expectations exist."
+  - id: REL-ART-PRODUCT-REQUIREMENTS--ART-ACCESSIBILITY-ASSESSMENT
+    producer_artifact_id: ART-PRODUCT-REQUIREMENTS
+    consumer_artifact_id: ART-ACCESSIBILITY-ASSESSMENT
+    relationship_type: conditional_input
+    output: "Accessibility-related requirements and applicable user scenarios"
+    condition: "When accessibility requirements or user-facing interfaces are in scope."
+  - id: REL-ART-ARCHITECTURE--ART-API-CONTRACT
+    producer_artifact_id: ART-ARCHITECTURE
+    consumer_artifact_id: ART-API-CONTRACT
+    relationship_type: conditional_input
+    output: "System boundaries, service responsibilities, interaction patterns, and architectural constraints"
+    condition: "When APIs or events cross a defined system boundary."
+  - id: REL-ART-ARCHITECTURE--ART-DATA-MODEL
+    producer_artifact_id: ART-ARCHITECTURE
+    consumer_artifact_id: ART-DATA-MODEL
+    relationship_type: conditional_input
+    output: "Data ownership, system boundaries, consistency requirements, and architecture constraints"
+    condition: "When the project creates or changes persistent data structures."
+  - id: REL-ART-ARCHITECTURE--ART-BACKEND
+    producer_artifact_id: ART-ARCHITECTURE
+    consumer_artifact_id: ART-BACKEND
+    relationship_type: required_input
+    output: "Service boundaries, backend responsibilities, technical decisions, and relevant architecture diagrams"
+    condition: "Required for backend work governed by a defined system design."
+  - id: REL-ART-ARCHITECTURE--ART-FRONTEND
+    producer_artifact_id: ART-ARCHITECTURE
+    consumer_artifact_id: ART-FRONTEND
+    relationship_type: conditional_input
+    output: "Client architecture, integration boundaries, and relevant technical constraints"
+    condition: "When frontend implementation depends on cross-system or client architecture decisions."
+  - id: REL-ART-ARCHITECTURE--ART-INTEGRATION
+    producer_artifact_id: ART-ARCHITECTURE
+    consumer_artifact_id: ART-INTEGRATION
+    relationship_type: conditional_input
+    output: "Integration topology, trust boundaries, system interactions, and architecture decisions"
+    condition: "When external systems or separately operated services are integrated."
+  - id: REL-ART-ARCHITECTURE--ART-OPERATIONS
+    producer_artifact_id: ART-ARCHITECTURE
+    consumer_artifact_id: ART-OPERATIONS
+    relationship_type: conditional_input
+    output: "Deployment topology, runtime boundaries, infrastructure decisions, and operational constraints"
+    condition: "When deployment or infrastructure work is in scope."
+  - id: REL-ART-ARCHITECTURE--ART-SECURITY-ASSESSMENT
+    producer_artifact_id: ART-ARCHITECTURE
+    consumer_artifact_id: ART-SECURITY-ASSESSMENT
+    relationship_type: conditional_input
+    output: "System context, assets, trust boundaries, and architecture diagrams"
+    condition: "When security assessment or threat modeling is required."
+  - id: REL-ART-UX-DESIGN--ART-FRONTEND
+    producer_artifact_id: ART-UX-DESIGN
+    consumer_artifact_id: ART-FRONTEND
+    relationship_type: conditional_input
+    output: "User flows, wireframes, interaction states, information hierarchy, and visual guidance"
+    condition: "Required for the user-facing portions of projects that include UX design."
+  - id: REL-ART-UX-DESIGN--ART-ACCESSIBILITY-ASSESSMENT
+    producer_artifact_id: ART-UX-DESIGN
+    consumer_artifact_id: ART-ACCESSIBILITY-ASSESSMENT
+    relationship_type: conditional_input
+    output: "Interaction patterns, content structure, and design decisions to assess"
+    condition: "When the design includes user-facing interactions or content."
+  - id: REL-ART-API-CONTRACT--ART-BACKEND
+    producer_artifact_id: ART-API-CONTRACT
+    consumer_artifact_id: ART-BACKEND
+    relationship_type: conditional_input
+    output: "API/event schemas, validation rules, authentication requirements, and error semantics"
+    condition: "When backend work implements the defined API or event contract."
+  - id: REL-ART-API-CONTRACT--ART-FRONTEND
+    producer_artifact_id: ART-API-CONTRACT
+    consumer_artifact_id: ART-FRONTEND
+    relationship_type: conditional_input
+    output: "Endpoint definitions, request/response schemas, error behavior, and compatibility rules"
+    condition: "When the frontend consumes the defined API."
+  - id: REL-ART-API-CONTRACT--ART-INTEGRATION
+    producer_artifact_id: ART-API-CONTRACT
+    consumer_artifact_id: ART-INTEGRATION
+    relationship_type: conditional_input
+    output: "External API/event schemas, authentication requirements, versioning, and compatibility rules"
+    condition: "When an integration uses the defined API or event interface."
+  - id: REL-ART-API-CONTRACT--ART-QUALITY-EVIDENCE
+    producer_artifact_id: ART-API-CONTRACT
+    consumer_artifact_id: ART-QUALITY-EVIDENCE
+    relationship_type: conditional_input
+    output: "Contract schemas, examples, error behavior, and compatibility expectations"
+    condition: "When API or event contract testing is applicable."
+  - id: REL-ART-DATA-MODEL--ART-BACKEND
+    producer_artifact_id: ART-DATA-MODEL
+    consumer_artifact_id: ART-BACKEND
+    relationship_type: conditional_input
+    output: "Entity definitions, relationships, constraints, migration plans, and data access guidance"
+    condition: "When backend behavior reads or writes the governed data structures."
+  - id: REL-ART-DATA-MODEL--ART-DATA-PIPELINE
+    producer_artifact_id: ART-DATA-MODEL
+    consumer_artifact_id: ART-DATA-PIPELINE
+    relationship_type: conditional_input
+    output: "Source and target structures, data definitions, schema constraints, and evolution guidance"
+    condition: "When pipelines read from or write to the governed data structures."
+  - id: REL-ART-DATA-MODEL--ART-INTEGRATION
+    producer_artifact_id: ART-DATA-MODEL
+    consumer_artifact_id: ART-INTEGRATION
+    relationship_type: conditional_input
+    output: "Persistence structures, identifier rules, and data ownership constraints"
+    condition: "When integration mappings or reconciliation persist data in the governed database."
+  - id: REL-ART-DATA-MODEL--ART-QUALITY-EVIDENCE
+    producer_artifact_id: ART-DATA-MODEL
+    consumer_artifact_id: ART-QUALITY-EVIDENCE
+    relationship_type: conditional_input
+    output: "Data constraints, migration expectations, and integrity requirements"
+    condition: "When database behavior, migrations, or data integrity are tested."
+  - id: REL-ART-INTEGRATION--ART-DATA-PIPELINE
+    producer_artifact_id: ART-INTEGRATION
+    consumer_artifact_id: ART-DATA-PIPELINE
+    relationship_type: conditional_input
+    output: "Source connectivity, extraction behavior, mapping details, and integration failure semantics"
+    condition: "When a data pipeline depends on external or integrated sources."
+  - id: REL-ART-INTEGRATION--ART-QUALITY-EVIDENCE
+    producer_artifact_id: ART-INTEGRATION
+    consumer_artifact_id: ART-QUALITY-EVIDENCE
+    relationship_type: conditional_input
+    output: "Integration flows, mapping rules, retry behavior, idempotency, and reconciliation scenarios"
+    condition: "When integration behavior requires verification."
+  - id: REL-ART-INTEGRATION--ART-OPERATIONS
+    producer_artifact_id: ART-INTEGRATION
+    consumer_artifact_id: ART-OPERATIONS
+    relationship_type: conditional_input
+    output: "Runtime dependencies, delivery/retry behavior, failure modes, and recovery requirements"
+    condition: "When integration components require deployment, monitoring, or operational recovery."
+  - id: REL-ART-BACKEND--ART-QUALITY-EVIDENCE
+    producer_artifact_id: ART-BACKEND
+    consumer_artifact_id: ART-QUALITY-EVIDENCE
+    relationship_type: required_input
+    output: "Backend implementation, automated tests, and observable service behavior"
+    condition: "Required for verification of implemented backend scope."
+  - id: REL-ART-BACKEND--ART-SECURITY-ASSESSMENT
+    producer_artifact_id: ART-BACKEND
+    consumer_artifact_id: ART-SECURITY-ASSESSMENT
+    relationship_type: conditional_input
+    output: "Implemented authentication, authorization, validation, and service behavior"
+    condition: "When backend security assessment is in scope."
+  - id: REL-ART-BACKEND--ART-PERFORMANCE-EVIDENCE
+    producer_artifact_id: ART-BACKEND
+    consumer_artifact_id: ART-PERFORMANCE-EVIDENCE
+    relationship_type: conditional_input
+    output: "Running service behavior, workload paths, and profiling targets"
+    condition: "When backend performance is being measured or optimized."
+  - id: REL-ART-BACKEND--ART-OPERATIONS
+    producer_artifact_id: ART-BACKEND
+    consumer_artifact_id: ART-OPERATIONS
+    relationship_type: conditional_input
+    output: "Runtime requirements, health behavior, configuration needs, and deployment constraints"
+    condition: "When backend deployment or operations are in scope."
+  - id: REL-ART-BACKEND--ART-KNOWLEDGE-DOCS
+    producer_artifact_id: ART-BACKEND
+    consumer_artifact_id: ART-KNOWLEDGE-DOCS
+    relationship_type: conditional_input
+    output: "Verified implementation behavior, service interfaces, and operational facts"
+    condition: "When backend changes affect technical documentation."
+  - id: REL-ART-FRONTEND--ART-QUALITY-EVIDENCE
+    producer_artifact_id: ART-FRONTEND
+    consumer_artifact_id: ART-QUALITY-EVIDENCE
+    relationship_type: required_input
+    output: "UI implementation, user-visible states, and frontend test results"
+    condition: "Required for verification of implemented frontend scope."
+  - id: REL-ART-FRONTEND--ART-ACCESSIBILITY-ASSESSMENT
+    producer_artifact_id: ART-FRONTEND
+    consumer_artifact_id: ART-ACCESSIBILITY-ASSESSMENT
+    relationship_type: conditional_input
+    output: "Implemented semantics, controls, navigation, focus behavior, and user interactions"
+    condition: "When frontend accessibility assessment is in scope."
+  - id: REL-ART-FRONTEND--ART-PERFORMANCE-EVIDENCE
+    producer_artifact_id: ART-FRONTEND
+    consumer_artifact_id: ART-PERFORMANCE-EVIDENCE
+    relationship_type: conditional_input
+    output: "Render behavior, client-side workloads, and profiling targets"
+    condition: "When frontend performance is being measured or optimized."
+  - id: REL-ART-FRONTEND--ART-KNOWLEDGE-DOCS
+    producer_artifact_id: ART-FRONTEND
+    consumer_artifact_id: ART-KNOWLEDGE-DOCS
+    relationship_type: conditional_input
+    output: "Verified user-visible behavior, routes, component behavior, and implementation notes"
+    condition: "When frontend changes affect technical or user-facing documentation."
+  - id: REL-ART-DATA-PIPELINE--ART-QUALITY-EVIDENCE
+    producer_artifact_id: ART-DATA-PIPELINE
+    consumer_artifact_id: ART-QUALITY-EVIDENCE
+    relationship_type: conditional_input
+    output: "Pipeline behavior, transformation rules, lineage, and data quality results"
+    condition: "When pipeline behavior or data quality requires verification."
+  - id: REL-ART-DATA-PIPELINE--ART-OPERATIONS
+    producer_artifact_id: ART-DATA-PIPELINE
+    consumer_artifact_id: ART-OPERATIONS
+    relationship_type: conditional_input
+    output: "Scheduling, dependencies, monitoring needs, replay, and backfill procedures"
+    condition: "When pipeline execution requires operational deployment or support."
+  - id: REL-ART-DATA-PIPELINE--ART-KNOWLEDGE-DOCS
+    producer_artifact_id: ART-DATA-PIPELINE
+    consumer_artifact_id: ART-KNOWLEDGE-DOCS
+    relationship_type: conditional_input
+    output: "Verified lineage, transformation behavior, and pipeline operating procedures"
+    condition: "When pipeline changes affect technical documentation."
+  - id: REL-ART-SECURITY-ASSESSMENT--ART-ARCHITECTURE
+    producer_artifact_id: ART-SECURITY-ASSESSMENT
+    consumer_artifact_id: ART-ARCHITECTURE
+    relationship_type: feedback
+    output: "Threats, trust-boundary findings, and architecture-level recommendations"
+    condition: "When assessment findings require architecture review or a design change."
+  - id: REL-ART-SECURITY-ASSESSMENT--ART-BACKEND
+    producer_artifact_id: ART-SECURITY-ASSESSMENT
+    consumer_artifact_id: ART-BACKEND
+    relationship_type: feedback
+    output: "Backend vulnerabilities, remediation recommendations, and retest findings"
+    condition: "When backend security findings are identified."
+  - id: REL-ART-SECURITY-ASSESSMENT--ART-INTEGRATION
+    producer_artifact_id: ART-SECURITY-ASSESSMENT
+    consumer_artifact_id: ART-INTEGRATION
+    relationship_type: feedback
+    output: "Integration vulnerabilities, provider risks, and remediation recommendations"
+    condition: "When integration security findings are identified."
+  - id: REL-ART-SECURITY-ASSESSMENT--ART-OPERATIONS
+    producer_artifact_id: ART-SECURITY-ASSESSMENT
+    consumer_artifact_id: ART-OPERATIONS
+    relationship_type: feedback
+    output: "Infrastructure, configuration, and runtime security findings"
+    condition: "When operational security findings are identified."
+  - id: REL-ART-SECURITY-ASSESSMENT--ART-RELEASE-PACKAGE
+    producer_artifact_id: ART-SECURITY-ASSESSMENT
+    consumer_artifact_id: ART-RELEASE-PACKAGE
+    relationship_type: conditional_input
+    output: "Security findings, severity, remediation status, and unresolved risk evidence"
+    condition: "When security assessment is required for release readiness."
+  - id: REL-ART-ACCESSIBILITY-ASSESSMENT--ART-FRONTEND
+    producer_artifact_id: ART-ACCESSIBILITY-ASSESSMENT
+    consumer_artifact_id: ART-FRONTEND
+    relationship_type: feedback
+    output: "Accessibility findings, reproduction details, remediation guidance, and verification results"
+    condition: "When frontend accessibility barriers are identified."
+  - id: REL-ART-ACCESSIBILITY-ASSESSMENT--ART-UX-DESIGN
+    producer_artifact_id: ART-ACCESSIBILITY-ASSESSMENT
+    consumer_artifact_id: ART-UX-DESIGN
+    relationship_type: feedback
+    output: "Design-level accessibility findings and inclusive interaction recommendations"
+    condition: "When design changes are needed to address accessibility barriers."
+  - id: REL-ART-ACCESSIBILITY-ASSESSMENT--ART-RELEASE-PACKAGE
+    producer_artifact_id: ART-ACCESSIBILITY-ASSESSMENT
+    consumer_artifact_id: ART-RELEASE-PACKAGE
+    relationship_type: conditional_input
+    output: "Accessibility findings and applicable verification evidence"
+    condition: "When accessibility evidence is a release requirement."
+  - id: REL-ART-PERFORMANCE-EVIDENCE--ART-BACKEND
+    producer_artifact_id: ART-PERFORMANCE-EVIDENCE
+    consumer_artifact_id: ART-BACKEND
+    relationship_type: feedback
+    output: "Backend bottleneck analysis and optimization recommendations"
+    condition: "When backend performance issues are identified."
+  - id: REL-ART-PERFORMANCE-EVIDENCE--ART-FRONTEND
+    producer_artifact_id: ART-PERFORMANCE-EVIDENCE
+    consumer_artifact_id: ART-FRONTEND
+    relationship_type: feedback
+    output: "Client-side bottleneck analysis and optimization recommendations"
+    condition: "When frontend performance issues are identified."
+  - id: REL-ART-PERFORMANCE-EVIDENCE--ART-DATA-MODEL
+    producer_artifact_id: ART-PERFORMANCE-EVIDENCE
+    consumer_artifact_id: ART-DATA-MODEL
+    relationship_type: feedback
+    output: "Query, indexing, and database performance findings"
+    condition: "When database performance issues are identified."
+  - id: REL-ART-PERFORMANCE-EVIDENCE--ART-OPERATIONS
+    producer_artifact_id: ART-PERFORMANCE-EVIDENCE
+    consumer_artifact_id: ART-OPERATIONS
+    relationship_type: feedback
+    output: "Capacity, infrastructure, and runtime performance findings"
+    condition: "When operational capacity or runtime issues are identified."
+  - id: REL-ART-PERFORMANCE-EVIDENCE--ART-RELEASE-PACKAGE
+    producer_artifact_id: ART-PERFORMANCE-EVIDENCE
+    consumer_artifact_id: ART-RELEASE-PACKAGE
+    relationship_type: conditional_input
+    output: "Performance baseline, target results, and unresolved performance risks"
+    condition: "When performance targets are release acceptance criteria."
+  - id: REL-ART-QUALITY-EVIDENCE--ART-RELEASE-PACKAGE
+    producer_artifact_id: ART-QUALITY-EVIDENCE
+    consumer_artifact_id: ART-RELEASE-PACKAGE
+    relationship_type: required_input
+    output: "Test execution results, acceptance traceability, regression evidence, and unresolved defects"
+    condition: "Required when a release is subject to the team's QA process."
+  - id: REL-ART-OPERATIONS--ART-RELEASE-PACKAGE
+    producer_artifact_id: ART-OPERATIONS
+    consumer_artifact_id: ART-RELEASE-PACKAGE
+    relationship_type: conditional_input
+    output: "Deployment readiness, monitoring, backup, restore, rollback, and operational procedures"
+    condition: "Required when the release includes deployment or runtime changes."
+  - id: REL-ART-PRODUCT-REQUIREMENTS--ART-RELEASE-PACKAGE
+    producer_artifact_id: ART-PRODUCT-REQUIREMENTS
+    consumer_artifact_id: ART-RELEASE-PACKAGE
+    relationship_type: conditional_input
+    output: "Approved scope and user-facing change expectations"
+    condition: "When release notes or release scope must be checked against approved requirements."
+  - id: REL-ART-RELEASE-PACKAGE--ART-DELIVERY-RECORD
+    producer_artifact_id: ART-RELEASE-PACKAGE
+    consumer_artifact_id: ART-DELIVERY-RECORD
+    relationship_type: conditional_input
+    output: "Release status, readiness decision, rollout outcome, and outstanding follow-up actions"
+    condition: "When a release is part of the delivery being coordinated."
+
+handoffs: []

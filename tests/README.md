@@ -32,7 +32,7 @@ runs in the GitHub Actions validation workflow.
 
 | Validator | Responsibility |
 |---|---|
-| `validate-skills.py` | Skill inventory, frontmatter, role index, and local Markdown links |
+| `validate-skills.py` | Skill inventory, frontmatter, role index, manifest/source drift, and local Markdown links |
 | `validate-artifacts.py` | Artifact package ownership |
 | `validate-handoffs.py` | Formal handoff contract governance |
 | `validate-scenarios.py` | Scenario and review-record structure |
