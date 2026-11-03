@@ -12,6 +12,7 @@ python -m pip install -r requirements-dev.txt
 
 ```powershell
 python -m unittest discover -s tests -p "test_*.py" -v
+python scripts/build-all-role-skills.py --check
 python scripts/validate-execution.py --check-schemas
 python scripts/validate-skills.py
 python scripts/validate-manifest.py
@@ -24,7 +25,7 @@ python scripts/build-agents-section.py --check
 The unit tests cover deterministic validator behavior, including manifest
 declarations, handoff contracts, malformed skill frontmatter, blocker
 lifecycle synchronization, integrated execution-validation orchestration,
-and resolver alignment with canonical role-activation triggers.
+resolver alignment with canonical role-activation triggers, and generated consolidated role-skill synchronization.
 The same unit-test command runs in GitHub Actions.
 
 The execution schema check meta-validates all ten record schemas and their
@@ -57,6 +58,7 @@ python -m unittest discover -s tests -p "test_blocker_status_governance.py" -v
 | `validate-scenarios.py` | Scenario and review-record structure |
 | `validate-execution.py` | Integrated execution parsing, JSON Schema, cross-record, and lifecycle validation; `--check-schemas` validates schema documents without an execution fixture |
 | `build-agents-section.py --check` | Generated `AGENTS.md` section synchronization |
+| `build-all-role-skills.py --check` | Generated `ALL-ROLE-SKILLS.md` synchronization with all canonical role skills |
 
 The manifest validator complements the source-projection check in
 `validate-skills.py`; it does not replace that check or make the manifest
@@ -67,3 +69,17 @@ These validators check declared structure and consistency. They do not
 replace independent technical review or prove subjective quality, evidence
 sufficiency, or risk acceptance. Model-assisted evaluation remains separate
 from ordinary structural CI.
+
+
+## Consolidated role skills reference
+
+`ALL-ROLE-SKILLS.md` is generated from the ordered role inventory in
+`docs/team/expected-roles.yml` and each role's canonical
+`skills/<role>/SKILL.md`. Do not edit the consolidated file directly. After
+changing a canonical skill, regenerate the reference with:
+
+```powershell
+python scripts/build-all-role-skills.py --write
+```
+
+Use `--check` to detect drift without modifying files. The check runs in CI.
