@@ -84,8 +84,11 @@ version, or material settings differ.
 
 ## Current status
 
-- Scenario specifications: reviewed as designs, rubric version `pilot-v2`,
-  still draft and awaiting human approval.
+- Scenario specifications: rubric version `pilot-v2`.
+  - `SCEN-BACKEND-WEBHOOK-VALIDATION`: approved by `crississipi` on
+    2026-11-03T15:10:45Z.
+  - `SCEN-APPSEC-STATIC-WEBHOOK-REVIEW`: draft, awaiting human approval.
+  - `SCEN-DELIVERY-CROSSROLE-WEBHOOK`: draft, awaiting human approval.
 - Model executions: 0 of 9 recorded.
 - Post-run scenario reviews: 0 of 3 recorded.
 - Evaluation conclusions: none.

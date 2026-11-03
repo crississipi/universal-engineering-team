@@ -1,6 +1,9 @@
 id: SCEN-BACKEND-WEBHOOK-VALIDATION
 role: backend-developer
-status: draft
+status: approved
+approval:
+  approved_by: crississipi
+  approved_at: "2026-11-03T15:10:45Z"
 title: Implement bounded order-webhook validation
 rubric_version: pilot-v2
 purpose: Evaluate whether the Backend Developer skill produces a small, correct, testable server-side implementation without expanding scope.
