@@ -19,11 +19,11 @@
 
 **Remaining-scenario probe status:** A dependency-free reference conformance probe and 15 test cases have been added under `proof-pair-lab/governance/`. Coverage includes inactive/active conditional inputs, feedback-only behavior, materially distinct correction-attempt counting, and immediate escalation triggers. The companion report is `docs/reviews/phase2b-remaining-conformance-report.md`.
 
-**Validation status:** The new tests have not yet been run by the user against this branch. They test a reference decision model, not a live agent or production orchestration runtime. The immediate-escalation probe also exposed an unresolved blocker-status vocabulary mismatch between the blocker governance document and the blocker schema.
+**Validation status:** The user ran all three proof-lab suites on this branch: governance 15/15, Backend 12/12, and independent QA 10/10 (37 passed total, no failures or errors). `git diff --check` produced no reported diagnostics. The new governance tests exercise a reference decision model, not a live agent or production orchestration runtime. The immediate-escalation probe also exposed an unresolved blocker-status vocabulary mismatch between the blocker governance document and the blocker schema.
 
-**Still deferred:** Formal handoff submission/acceptance remains unverified because the repository currently declares no formal handoff contracts. Live-agent enforcement and persistence of canonical execution records are also not demonstrated.
+**Still deferred:** Formal handoff submission/acceptance remains unverified because the repository currently declares no formal handoff contracts. Live-agent enforcement and persistence of canonical execution records are also not demonstrated. Broader role coverage beyond Backend and QA has not been established.
 
-**Overall Phase 2B acceptance:** Pending local execution of the new tests and disposition of the documented governance inconsistency.
+**Overall Phase 2B assessment:** The Backend–QA proof pair and four remaining reference-model scenarios have passed local tests. Phase 2B is not fully accepted as end-to-end orchestration governance until the blocker status vocabulary is reconciled or dispositioned and the explicitly deferred items are addressed or formally scoped out.
 
 ## Scope
 
@@ -110,40 +110,53 @@ The current `docs/team/ownership.yml` contains no approved formal handoff contra
 
 ## Remaining Unverified or Deferred Work
 
-The controlled Backend–QA run verifies the core producer-to-verifier workflow, but it does not establish that every collaboration and escalation rule has been exercised.
+The local reference-model tests now cover the logical decisions for conditional
+dependencies, feedback-only relationships, distinct correction attempts, and
+immediate escalation triggers. All 15 governance probe tests passed.
 
-The following scenarios remain outstanding:
+The following limitations remain:
 
-1. **Conditional dependencies:** Verify that conditional consumers become blocking only when their activation conditions are satisfied and the relationship is required.
+1. **Live-agent enforcement:** No Copilot, Claude Code, Codex, or production
+   orchestration run has been exercised. The probe does not demonstrate that an
+   agent correctly classifies real-world dependency activation, materially
+   different corrections, or blocker severity.
+2. **Canonical execution-record persistence and escalation routing:** The
+   reference probe does not create or update canonical dependency, work-item,
+   or blocker records, send escalation notifications, or enforce stop-work and
+   authority-routing behavior.
+3. **Blocker status vocabulary:** The blocker lifecycle prose includes
+   `escalated` and `closed`, while the blocker record definition and JSON
+   Schema use a different status set. The probe verifies the decision to
+   escalate, not persistence of an escalation status. This inconsistency needs
+   an explicit governance resolution.
+4. **Formal handoff contracts:** No formal handoff contracts are currently
+   declared in `docs/team/ownership.yml`. Formal handoff submission and
+   consumer acceptance therefore remain unverified. The completed proof
+   demonstrates a package-level producer–verifier relationship, not formal
+   handoff-contract execution.
+5. **Broader role coverage:** The proof pair covers Backend Developer and QA
+   Manager only. It does not establish that the same collaboration behavior
+   has been validated across all 17 roles.
 
-2. **Feedback-only relationships:** Verify that feedback relationships do not block work-item closure unless explicitly required by the task's acceptance criteria.
-
-3. **Three materially different correction attempts:** Verify that the correction limit counts materially different attempts against the same unresolved increment rather than repeated command executions or identical retries.
-
-4. **Immediate escalation:** Verify that critical infrastructure, permission, and authorization blockers are escalated immediately without waiting for the normal correction-attempt limit.
-
-5. **Formal handoff contracts:** No formal handoff contracts are currently declared in `docs/team/ownership.yml`. Formal handoff acceptance behavior therefore remains unverified. The completed proof demonstrates a package-level producer–verifier relationship, not formal handoff-contract execution.
-
-6. **Broader role coverage:** The proof pair covers Backend Developer and QA Manager only. It does not establish that the same collaboration behavior has been validated across all 17 roles.
-
-### Historical Findings and Resolution
-
-Earlier QA runs identified defects involving Decimal exponent limits and extremely large integer quantities. Backend corrected these defects, added regression coverage, and submitted the updated implementation for independent QA verification.
-
-The final QA verification passed for the oversized-quantity defect and its associated regression cases. Earlier failed findings remain part of the evidence history and must not be removed or rewritten as if they never occurred.
-
-These outstanding scenarios must be explicitly tested or formally deferred with documented rationale. No unexecuted scenario should be reported as passed.
+These limitations must remain visible. Do not report reference-model test
+success as proof of live orchestration, persisted execution records, formal
+handoff acceptance, or all-role behavior.
 
 ## Phase gate
 
-Phase 2B should be considered complete only after:
+The local reference-model validation gate is complete:
 
-1. The user runs the repository validation suite on this branch and reports the actual output.
-2. Any validator failures or policy/link issues are corrected.
-3. The proof scenarios are exercised in a controlled run or explicitly retained as unexecuted evaluation cases with a documented reason.
-4. The revised skills are reviewed for preservation of role-specific expertise and responsibility boundaries.
+- Governance conformance tests: 15 passed.
+- Backend proof-lab tests: 12 passed.
+- Independent QA proof-lab tests: 10 passed.
+- Total: 37 passed, 0 failures, 0 errors.
+- `git diff --check`: no reported diagnostics.
 
-Do not begin rewriting the remaining 15 role skills until this proof-pair gate is reviewed and accepted.
+The remaining governance review must explicitly disposition the blocker status
+vocabulary mismatch. Formal handoff behavior remains deferred until an
+approved formal handoff contract exists. Live-agent enforcement, canonical
+record persistence, escalation routing, and broader role coverage require
+separate evidence and must not be inferred from these tests.
 
 ## Final Controlled Run Outcome — 2026-11-03
 
