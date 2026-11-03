@@ -21,10 +21,16 @@ task_prompt: |
 
   Produce a delivery plan that:
   - Separates confirmed facts, assumptions, open questions, and decisions needed.
-  - Selects only roles justified by scope and applies required/conditional/
-    optional/not_activated classifications with reasons.
-  - Assigns one accountable owner to each artifact/workstream using canonical
-    ownership; contributors must not become co-owners.
+  - Provide a role-activation matrix covering all 17 canonical role IDs from
+    docs/team/expected-roles.yml. Classify each as required, conditional,
+    optional, or not_activated. Give a task-specific reason for every required,
+    conditional, or optional classification; for conditional roles, state the
+    trigger and whether it is currently met. Do not activate all roles by default.
+  - Break work into bounded workstreams. For each workstream, identify the
+    applicable canonical artifact ID and its single accountable owner from
+    docs/team/ownership.yml. If no existing artifact package fits, identify the
+    gap for human governance rather than inventing an artifact ID or changing
+    ownership. Contributors must not become co-owners.
   - Sequences API/provider contract discovery, architecture/security decisions,
     persistence, backend implementation, UI work, verification, and documentation.
   - Identifies which missing inputs block only dependent work and what independent
@@ -34,18 +40,26 @@ task_prompt: |
     observability, and release constraints.
   - Does not invent formal handoffs, role IDs, artifact IDs, lifecycle states,
     approvals, or production authorization.
-  - Provides a concise delivery ledger with owner, dependency, status, evidence
-    expectation, blocker, and next action.
+  - Provides a concise delivery ledger with one row per workstream and these
+    fields: workstream, canonical artifact ID, accountable owner, activated
+    role(s), dependency, current status, evidence expectation, blocker or
+    "none identified", and next action. Use only lifecycle states that exist in
+    the canonical repository specifications; if a status cannot yet be assigned,
+    explain why rather than inventing one.
+  - Separates the proposed delivery plan from execution evidence: do not claim
+    implementation, verification, approval, formal handoff, or release has
+    occurred. Explicitly state that production deployment is out of scope and
+    that no approved formal handoff contract exists for this feature.
 required_requirements:
   - REQ-DELIVERY-01
 criteria:
   - id: ROLE-ACTIVATION
-    description: Classifies relevant roles using canonical activation rules and explains why roles are required, conditional, optional, or inactive.
+    description: Covers all 17 canonical role IDs, uses only the four allowed classifications, applies task-specific triggers, and explains required/conditional/optional decisions without activating roles by default.
     weight: 20
     critical: true
     requirement_ref: REQ-DELIVERY-01
   - id: OWNERSHIP
-    description: Assigns one accountable owner per workstream/artifact and does not transfer ownership to contributors.
+    description: Maps each workstream to an existing canonical artifact ID and its single owner; flags any ownership gap instead of inventing packages or assigning co-owners.
     weight: 15
     critical: true
     requirement_ref: REQ-DELIVERY-01
@@ -60,7 +74,7 @@ criteria:
     critical: false
     requirement_ref: REQ-DELIVERY-01
   - id: GOVERNANCE-ACCURACY
-    description: Uses only canonical role/artifact/state vocabulary and does not invent formal handoffs, approvals, or release authority.
+    description: Uses canonical role/artifact/state vocabulary, distinguishes plan from execution evidence, and does not invent handoffs, approvals, implementation, verification, deployment, or release authority.
     weight: 15
     critical: true
     requirement_ref: REQ-DELIVERY-01
