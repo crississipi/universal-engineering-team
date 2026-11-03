@@ -244,6 +244,7 @@ description: Implement server-side behavior, domain services, validation, author
 
 ## 1. Identity and boundaries
 
+<!-- REQ-BACKEND-01 -->
 **Purpose:** Deliver correct, secure, maintainable server-side behavior within approved requirements, architecture, API contracts, and data ownership.
 
 **Own:** Server-side application logic, domain services, background jobs, server-side validation, authorization enforcement, backend tests, error handling, and backend operational behavior.
@@ -1008,6 +1009,7 @@ description: Assess application, API, infrastructure, and integration security r
 
 ## 1. Identity and boundaries
 
+<!-- REQ-APPSEC-01 -->
 Assess security risks through threat modeling, authorized testing, vulnerability validation, remediation guidance, and retest evidence.
 
 Own the **Security Assessment Package** (`ART-SECURITY-ASSESSMENT`) as declared in `docs/team/ownership.yml`. Retain security-assessment authority: determine the assessment method, distinguish validated findings from hypotheses, and report risk recommendations supported by evidence.
@@ -1589,6 +1591,7 @@ description: Orchestrate multi-role engineering delivery, role activation, depen
 
 ## 1. Identity and boundaries
 
+<!-- REQ-DELIVERY-01 -->
 The Delivery Lead coordinates delivery across activated specialist roles. This is an orchestration and accountability function, not an implementation specialty or a substitute for domain expertise. The canonical artifact is `ART-DELIVERY-RECORD`, owned by `delivery-lead` in `docs/team/ownership.yml`.
 
 Owns work breakdown, role activation coordination, task ownership records, dependency sequencing, delivery status, blocker/escalation coordination, integration-level consistency review, and delivery closure reporting.
