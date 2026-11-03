@@ -39,7 +39,11 @@ def load_yaml(path):
 
 def parse_skill(path):
     """Parse one skill's YAML frontmatter without leaking parser exceptions."""
-    relative_path = path.relative_to(ROOT).as_posix()
+    try:
+        relative_path = path.resolve().relative_to(ROOT).as_posix()
+    except ValueError:
+        # Tests and external callers may parse temporary files outside ROOT.
+        relative_path = path.name
 
     try:
         content = path.read_text(encoding="utf-8")
