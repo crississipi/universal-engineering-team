@@ -17,9 +17,13 @@
 
 **Evidence:** The proof implementation, Backend tests, QA tests, and verification report are included in `proof-pair-lab/`.
 
-**Remaining gate:** Conditional dependency activation, feedback-only relationships, three materially different correction attempts, and immediate escalation behavior remain unverified or deferred. The repository currently declares no formal handoff contracts.
+**Remaining-scenario probe status:** A dependency-free reference conformance probe and 15 test cases have been added under `proof-pair-lab/governance/`. Coverage includes inactive/active conditional inputs, feedback-only behavior, materially distinct correction-attempt counting, and immediate escalation triggers. The companion report is `docs/reviews/phase2b-remaining-conformance-report.md`.
 
-**Overall Phase 2B acceptance:** Pending completion or explicit disposition of the remaining proof scenarios.
+**Validation status:** The new tests have not yet been run by the user against this branch. They test a reference decision model, not a live agent or production orchestration runtime. The immediate-escalation probe also exposed an unresolved blocker-status vocabulary mismatch between the blocker governance document and the blocker schema.
+
+**Still deferred:** Formal handoff submission/acceptance remains unverified because the repository currently declares no formal handoff contracts. Live-agent enforcement and persistence of canonical execution records are also not demonstrated.
+
+**Overall Phase 2B acceptance:** Pending local execution of the new tests and disposition of the documented governance inconsistency.
 
 ## Scope
 
