@@ -4,9 +4,13 @@ from pathlib import Path
 import importlib.util
 import tempfile
 import unittest
+import sys
 
 
 ROOT = Path(__file__).resolve().parents[1]
+SCRIPTS_DIR = ROOT / "scripts"
+if str(SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_DIR))
 SCRIPT = ROOT / "scripts/build-all-role-skills.py"
 spec = importlib.util.spec_from_file_location("build_all_role_skills", SCRIPT)
 builder = importlib.util.module_from_spec(spec)
