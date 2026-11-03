@@ -25,6 +25,14 @@ SCENARIO_STATUSES = {"draft", "approved"}
 REVIEW_DECISIONS = {"pass", "needs_changes", "blocked"}
 
 
+def display_path(path):
+    """Format repository paths while remaining safe for isolated test fixtures."""
+    try:
+        return display_path(path).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
 def yaml_files(folder):
     if not folder.exists():
         return []
@@ -52,7 +60,7 @@ def main():
             continue
 
         if not isinstance(data, dict):
-            errors.append(f"{path.relative_to(ROOT)} must contain a mapping")
+            errors.append(f"{display_path(path)} must contain a mapping")
             continue
 
         scenario_id = data.get("id")
@@ -67,7 +75,7 @@ def main():
             not isinstance(scenario_id, str)
             or not SCENARIO_ID_RE.fullmatch(scenario_id)
         ):
-            errors.append(f"{path.relative_to(ROOT)} has an invalid scenario ID")
+            errors.append(f"{display_path(path)} has an invalid scenario ID")
             continue
 
         if scenario_id in scenarios:
@@ -253,14 +261,14 @@ def main():
             continue
 
         if not isinstance(data, dict):
-            errors.append(f"{path.relative_to(ROOT)} must contain a mapping")
+            errors.append(f"{display_path(path)} must contain a mapping")
             continue
 
         scenario_id = data.get("scenario_id")
 
         if not isinstance(scenario_id, str):
             errors.append(
-                f"{path.relative_to(ROOT)} must contain scenario_id"
+                f"{display_path(path)} must contain scenario_id"
             )
             continue
 
@@ -271,7 +279,7 @@ def main():
 
         if scenario_id not in scenarios:
             errors.append(
-                f"Orphan review record: {path.relative_to(ROOT)}"
+                f"Orphan review record: {display_path(path)}"
             )
 
         decision = data.get("decision")
@@ -283,17 +291,17 @@ def main():
             or decision not in REVIEW_DECISIONS
         ):
             errors.append(
-                f"{path.relative_to(ROOT)}: invalid review decision"
+                f"{display_path(path)}: invalid review decision"
             )
 
         if not isinstance(reviewer, str) or not reviewer.strip():
             errors.append(
-                f"{path.relative_to(ROOT)}: reviewer must be non-empty"
+                f"{display_path(path)}: reviewer must be non-empty"
             )
 
         if not isinstance(runs, int) or isinstance(runs, bool) or runs < 1:
             errors.append(
-                f"{path.relative_to(ROOT)}: runs must be a positive integer"
+                f"{display_path(path)}: runs must be a positive integer"
             )
 
     for scenario_id in scenarios:
