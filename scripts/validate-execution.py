@@ -75,6 +75,8 @@ def load_schema_catalog(root: Path = ROOT):
         except (OSError, json.JSONDecodeError) as exc:
             raise ValueError(f"Cannot load schema {relative}: {exc}") from exc
 
+        if not isinstance(schema, dict):
+            raise ValueError(f"{relative} must contain a JSON object schema")
         if schema.get("$schema") != "https://json-schema.org/draft/2020-12/schema":
             raise ValueError(f"{relative} must declare JSON Schema Draft 2020-12")
         if not isinstance(schema.get("$id"), str) or not schema["$id"]:
@@ -266,13 +268,27 @@ def main(argv=None):
     )
     parser.add_argument(
         "execution_directory",
+        nargs="?",
         help="Repository-relative path such as executions/EXE-<UUID>",
+    )
+    parser.add_argument(
+        "--check-schemas",
+        action="store_true",
+        help="Meta-validate all ten execution schemas and shared definitions without an execution directory.",
     )
     args = parser.parse_args(argv)
 
     try:
-        directory = resolve_execution_directory(args.execution_directory)
         schema_catalog, registry = load_schema_catalog()
+        if args.check_schemas:
+            print(
+                f"Execution schemas passed: {len(schema_catalog)} record schemas "
+                "and all shared definitions are valid Draft 2020-12 documents."
+            )
+            return 0
+        if not args.execution_directory:
+            parser.error("execution_directory is required unless --check-schemas is used")
+        directory = resolve_execution_directory(args.execution_directory)
         result = validate_execution(directory, schema_catalog, registry)
     except (OSError, ValueError, yaml.YAMLError) as exc:
         print(f"ERROR: [EXV001] {exc}")
