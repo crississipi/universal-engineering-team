@@ -32,7 +32,7 @@ unit-test command runs in the GitHub Actions validation workflow.
 The blocker governance regression tests can also be run independently:
 
 ```powershell
-python -m unittest tests.test_blocker_status_governance -v
+python -m unittest discover -s tests -p "test_blocker_status_governance.py" -v
 ```
 
 ## Validator responsibilities
