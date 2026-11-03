@@ -25,7 +25,7 @@ Use this guide to select the smallest sufficient set of specialist skills. It is
 | Interaction design, navigation, visual system | UX/UI Designer | Product Analyst, Frontend, Accessibility |
 | Schema, migration, integrity, query | Database Manager | Backend, Data Engineer, DevOps/SRE; Penetration Tester or QA when their triggers apply |
 | SaaS/partner integration, webhook, queue, event flow | Integration Engineer | Architect, API, Backend, Database, DevOps/SRE; Penetration Tester or QA when their triggers apply |
-| ETL/ELT, ingestion, transformation, analytics pipeline | Data Engineer | Database, Integration, Security, DevOps/SRE; QA when its triggers apply |
+| ETL/ELT, ingestion, transformation, analytics pipeline | Data Engineer | Database, Integration, Penetration Tester, DevOps/SRE; QA when its triggers apply |
 | Test strategy, regression, defect verification | QA Manager | Relevant implementation owner and specialist reviewers |
 | Authentication, authorization, threat, dependency or trust-boundary risk | Penetration Tester | Architect, API, Backend, Frontend, DevOps/SRE; QA when its triggers apply |
 | CI/CD, hosting, infrastructure, monitoring, recovery | DevOps / SRE | Architect, Backend, Database, Penetration Tester, Release when applicable |
