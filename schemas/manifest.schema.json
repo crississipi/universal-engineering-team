@@ -90,6 +90,7 @@
         "additionalProperties": false,
         "required": [
           "id",
+          "name",
           "owner",
           "primary_producer",
           "contributors"
@@ -114,6 +115,10 @@
               "type": "string",
               "pattern": "^[a-z][a-z0-9-]*$"
             }
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
           }
         }
       }
