@@ -1,0 +1,48 @@
+# Copy this file once per actual model execution.
+# This is a template, not an execution record or evidence of a completed run.
+
+run_id: RUN-REPLACE-WITH-UNIQUE-ID
+scenario_id: SCEN-REPLACE-WITH-SCENARIO-ID
+role: REPLACE-WITH-CANONICAL-ROLE-ID
+run_number: 1
+started_at: "YYYY-MM-DDTHH:MM:SSZ"
+
+provider: REPLACE-WITH-PROVIDER
+model: REPLACE-WITH-EXACT-MODEL-NAME
+model_version: REPLACE-WITH-VERSION-OR-UNKNOWN
+configuration:
+  temperature: null
+  reasoning_effort: REPLACE-OR-UNKNOWN
+  system_instructions_revision: REPLACE-WITH-REFERENCE
+  other_relevant_settings: []
+
+skill_revision:
+  commit: REPLACE-WITH-FULL-40-CHARACTER-COMMIT-SHA
+  path: skills/REPLACE-WITH-ROLE-ID/SKILL.md
+
+scenario_revision:
+  commit: REPLACE-WITH-FULL-40-CHARACTER-COMMIT-SHA
+  path: tests/scenarios/REPLACE-WITH-SCENARIO-FILENAME.yml
+
+input:
+  prompt_reference: REPLACE-WITH-REDACTED-PROMPT-OR-EVIDENCE-PATH
+  prompt_sha256: REPLACE-WITH-SHA256
+  context_references: []
+
+output:
+  artifact_references: []
+  transcript_reference: REPLACE-WITH-REDACTED-TRANSCRIPT-PATH
+  tool_behavior_summary: REPLACE-WITH-ACTUAL-TOOL-BEHAVIOR
+  errors_or_interruptions: []
+
+scores:
+  - criterion_id: REPLACE-WITH-SCENARIO-CRITERION-ID
+    score: null
+    rationale: REPLACE-WITH-EVIDENCE-BASED-RATIONALE
+
+critical_failures: []
+limitations: []
+review:
+  reviewer: null
+  reviewed_at: null
+  notes: null
