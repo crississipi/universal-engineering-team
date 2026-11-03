@@ -150,9 +150,20 @@ def main():
 
         expected_record = f"docs/reviews/scenario-{scenario_id}.yml"
 
-        if review_record != expected_record:
+        if status == "approved" and review_record != expected_record:
             errors.append(
-                f"{scenario_id}: review_record must equal {expected_record}"
+                f"{scenario_id}: approved scenarios require review_record "
+                f"to equal {expected_record}"
+            )
+        elif review_record is None:
+            if status == "approved":
+                errors.append(
+                    f"{scenario_id}: approved scenarios require a review record"
+                )
+        elif review_record != expected_record:
+            errors.append(
+                f"{scenario_id}: review_record must equal {expected_record} "
+                "when supplied"
             )
         else:
             try:
