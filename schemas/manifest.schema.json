@@ -1,6 +1,5 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.invalid/universal-engineering-team/manifest.schema.json",
   "title": "Universal Engineering Team Manifest",
   "description": "Derived collaboration index. Canonical source documents are listed in sources and remain authoritative.",
   "type": "object",
@@ -90,12 +89,31 @@
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "id"
+          "id",
+          "owner",
+          "primary_producer",
+          "contributors"
         ],
         "properties": {
           "id": {
             "type": "string",
             "pattern": "^ART-[A-Z0-9-]+$"
+          },
+          "owner": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "primary_producer": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "contributors": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]*$"
+            }
           }
         }
       }
