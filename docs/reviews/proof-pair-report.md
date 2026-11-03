@@ -108,3 +108,45 @@ Phase 2B should be considered complete only after:
 4. The revised skills are reviewed for preservation of role-specific expertise and responsibility boundaries.
 
 Do not begin rewriting the remaining 15 role skills until this proof-pair gate is reviewed and accepted.
+
+## Final Controlled Run Outcome — 2026-11-03
+
+### Backend–QA correction cycle
+
+The final controlled run demonstrated the following sequence:
+
+1. Backend submitted an implementation and supporting tests.
+2. QA independently identified a Decimal overflow defect.
+3. Backend corrected the Decimal precision and exponent handling.
+4. QA re-verified the correction and identified an additional oversized-integer quantity defect.
+5. Backend replaced integer-to-string digit counting with a `bit_length()`-based upper-bound calculation.
+6. Independent QA re-verified the final implementation.
+
+### Final verification evidence
+
+- Backend test suite: 12 passed.
+- QA test suite: 10 passed.
+- Independent 5,001-digit quantity regression: passed.
+- Additional Decimal, rounding, boolean rejection, and large-quantity probes: passed.
+- Supplied SHA-256 fingerprints: matched the uploaded archive.
+
+### Outcome
+
+**The oversized-quantity defect is resolved.**
+
+The Backend–QA proof pair successfully demonstrated independent defect identification, implementation-owner correction, and independent re-verification.
+
+### Evidence limitations and deferred scenarios
+
+The controlled run does not establish that the deliberately injected boolean defect was present during the initial QA review.
+
+The following scenarios remain unverified or require separate evidence:
+
+- Conditional dependency activation and acceptance.
+- Feedback-only relationships and closure behavior.
+- Three materially different correction attempts.
+- Immediate escalation for critical infrastructure, permission, or authorization blockers.
+
+No formal handoff contracts currently exist in `docs/team/ownership.yml`. This controlled run therefore demonstrates a package-level producer–verifier relationship, not formal handoff-contract execution.
+
+**Phase 2B assessment:** The Backend–QA proof-pair correction cycle has passed. Overall Phase 2B acceptance remains subject to the remaining review and deferred scenarios.
