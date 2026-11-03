@@ -8,7 +8,7 @@ It establishes how YAML execution records are parsed, structurally validated, ch
 
 This document is the architectural reference for Phase 1.4.7.
 
-The individual JSON Schemas are maintained under `schemas/executions/` and are delivered through Phase 1.4.7.2. The cross-record and lifecycle validators remain subsequent implementation work.
+The individual JSON Schemas are maintained under `schemas/executions/`. The integrated entry point is `scripts/validate-execution.py`; it coordinates parsing, schema validation, cross-record validation, lifecycle validation, and consolidated reporting. The cross-record and lifecycle modules remain independently testable.
 
 ## 2. Scope
 
@@ -297,8 +297,8 @@ The prescribed execution order is:
 
 The cross-record and lifecycle validators may be run independently during
 development. Neither independent pass represents a complete execution
-validation. The integrated entry point must run both after successful
-parsing and schema validation.
+validation. The integrated entry point runs both only after all ten records
+parse and pass their individual schemas.
 
 The cross-record reference validator may also be invoked independently for
 one execution directory during development. An independent pass reports
@@ -381,7 +381,7 @@ When an inconsistency is discovered, the governance specification must be reconc
 
 ## 12. Implementation Roadmap
 
-The architecture shall be implemented through these subphases:
+The architecture implementation roadmap records the original delivery subphases. The integrated entry point, automated tests, CI schema check, documentation, and final verification are delivered together as the integration/completion work.
 
 | Subphase | Deliverable |
 |---|---|

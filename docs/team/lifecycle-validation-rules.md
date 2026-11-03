@@ -28,8 +28,9 @@ top-level wrappers.
 
 The validator checks lifecycle state values, explicit transition history,
 history chronology, current-state consistency, and status-specific
-requirements. JSON Schema and cross-record reference validation remain
-separate layers.
+requirements. It remains independently runnable for focused development.
+It does not perform JSON Schema or cross-record reference validation. Use
+`scripts/validate-execution.py` for the complete validation sequence.
 
 ## 3. Shared History and Timestamp Rules
 

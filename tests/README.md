@@ -12,6 +12,7 @@ python -m pip install -r requirements-dev.txt
 
 ```powershell
 python -m unittest discover -s tests -p "test_*.py" -v
+python scripts/validate-execution.py --check-schemas
 python scripts/validate-skills.py
 python scripts/validate-manifest.py
 python scripts/validate-artifacts.py
@@ -21,9 +22,22 @@ python scripts/build-agents-section.py --check
 ```
 
 The unit tests cover deterministic validator behavior, including manifest
-declarations, handoff contracts, malformed skill frontmatter, and
-synchronization between the canonical blocker lifecycle specification and
-its JSON Schema. The same unit-test command runs in GitHub Actions.
+declarations, handoff contracts, malformed skill frontmatter, blocker
+lifecycle synchronization, and integrated execution-validation orchestration.
+The same unit-test command runs in GitHub Actions.
+
+The execution schema check meta-validates all ten record schemas and their
+shared definitions without requiring a populated execution directory. To
+validate a specific execution end to end, run:
+
+```powershell
+python scripts/validate-execution.py "executions/EXE-<uuid>"
+```
+
+The integrated command parses all ten required YAML records, rejects duplicate
+mapping keys, validates each record against its Draft 2020-12 schema, and only
+then runs cross-record and lifecycle validation. A failed prerequisite causes
+dependent checks to be reported as skipped, not passed.
 
 The blocker governance regression tests can also be run independently:
 
@@ -40,6 +54,7 @@ python -m unittest discover -s tests -p "test_blocker_status_governance.py" -v
 | `validate-artifacts.py` | Artifact package ownership |
 | `validate-handoffs.py` | Formal handoff contract governance |
 | `validate-scenarios.py` | Scenario and review-record structure |
+| `validate-execution.py` | Integrated execution parsing, JSON Schema, cross-record, and lifecycle validation; `--check-schemas` validates schema documents without an execution fixture |
 | `build-agents-section.py --check` | Generated `AGENTS.md` section synchronization |
 
 The manifest validator complements the source-projection check in
