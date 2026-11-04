@@ -1,0 +1,77 @@
+# Run 1; score fields intentionally remain pending human review.
+run_id: SCEN-BACKEND-WEBHOOK-VALIDATION-RUN-1
+scenario_id: SCEN-BACKEND-WEBHOOK-VALIDATION
+role: backend-developer
+rubric_version: pilot-v2
+run_number: 1
+started_at: "unknown"
+
+provider: GitHub Copilot
+model: GPT-6-Luna
+model_version: unknown
+configuration:
+  mode: Agent
+  temperature: null
+  reasoning_effort: unknown
+  system_instructions_revision: "Exact user-supplied prompt; SHA-256 recorded below"
+  other_relevant_settings:
+    - "Underlying model version was not captured"
+    - "UTC start time was not captured"
+
+skill_revision:
+  commit: e86d6910b4c4fa754058d6113bc9ecf4e30da147
+  path: skills/backend-developer/SKILL.md
+
+scenario_revision:
+  commit: a975fb3404c9da1323a7c11baa54b880204d7726
+  path: tests/scenarios/SCEN-BACKEND-WEBHOOK-VALIDATION.yml
+
+input:
+  prompt_reference: evaluations/pilot/evidence/SCEN-BACKEND-WEBHOOK-VALIDATION/prompt-used.md
+  prompt_sha256: c4dd687677a7ae8ab92d1870d001e60b7cc5fb98b14481a33d821b74076efe2c
+  context_references:
+    - tests/scenarios/SCEN-BACKEND-WEBHOOK-VALIDATION.yml
+    - skills/backend-developer/SKILL.md
+
+output:
+  artifact_references:
+    - "User-supplied evidence archive backend-pilot-evidence.zip (not committed; SHA-256: 336588aad5dc3bc55ece2a7bb2da9f249b7491b1d95301d55abc45846442a5a0)"
+    - "evaluations/pilot/evidence/SCEN-BACKEND-WEBHOOK-VALIDATION/run-1/README.md"
+  transcript_reference: evaluations/pilot/evidence/SCEN-BACKEND-WEBHOOK-VALIDATION/run-1/transcript.md
+  tool_behavior_summary: "GitHub Copilot Agent mode was used, as reported. No external services or package installation were reported. Per-run transcript supplied was a summary, not a full conversation export."
+  errors_or_interruptions:
+    - "Run 1: No implementation interruption reported."
+    - "Run Repository-wide test attempt had two import errors because jsonschema was unavailable; no package was installed."
+
+scores:
+  - criterion_id: SCOPE-CONTROL
+    score: null
+    rationale: "Pending human post-run scoring."
+  - criterion_id: INPUT-VALIDATION
+    score: null
+    rationale: "Pending human post-run scoring."
+  - criterion_id: NUMERIC-SAFETY
+    score: null
+    rationale: "Pending human post-run scoring."
+  - criterion_id: NORMALIZATION
+    score: null
+    rationale: "Pending human post-run scoring."
+  - criterion_id: TEST-COVERAGE
+    score: null
+    rationale: "Pending human post-run scoring."
+  - criterion_id: EVIDENCE-AND-ACCURACY
+    score: null
+    rationale: "Pending human post-run scoring."
+
+critical_failures: []
+limitations:
+  - "UTC start time was not captured; recorded as unknown, not inferred."
+  - "Underlying model version, temperature, and reasoning effort were not captured."
+  - "Original full Copilot conversation export was not supplied; transcript is a run summary."
+  - "Source code/test artifact bytes remain in the supplied ZIP archive and are not committed in this repository."
+  - "No final human post-run review or pass/needs_changes/blocked decision has been recorded."
+  - "Run 1: 17 tests, OK (0.005s). Repository suite: 40 tests attempted; 2 import errors because jsonschema was unavailable (no packages installed)."
+review:
+  reviewer: null
+  reviewed_at: null
+  notes: null
