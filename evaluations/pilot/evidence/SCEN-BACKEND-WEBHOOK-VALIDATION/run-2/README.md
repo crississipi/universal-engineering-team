@@ -1,10 +1,11 @@
 # Run 2 evidence index
 
-Reported artifacts:
-- `pilot-output/order_webhook.py`
-- `pilot-output/test_order_webhook.py`
-- `pilot-output/README.md`
+Committed output artifacts:
+- [`order_webhook.py`](pilot-output/order_webhook.py)
+- [`test_order_webhook.py`](pilot-output/test_order_webhook.py)
+- [`README.md`](pilot-output/README.md)
 
-Original artifact bytes are retained in the supplied evidence archive
-`backend-pilot-evidence.zip` (SHA-256: `336588aad5dc3bc55ece2a7bb2da9f249b7491b1d95301d55abc45846442a5a0`), not copied into this repository.
-The run summary and metadata are committed alongside this index.
+Run metadata and the transcript summary are stored alongside this index.
+The transcript is a summary, not a full original Copilot conversation export.
+The source files were relocated from the temporary top-level `backend-pilot-evidence/`
+directory without changing their contents.
