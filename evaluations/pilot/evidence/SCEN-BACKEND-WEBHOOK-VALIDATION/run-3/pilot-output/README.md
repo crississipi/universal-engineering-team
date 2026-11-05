@@ -18,8 +18,7 @@ normalized result. The item collection must be a non-empty `list`.
 Run the focused tests from the repository root with:
 
 ```powershell
-python -m unittest discover -s pilot-output -p "test_*.py" -q
-```
+python -m unittest discover -s evaluations/pilot/evidence/SCEN-BACKEND-WEBHOOK-VALIDATION/run-3/pilot-output -p "test_*.py"```
 
 Focused test result:
 
