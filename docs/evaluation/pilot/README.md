@@ -86,9 +86,12 @@ repository check passed. Runs 1 and 3 also reported a repository test attempt
 with 40 tests and two import errors because `jsonschema` was unavailable.
 Run 2 did not report a repository-wide test run.
 
-Criterion scores remain null pending human post-run scoring. No scenario-level
-post-run decision has been made. The evidence review did not identify a
-critical implementation defect, but this is not a final `pass` decision.
+An evidence-based proposed review is documented in
+`docs/reviews/backend-developer-pilot-review.md`. It includes comparative
+criterion score recommendations, test-coverage gaps, and a proposed `pass`
+outcome. These are recommendations only: all run-record score fields remain
+null, the scenario `review_record` remains null, and no formal post-run
+decision has been recorded pending human approval.
 
 ## Review and reporting
 
@@ -125,8 +128,8 @@ version, or material settings differ.
   - `SCEN-APPSEC-STATIC-WEBHOOK-REVIEW`: draft, awaiting human approval.
   - `SCEN-DELIVERY-CROSSROLE-WEBHOOK`: draft, awaiting human approval.
 - Model executions: 3 of 9 recorded.
-- Post-run scenario reviews: 0 of 3 recorded.
-- Evaluation conclusions: none.
+- Post-run scenario reviews: 0 of 3 formally recorded (one proposed review is awaiting human approval).
+- Evaluation conclusions: none; the Backend Developer report contains a proposed outcome only.
 
 These counts describe repository records only. They must be updated from actual
 evidence, never inferred from planned work.
