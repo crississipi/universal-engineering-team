@@ -65,12 +65,13 @@ The exact submitted prompt is stored at
 Its SHA-256 is
 `c4dd687677a7ae8ab92d1870d001e60b7cc5fb98b14481a33d821b74076efe2c`.
 
-The evidence archive supplied for review was
-`backend-pilot-evidence.zip` (SHA-256:
-`336588aad5dc3bc55ece2a7bb2da9f249b7491b1d95301d55abc45846442a5a0`). Its
-implementation, test, and README files are referenced by the run records but
-the archive bytes are not committed to this repository. The transcript files
-are summaries, not full original Copilot conversation exports.
+The implementation, focused tests, and per-run README files are committed
+under `evaluations/pilot/evidence/SCEN-BACKEND-WEBHOOK-VALIDATION/run-<n>/pilot-output/`.
+The run-level `README.md`, `metadata.md`, and `transcript.md` files sit beside
+each `pilot-output/` directory. The original files were moved from the temporary
+root-level `backend-pilot-evidence/` directory into this canonical evidence
+location without changing their contents. The transcript files are summaries,
+not full original Copilot conversation exports.
 
 All three run records preserve unavailable metadata as unknown:
 - UTC start timestamps were not captured.
