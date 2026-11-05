@@ -35,13 +35,14 @@ input:
 
 output:
   artifact_references:
-    - "User-supplied evidence archive backend-pilot-evidence.zip (not committed; SHA-256: 336588aad5dc3bc55ece2a7bb2da9f249b7491b1d95301d55abc45846442a5a0)"
-    - "evaluations/pilot/evidence/SCEN-BACKEND-WEBHOOK-VALIDATION/run-3/README.md"
+    - "evaluations/pilot/evidence/SCEN-BACKEND-WEBHOOK-VALIDATION/run-3/pilot-output/webhook_validation.py"
+    - "evaluations/pilot/evidence/SCEN-BACKEND-WEBHOOK-VALIDATION/run-3/pilot-output/test_webhook_validation.py"
+    - "evaluations/pilot/evidence/SCEN-BACKEND-WEBHOOK-VALIDATION/run-3/pilot-output/README.md"
   transcript_reference: evaluations/pilot/evidence/SCEN-BACKEND-WEBHOOK-VALIDATION/run-3/transcript.md
   tool_behavior_summary: "GitHub Copilot Agent mode was used, as reported. No external services or package installation were reported. Per-run transcript supplied was a summary, not a full conversation export."
   errors_or_interruptions:
     - "Run 3: No implementation interruption reported."
-    - "Run Repository-wide test attempt had two import errors because jsonschema was unavailable; no package was installed."
+    - "Repository-wide test attempt had two import errors because jsonschema was unavailable; no package was installed."
 
 scores:
   - criterion_id: SCOPE-CONTROL
@@ -68,7 +69,6 @@ limitations:
   - "UTC start time was not captured; recorded as unknown, not inferred."
   - "Underlying model version, temperature, and reasoning effort were not captured."
   - "Original full Copilot conversation export was not supplied; transcript is a run summary."
-  - "Source code/test artifact bytes remain in the supplied ZIP archive and are not committed in this repository."
   - "No final human post-run review or pass/needs_changes/blocked decision has been recorded."
   - "Run 3: 20 tests, OK (0.005s). Repository suite: 40 tests attempted; 2 import errors because jsonschema was unavailable (no packages installed)."
 review:
