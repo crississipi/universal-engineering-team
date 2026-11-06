@@ -71,7 +71,7 @@ criteria:
     weight: 15
     critical: false
     requirement_ref: REQ-BACKEND-01
-review_record: null
+review_record: docs/reviews/scenario-SCEN-BACKEND-WEBHOOK-VALIDATION.yml
 evidence:
   - path: skills/backend-developer/SKILL.md
     commit: e86d6910b4c4fa754058d6113bc9ecf4e30da147
