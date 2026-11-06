@@ -1,0 +1,62 @@
+scenario_id: SCEN-BACKEND-WEBHOOK-VALIDATION
+decision: pass
+reviewer: crississipi
+reviewed_at: "2026-11-06"
+runs: 3
+rubric_version: pilot-v2
+weighted_scores:
+  run_1: 97.10
+  run_2: 97.25
+  run_3: 95.25
+  mean: 96.53
+  range: 2.00
+criterion_scores:
+  - criterion_id: SCOPE-CONTROL
+    weight: 15
+    run_1: 100
+    run_2: 100
+    run_3: 100
+  - criterion_id: INPUT-VALIDATION
+    weight: 20
+    run_1: 95
+    run_2: 100
+    run_3: 95
+  - criterion_id: NUMERIC-SAFETY
+    weight: 20
+    run_1: 100
+    run_2: 95
+    run_3: 95
+  - criterion_id: NORMALIZATION
+    weight: 10
+    run_1: 100
+    run_2: 100
+    run_3: 100
+  - criterion_id: TEST-COVERAGE
+    weight: 20
+    run_1: 98
+    run_2: 95
+    run_3: 90
+  - criterion_id: EVIDENCE-AND-ACCURACY
+    weight: 15
+    run_1: 90
+    run_2: 95
+    run_3: 95
+critical_failures: []
+findings:
+  - "All three implementations meet the scenario's core functional and scope requirements on source inspection; no critical implementation defect was identified."
+  - "All three focused test suites passed when independently reproduced against the uploaded evidence archive: 17, 17, and 20 tests respectively. This was archive verification, not a post-relocation test run."
+  - "Runs 1 and 3 reported repository-wide test attempts with 40 tests and two import errors because jsonschema was unavailable. Run 2 did not report a repository-wide test run."
+  - "Test-evidence gaps remain for selected non-string identifier/email/SKU and negative-infinity variants; these are missing explicit tests, not observed implementation defects."
+limitations:
+  - "Original Copilot conversation exports were not supplied; committed transcript files are summaries."
+  - "Exact underlying model version, UTC run start times, temperature, and reasoning effort remain unknown. GPT-6-Luna is the reported model display label."
+  - "No linter, static type checker, or integration test result is available."
+  - "Archive tests were independently reproduced before evidence relocation; no test rerun after relocation is claimed."
+evidence:
+  proposal: docs/reviews/backend-developer-pilot-review.md
+  scenario: tests/scenarios/SCEN-BACKEND-WEBHOOK-VALIDATION.yml
+  run_records:
+    - evaluations/pilot/runs/SCEN-BACKEND-WEBHOOK-VALIDATION-run-1.yml
+    - evaluations/pilot/runs/SCEN-BACKEND-WEBHOOK-VALIDATION-run-2.yml
+    - evaluations/pilot/runs/SCEN-BACKEND-WEBHOOK-VALIDATION-run-3.yml
+  prompt: evaluations/pilot/evidence/SCEN-BACKEND-WEBHOOK-VALIDATION/prompt-used.md
