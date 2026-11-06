@@ -1,0 +1,9 @@
+diff --git a/evaluations/pilot/evidence/SCEN-DELIVERY-CROSSROLE-WEBHOOK/prompt-used.md b/evaluations/pilot/evidence/SCEN-DELIVERY-CROSSROLE-WEBHOOK/prompt-used.md
+index 3781bc7..e366f9c 100644
+--- a/evaluations/pilot/evidence/SCEN-DELIVERY-CROSSROLE-WEBHOOK/prompt-used.md
++++ b/evaluations/pilot/evidence/SCEN-DELIVERY-CROSSROLE-WEBHOOK/prompt-used.md
+@@ -31,3 +31,4 @@ Evidence capture:
+ - Preserve the final `pilot-output/` artifact files and the actual `git status --short` output showing the scope of changes.
+ - Do not manually edit or repair the output before preserving the original evidence.
+ - Record the actual provider, displayed model label, exact model/version if exposed, Agent mode, relevant settings, and UTC start time. If a value is unavailable, record `unknown`; never infer it.
++
