@@ -147,5 +147,36 @@ class ScenarioLifecycleTests(unittest.TestCase):
         self.assertIn("runs must be a positive integer", output)
 
 
+    def test_rejects_criteria_whose_weights_do_not_total_100(self):
+        criteria = [
+            {
+                "id": "CORRECTNESS",
+                "description": "Implements the stated behavior correctly.",
+                "weight": 60,
+                "critical": True,
+                "requirement_ref": "REQ-BACKEND-01",
+            },
+            {
+                "id": "EVIDENCE",
+                "description": "Provides reproducible verification evidence.",
+                "weight": 50,
+                "critical": False,
+                "requirement_ref": "REQ-BACKEND-01",
+            },
+        ]
+        self.write_yaml(self.scenario_path, self.scenario(criteria=criteria))
+        code, output = self.run_validator()
+        self.assertEqual(code, 1)
+        self.assertIn("criterion weights must total 100; found 110", output)
+
+    def test_rejects_non_finite_criterion_weights(self):
+        criteria = self.scenario()["criteria"]
+        criteria[0]["weight"] = float("nan")
+        self.write_yaml(self.scenario_path, self.scenario(criteria=criteria))
+        code, output = self.run_validator()
+        self.assertEqual(code, 1)
+        self.assertIn("weight must be a finite positive number", output)
+
+
 if __name__ == "__main__":
     unittest.main()
