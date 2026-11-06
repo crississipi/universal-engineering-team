@@ -2,6 +2,7 @@
 """Validate scenario specifications and one-to-one review records."""
 
 from pathlib import Path
+import math
 import re
 import sys
 
@@ -108,6 +109,7 @@ def main():
             criteria = []
 
         criterion_ids = set()
+        criterion_weights = []
 
         for index, criterion in enumerate(criteria):
             label = f"{scenario_id}.criteria[{index}]"
@@ -140,9 +142,12 @@ def main():
             if (
                 not isinstance(weight, (int, float))
                 or isinstance(weight, bool)
+                or not math.isfinite(weight)
                 or weight <= 0
             ):
-                errors.append(f"{label}.weight must be a positive number")
+                errors.append(f"{label}.weight must be a finite positive number")
+            else:
+                criterion_weights.append(float(weight))
 
             if not isinstance(critical, bool):
                 errors.append(f"{label}.critical must be true or false")
@@ -154,6 +159,14 @@ def main():
                 errors.append(
                     f"{label}.requirement_ref must appear in "
                     "required_requirements"
+                )
+
+        if criteria and len(criterion_weights) == len(criteria):
+            total_weight = math.fsum(criterion_weights)
+            if not math.isclose(total_weight, 100.0, rel_tol=0.0, abs_tol=1e-9):
+                errors.append(
+                    f"{scenario_id}: criterion weights must total 100; "
+                    f"found {total_weight:g}"
                 )
 
         approval = data.get("approval")
