@@ -26,22 +26,22 @@ scenario files exist and receive human pre-run approval.
 
 | Canonical role | Pilot coverage | Baseline scenario ID (proposed) | Role requirement anchor | Design state |
 |---|---|---|---|---|
-| product-analyst | None | SCEN-BASELINE-PRODUCT-ANALYST | REQ-PRODUCT-ANALYST-01 (to define) | Not designed |
-| solution-architect | None | SCEN-BASELINE-SOLUTION-ARCHITECT | REQ-SOLUTION-ARCHITECT-01 (to define) | Not designed |
-| api-manager | None | SCEN-BASELINE-API-MANAGER | REQ-API-MANAGER-01 (to define) | Not designed |
+| product-analyst | None | SCEN-BASELINE-PRODUCT-ANALYST | REQ-PRODUCT-ANALYST-01 (drafted in role skill; pending review) | Not designed |
+| solution-architect | None | SCEN-BASELINE-SOLUTION-ARCHITECT | REQ-SOLUTION-ARCHITECT-01 (drafted in role skill; pending review) | Not designed |
+| api-manager | None | SCEN-BASELINE-API-MANAGER | REQ-API-MANAGER-01 (drafted in role skill; pending review) | Not designed |
 | backend-developer | Pilot only | SCEN-BASELINE-BACKEND-DEVELOPER | REQ-BACKEND-01 (exists; reassess baseline fit) | Not designed |
-| frontend-developer | None | SCEN-BASELINE-FRONTEND-DEVELOPER | REQ-FRONTEND-DEVELOPER-01 (to define) | Not designed |
-| ux-ui-designer | None | SCEN-BASELINE-UX-UI-DESIGNER | REQ-UX-UI-DESIGNER-01 (to define) | Not designed |
-| database-manager | None | SCEN-BASELINE-DATABASE-MANAGER | REQ-DATABASE-MANAGER-01 (to define) | Not designed |
-| integration-engineer | None | SCEN-BASELINE-INTEGRATION-ENGINEER | REQ-INTEGRATION-ENGINEER-01 (to define) | Not designed |
-| data-engineer | None | SCEN-BASELINE-DATA-ENGINEER | REQ-DATA-ENGINEER-01 (to define) | Not designed |
-| qa-manager | None | SCEN-BASELINE-QA-MANAGER | REQ-QA-MANAGER-01 (to define) | Not designed |
+| frontend-developer | None | SCEN-BASELINE-FRONTEND-DEVELOPER | REQ-FRONTEND-DEVELOPER-01 (drafted in role skill; pending review) | Not designed |
+| ux-ui-designer | None | SCEN-BASELINE-UX-UI-DESIGNER | REQ-UX-UI-DESIGNER-01 (drafted in role skill; pending review) | Not designed |
+| database-manager | None | SCEN-BASELINE-DATABASE-MANAGER | REQ-DATABASE-MANAGER-01 (drafted in role skill; pending review) | Not designed |
+| integration-engineer | None | SCEN-BASELINE-INTEGRATION-ENGINEER | REQ-INTEGRATION-ENGINEER-01 (drafted in role skill; pending review) | Not designed |
+| data-engineer | None | SCEN-BASELINE-DATA-ENGINEER | REQ-DATA-ENGINEER-01 (drafted in role skill; pending review) | Not designed |
+| qa-manager | None | SCEN-BASELINE-QA-MANAGER | REQ-QA-MANAGER-01 (drafted in role skill; pending review) | Not designed |
 | penetration-tester | Pilot only | SCEN-BASELINE-PENETRATION-TESTER | REQ-APPSEC-01 (exists; reassess baseline fit) | Not designed |
-| devops-sre | None | SCEN-BASELINE-DEVOPS-SRE | REQ-DEVOPS-SRE-01 (to define) | Not designed |
-| performance-engineer | None | SCEN-BASELINE-PERFORMANCE-ENGINEER | REQ-PERFORMANCE-ENGINEER-01 (to define) | Not designed |
-| accessibility-specialist | None | SCEN-BASELINE-ACCESSIBILITY-SPECIALIST | REQ-ACCESSIBILITY-SPECIALIST-01 (to define) | Not designed |
-| technical-writer-knowledge-engineer | None | SCEN-BASELINE-TECHNICAL-WRITER-KNOWLEDGE-ENGINEER | REQ-TECHNICAL-WRITER-01 (to define) | Not designed |
-| release-manager | None | SCEN-BASELINE-RELEASE-MANAGER | REQ-RELEASE-MANAGER-01 (to define) | Not designed |
+| devops-sre | None | SCEN-BASELINE-DEVOPS-SRE | REQ-DEVOPS-SRE-01 (drafted in role skill; pending review) | Not designed |
+| performance-engineer | None | SCEN-BASELINE-PERFORMANCE-ENGINEER | REQ-PERFORMANCE-ENGINEER-01 (drafted in role skill; pending review) | Not designed |
+| accessibility-specialist | None | SCEN-BASELINE-ACCESSIBILITY-SPECIALIST | REQ-ACCESSIBILITY-SPECIALIST-01 (drafted in role skill; pending review) | Not designed |
+| technical-writer-knowledge-engineer | None | SCEN-BASELINE-TECHNICAL-WRITER-KNOWLEDGE-ENGINEER | REQ-TECHNICAL-WRITER-01 (drafted in role skill; pending review) | Not designed |
+| release-manager | None | SCEN-BASELINE-RELEASE-MANAGER | REQ-RELEASE-MANAGER-01 (drafted in role skill; pending review) | Not designed |
 | delivery-lead | Pilot only | SCEN-BASELINE-DELIVERY-LEAD | REQ-DELIVERY-01 (exists; reassess baseline fit) | Not designed |
 
 Role names and order must remain aligned with `docs/team/expected-roles.yml`.
@@ -176,10 +176,11 @@ post-run review records distinct.
 ## Known repository readiness gap
 
 At the start of Stage B, only the Backend Developer, Penetration Tester, and
-Delivery Lead skills contain explicit requirement anchors used by the scenario
-validator. The other 14 canonical skills do not yet expose such anchors. The
-first implementation task is therefore the role requirement traceability gate,
-not immediate creation of 14 scenario files or model runs.
+Delivery Lead skills contained explicit requirement anchors. This branch adds
+one draft role-level anchor to each of the other 14 canonical skills. These
+anchors remain pending review and repository validation; they are not scenario
+approvals. The traceability gate is not complete until the anchors are reviewed,
+merged, and validated against scenario requirements and criterion references.
 
 The repository currently has pilot run-record conventions and execution
 lifecycle schemas, but no dedicated baseline run-record validator or baseline
