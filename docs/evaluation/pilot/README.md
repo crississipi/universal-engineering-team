@@ -27,8 +27,8 @@ does not substitute for the required human approval.
 | Scenario | Role | Required runs | Recorded runs |
 |---|---|---:|---:|
 | SCEN-BACKEND-WEBHOOK-VALIDATION | backend-developer | 3 | 3 |
-| SCEN-APPSEC-STATIC-WEBHOOK-REVIEW | penetration-tester | 3 | 0 |
-| SCEN-DELIVERY-CROSSROLE-WEBHOOK | delivery-lead | 3 | 0 |
+| SCEN-APPSEC-STATIC-WEBHOOK-REVIEW | penetration-tester | 3 | 3 |
+| SCEN-DELIVERY-CROSSROLE-WEBHOOK | delivery-lead | 3 | 3 |
 | **Total** | | **9** | **3** |
 
 For each run:
@@ -152,14 +152,16 @@ version, or material settings differ.
     2026-11-06T03:55:05Z.
   - `SCEN-DELIVERY-CROSSROLE-WEBHOOK`: approved by `crississipi` on
     2026-11-06T03:55:05Z.
-- Model executions: 3 of 9 recorded.
-- Post-run scenario reviews: 1 of 3 formally recorded.
+- Model executions: 9 of 9 recorded.
+- Post-run scenario reviews: 3 of 3 formally recorded.
   - `SCEN-BACKEND-WEBHOOK-VALIDATION`: `pass`, reviewed by `crississipi`
     on 2026-11-06 (3 runs; mean weighted score 96.53/100).
-  - The penetration-testing and Delivery Lead scenarios have not yet been run
-    or reviewed.
-- Evaluation conclusions: the Backend Developer pilot is formally recorded as
-  `pass`; this is a pilot result, not the repository-wide baseline.
+  - `SCEN-APPSEC-STATIC-WEBHOOK-REVIEW`: `pass`, reviewed by `crississipi`
+    on 2026-11-06 (3 runs; mean weighted score 98.57/100).
+  - `SCEN-DELIVERY-CROSSROLE-WEBHOOK`: `pass`, reviewed by `crississipi`
+    on 2026-11-06 (3 runs; mean weighted score 99.90/100).
+- Evaluation conclusions: all three pilot scenarios are formally recorded as
+  `pass`. These are pilot results, not the repository-wide 17-role baseline.
 
 These counts describe repository records only. They must be updated from actual
 evidence, never inferred from planned work.
