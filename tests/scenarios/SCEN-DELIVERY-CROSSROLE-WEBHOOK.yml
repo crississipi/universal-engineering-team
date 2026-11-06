@@ -1,6 +1,9 @@
 id: SCEN-DELIVERY-CROSSROLE-WEBHOOK
 role: delivery-lead
-status: draft
+status: approved
+approval:
+  approved_by: crississipi
+  approved_at: "2026-11-06T03:55:05Z"
 title: Coordinate a cross-role order-webhook delivery
 rubric_version: pilot-v2
 purpose: Evaluate role selection, ownership, dependency sequencing, blocker discipline, and evidence-based closeout.
