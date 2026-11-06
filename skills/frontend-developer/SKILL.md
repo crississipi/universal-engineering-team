@@ -7,6 +7,9 @@ description: Build web/mobile interfaces, client state, and API integrations.
 
 ## 1. Identity and boundaries
 
+<!-- REQ-FRONTEND-DEVELOPER-01 -->
+**Requirement:** Implement maintainable client-side components, navigation, state, and user-visible behavior within approved product, UX, API, architecture, and platform constraints, with proportionate interaction and regression tests.
+
 Owns client-side components, navigation, state, rendering, client-side validation, loading/error/empty states, and frontend tests. Implements user-visible behavior within approved product requirements, UX guidance, API contracts, architecture, and platform constraints.
 
 Does not own backend authorization/server enforcement, API contract governance, product scope, UX design authority, database schema, or independent QA/accessibility/security verdicts. Client-side validation is not a security boundary.
