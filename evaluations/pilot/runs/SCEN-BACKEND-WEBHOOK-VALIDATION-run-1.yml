@@ -1,4 +1,4 @@
-# Run 1; score fields intentionally remain pending human review.
+# Run 1; criterion scores and post-run review approved by crississipi on 2026-11-06.
 run_id: SCEN-BACKEND-WEBHOOK-VALIDATION-RUN-1
 scenario_id: SCEN-BACKEND-WEBHOOK-VALIDATION
 role: backend-developer
@@ -46,32 +46,32 @@ output:
 
 scores:
   - criterion_id: SCOPE-CONTROL
-    score: null
-    rationale: "Pending human post-run scoring."
+    score: 100
+    rationale: "Pure, small, typed, standard-library-only validation with no prohibited side effects or unrelated abstractions."
   - criterion_id: INPUT-VALIDATION
-    score: null
-    rationale: "Pending human post-run scoring."
+    score: 95
+    rationale: "The implementation rejects non-string identifiers/email, but direct tests do not explicitly cover every order_id, customer_email, and sku type boundary."
   - criterion_id: NUMERIC-SAFETY
-    score: null
-    rationale: "Pending human post-run scoring."
+    score: 100
+    rationale: "Explicit float negative infinity and string negative infinity cases are covered; implementation rejects all non-finite Decimal values."
   - criterion_id: NORMALIZATION
-    score: null
-    rationale: "Pending human post-run scoring."
+    score: 100
+    rationale: "Applies requested trimming, email lowercasing, uppercase ASCII currency, and exact Decimal preservation without rounding."
   - criterion_id: TEST-COVERAGE
-    score: null
-    rationale: "Pending human post-run scoring."
+    score: 98
+    rationale: "The suite covers the enumerated scenario requirements and most additional boundaries; a few direct type-boundary assertions remain absent."
   - criterion_id: EVIDENCE-AND-ACCURACY
-    score: null
-    rationale: "Pending human post-run scoring."
+    score: 90
+    rationale: "Run reports are honest about test results and limitations; independent git status output was not supplied for scope verification."
+weighted_score: 97.10
 
 critical_failures: []
 limitations:
   - "UTC start time was not captured; recorded as unknown, not inferred."
   - "Underlying model version, temperature, and reasoning effort were not captured."
   - "Original full Copilot conversation export was not supplied; transcript is a run summary."
-  - "No final human post-run review or pass/needs_changes/blocked decision has been recorded."
   - "Run 1: 17 tests, OK (0.005s). Repository suite: 40 tests attempted; 2 import errors because jsonschema was unavailable (no packages installed)."
 review:
-  reviewer: null
-  reviewed_at: null
-  notes: null
+  reviewer: crississipi
+  reviewed_at: "2026-11-06"
+  notes: "Human-approved pass decision and criterion scores. Run 1: 17 focused tests passed; repository suite had 2 jsonschema import errors. No independent git status output was supplied."
