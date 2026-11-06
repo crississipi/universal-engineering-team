@@ -86,12 +86,14 @@ repository check passed. Runs 1 and 3 also reported a repository test attempt
 with 40 tests and two import errors because `jsonschema` was unavailable.
 Run 2 did not report a repository-wide test run.
 
-An evidence-based proposed review is documented in
-`docs/reviews/backend-developer-pilot-review.md`. It includes comparative
-criterion score recommendations, test-coverage gaps, and a proposed `pass`
-outcome. These are recommendations only: all run-record score fields remain
-null, the scenario `review_record` remains null, and no formal post-run
-decision has been recorded pending human approval.
+The evidence-based review proposal is retained at
+`docs/reviews/backend-developer-pilot-review.md` as the detailed analysis.
+Following explicit human approval, the formal post-run decision is recorded at
+`docs/reviews/scenario-SCEN-BACKEND-WEBHOOK-VALIDATION.yml`. The approved
+decision is `pass`; the three run records contain the approved criterion
+scores, weighted scores, reviewer, and review date. The scenario's
+`review_record` points to the formal record. Original implementation,
+test, metadata, and transcript-summary evidence remains unchanged.
 
 ## Review and reporting
 
@@ -128,8 +130,13 @@ version, or material settings differ.
   - `SCEN-APPSEC-STATIC-WEBHOOK-REVIEW`: draft, awaiting human approval.
   - `SCEN-DELIVERY-CROSSROLE-WEBHOOK`: draft, awaiting human approval.
 - Model executions: 3 of 9 recorded.
-- Post-run scenario reviews: 0 of 3 formally recorded (one proposed review is awaiting human approval).
-- Evaluation conclusions: none; the Backend Developer report contains a proposed outcome only.
+- Post-run scenario reviews: 1 of 3 formally recorded.
+  - `SCEN-BACKEND-WEBHOOK-VALIDATION`: `pass`, reviewed by `crississipi`
+    on 2026-11-06 (3 runs; mean weighted score 96.53/100).
+  - The penetration-testing and Delivery Lead scenarios have not yet been run
+    or reviewed.
+- Evaluation conclusions: the Backend Developer pilot is formally recorded as
+  `pass`; this is a pilot result, not the repository-wide baseline.
 
 These counts describe repository records only. They must be updated from actual
 evidence, never inferred from planned work.
