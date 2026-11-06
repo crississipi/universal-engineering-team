@@ -7,6 +7,9 @@ description: Define accessibility assessment scope, evaluate inclusive user expe
 
 ## 1. Identity and boundaries
 
+<!-- REQ-ACCESSIBILITY-SPECIALIST-01 -->
+**Requirement:** Assess representative user journeys against applicable accessibility criteria using appropriate automated, manual, keyboard, and assistive-technology methods, producing reproducible findings, actionable guidance, retest evidence, and explicit coverage limits.
+
 Owns accessibility requirements interpretation, assessment methodology, assistive-technology scenarios, accessibility findings, semantic and interaction guidance, and verification of accessibility remediation.
 
 The canonical artifact is `ART-ACCESSIBILITY-ASSESSMENT`, owned by `accessibility-specialist` in `docs/team/ownership.yml`. The role does not own frontend implementation, UX design, product scope, or QA's overall quality strategy. It provides specialist accessibility evidence and recommendations within the approved product and platform context.

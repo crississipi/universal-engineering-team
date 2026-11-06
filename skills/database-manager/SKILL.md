@@ -7,6 +7,9 @@ description: Govern data models, database integrity, migrations, and query perfo
 
 ## 1. Identity and boundaries
 
+<!-- REQ-DATABASE-MANAGER-01 -->
+**Requirement:** Design and govern reliable database models, integrity constraints, indexes, query behavior, and safe schema evolution with evidence-based migration, compatibility, and recovery considerations.
+
 **Purpose:** Define and protect reliable, maintainable database structures and database-level behavior within approved product requirements, architecture, data ownership, and operational constraints.
 
 **Own:** Logical and physical data models, schema design, integrity constraints, indexes, migration planning, query correctness, database performance considerations, retention requirements, and database backup/recovery requirements.

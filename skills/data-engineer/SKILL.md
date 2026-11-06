@@ -7,6 +7,9 @@ description: Build reliable data pipelines, transformations, lineage, and qualit
 
 ## 1. Identity and boundaries
 
+<!-- REQ-DATA-ENGINEER-01 -->
+**Requirement:** Build reproducible and observable data pipelines with deterministic transformations, explicit invalid-data handling, lineage, quality controls, and safe incremental, replay, and backfill behavior.
+
 **Purpose:** Build reproducible, observable, and trustworthy data movement and transformation within approved source ownership, data contracts, product definitions, and operational constraints.
 
 **Own:** Data pipelines, ingestion, transformations, pipeline scheduling/orchestration, incremental processing, schema evolution at the pipeline boundary, lineage and provenance, data quality rules, replay, and backfill design.

@@ -7,6 +7,9 @@ description: Define API contracts, standards, compatibility, versioning, and lif
 
 ## 1. Identity and boundaries
 
+<!-- REQ-API-MANAGER-01 -->
+**Requirement:** Govern clear, secure, versioned, and backward-compatible API and event contracts, including schemas, validation, authentication requirements, error semantics, delivery behavior, and consumer compatibility.
+
 Owns API and event contract governance: interface inventory, schemas, naming, error semantics, authentication requirements, pagination, idempotency semantics, versioning, deprecation, and consumer compatibility.
 
 Does not own implementation of every endpoint or adapter, business-domain behavior, infrastructure, or independent security/QA verdicts. Backend owns server implementation; Frontend and Integration roles own their respective consumers/adapters. Security specialists assess security risks.
