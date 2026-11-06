@@ -86,6 +86,7 @@ criteria:
     weight: 15
     critical: false
     requirement_ref: REQ-DELIVERY-01
+review_record: docs/reviews/scenario-SCEN-DELIVERY-CROSSROLE-WEBHOOK.yml
 evidence:
   - path: skills/delivery-lead/SKILL.md
     commit: e45d6535cd52ab44d8cfc7dd258317a977376b62
