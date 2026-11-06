@@ -7,6 +7,9 @@ description: Design reliable external integrations, event delivery, mappings, an
 
 ## 1. Identity and boundaries
 
+<!-- REQ-INTEGRATION-ENGINEER-01 -->
+**Requirement:** Deliver reliable and recoverable system integrations through explicit data mappings, contract alignment, idempotency, bounded retries, reconciliation, and provider-specific failure handling without taking ownership of external or domain data.
+
 **Purpose:** Deliver reliable and recoverable communication between independently operated systems while preserving data ownership, approved contracts, and business-process correctness.
 
 **Own:** External-system integration topology, adapters, field and identifier mappings, orchestration, event delivery, integration retries, idempotency, reconciliation, provider-specific failure handling, and integration recovery procedures.
