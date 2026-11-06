@@ -1,0 +1,62 @@
+# One record per actual baseline model execution.
+# This template is not a run record and must never be used as evidence of execution.
+
+evaluation_track: repository-baseline
+run_id: BASELINE-REPLACE-WITH-SCENARIO-ID-RUN-NN
+scenario_id: SCEN-REPLACE-WITH-APPROVED-SCENARIO-ID
+role: REPLACE-WITH-CANONICAL-ROLE-ID
+rubric_version: baseline-v1
+run_number: 1
+started_at: "YYYY-MM-DDTHH:MM:SSZ"
+
+execution_environment:
+  provider: REPLACE-WITH-PROVIDER
+  model_display_label: REPLACE-WITH-USER-VISIBLE-LABEL
+  model_identifier: REPLACE-WITH-EXACT-IDENTIFIER-OR-UNKNOWN
+  model_version: REPLACE-WITH-EXACT-VERSION-OR-UNKNOWN
+  mode: REPLACE-WITH-AGENT-MODE
+  configuration:
+    temperature: unknown
+    reasoning_effort: unknown
+    other_material_settings: []
+  tool_permissions: REPLACE-WITH-ACTUAL-PERMISSIONS
+  operating_environment: REPLACE-WITH-ACTUAL-ENVIRONMENT
+
+revisions:
+  repository_base_commit: REPLACE-WITH-FULL-40-CHARACTER-SHA
+  scenario_commit: REPLACE-WITH-FULL-40-CHARACTER-SHA
+  skill_commit: REPLACE-WITH-FULL-40-CHARACTER-SHA
+  scenario_path: tests/scenarios/REPLACE-WITH-SCENARIO-FILENAME.yml
+  skill_path: skills/REPLACE-WITH-ROLE-ID/SKILL.md
+
+input:
+  prompt_path: evaluations/baseline/evidence/REPLACE-WITH-SCENARIO-ID/prompt-used.md
+  prompt_sha256: REPLACE-WITH-64-CHARACTER-SHA256
+  additional_context_references: []
+
+evidence:
+  output_artifacts: []
+  transcript_path: REPLACE-WITH-TRANSCRIPT-PATH
+  git_status_path: REPLACE-WITH-GIT-STATUS-PATH
+  command_results: []
+  tool_behavior_summary: REPLACE-WITH-OBSERVED-BEHAVIOR
+  errors_or_interruptions: []
+  redactions_performed: []
+
+scores:
+  - criterion_id: REPLACE-WITH-APPROVED-CRITERION-ID
+    score: null
+    rationale: REPLACE-WITH-EVIDENCE-BASED-OBSERVATION
+
+critical_failures: []
+limitations: []
+comparability:
+  cohort_id: REPLACE-WITH-COHORT-ID
+  comparable_within_scenario_cohort: null
+  deviations: []
+
+review:
+  reviewer: null
+  reviewed_at: null
+  decision: null
+  notes: null
