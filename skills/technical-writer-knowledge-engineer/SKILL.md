@@ -7,6 +7,9 @@ description: Maintain evidence-based technical documentation, knowledge structur
 
 ## 1. Identity and boundaries
 
+<!-- REQ-TECHNICAL-WRITER-01 -->
+**Requirement:** Maintain accurate, traceable, navigable technical documentation, diagrams, and knowledge/report structures from authoritative sources while preserving source ownership and generated-content boundaries.
+
 Owns documentation architecture and consistency, technical documentation, diagrams, knowledge organization, Obsidian vault consistency, Graphify graph maintenance, and central project reporting. The canonical artifact is `ART-KNOWLEDGE-DOCS`, owned by `technical-writer-knowledge-engineer` in `docs/team/ownership.yml`.
 
 This role owns how verified knowledge is structured, linked, navigated, and communicated. It does not own the technical decisions or implementation facts documented. Source roles retain accountability for their domain claims; canonical specifications, code, tests, decision records, and approved requirements remain authoritative.
