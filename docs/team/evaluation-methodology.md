@@ -14,13 +14,11 @@ matching.
    - Scenario and review-record structure.
    - Requirement anchor presence and scenario-to-skill traceability.
    - Generated instruction consistency.
-
 2. Scenario evaluation
    - Run representative tasks using the target agent/provider.
    - Capture outputs, tool behavior, and evidence.
    - Score outputs against explicit criteria.
    - Record provider, model, version, configuration, and run number.
-
 3. Human review
    - Review scenario specifications before execution and approve or return them
      for changes.
@@ -73,30 +71,83 @@ Pilot objectives:
 - Identify false positives in automated validation.
 - Refine the rubric before establishing a baseline.
 
-Do not treat pilot results as the repository-wide baseline.
+Do not treat pilot results as the repository-wide baseline. The pilot's 9
+executions and three post-run decisions remain a separate historical sample.
 
-## Stage B — Baseline
+## Stage B — Repository-wide baseline
 
-After the pilot rubric is reviewed:
+The baseline is a new, controlled evaluation cohort; it must not reuse pilot run
+records or count pilot executions toward the baseline sample.
 
-- Evaluate all 17 roles.
-- Use 10 runs per role/scenario.
-- Keep scenario inputs and evaluation settings stable within a comparison.
-- Record the exact provider, model, model version, and relevant settings.
-- Report per-criterion scores, aggregate scores, variation, and failures.
+- Evaluate all 17 canonical roles from `docs/team/expected-roles.yml`.
+- Design one bounded, representative scenario per role.
+- Obtain explicit human pre-run approval for every scenario.
+- Execute 10 independent runs per approved scenario.
+- The initial planned sample is 17 scenarios × 10 runs = 170 executions.
+- If a role needs multiple scenarios, state the expanded sample size and approve
+  each additional scenario before execution.
 
-The initial planned baseline therefore contains 170 executions if each role
-has one approved representative scenario.
+The baseline execution protocol, scenario register, evidence layout,
+comparability rules, readiness gaps, and status counts are maintained in
+`docs/evaluation/baseline/README.md`.
 
-If a role requires multiple scenarios, report the expanded sample size explicitly.
+### Baseline readiness gates
+
+1. Establish a role-specific requirement anchor in every canonical skill and
+   trace each scenario requirement and criterion to that anchor. Do not create
+   requirement IDs that are not grounded in the role's actual responsibilities.
+2. Draft all 17 scenarios with explicit task scope, inputs, exclusions,
+   deliverables, acceptance evidence, criteria, weights, and criticality.
+3. Complete a design review against canonical skills, ownership, activation,
+   responsibility boundaries, and safety constraints.
+4. Obtain individual human approval for every scenario. A passing validator,
+   merged pull request, or approval of another scenario is not sufficient.
+5. Pin the base commit, scenario and skill revisions, prompt hash, provider,
+   model/version, mode, and material settings before the first run.
+6. Validate the evidence layout and baseline run-record validation/reporting
+   tooling before executing the 170-run cohort.
+
+### Independence and comparability
+
+Each run must use a fresh agent conversation and isolated clean worktree or
+equivalent checkout. Do not reuse prior run context, outputs, or corrective
+hints. Keep prompt, scenario, skill revision, base commit, provider/model/version,
+mode, and material settings stable within a scenario's 10-run cohort.
+
+Use one fixed provider/model/version/configuration cohort across roles where
+possible. If this cannot be maintained, separate results into explicit cohorts
+and do not publish a combined headline score as though the runs were equivalent.
+Record the user-visible model label separately from the underlying model
+identifier/version. Record unavailable metadata as unknown; do not infer it.
+
+Preserve the submitted prompt and SHA-256, complete transcript/session export
+where available, generated artifacts, actual Git status, command outputs, tool
+behavior, errors, interruptions, and metadata. Redact secrets and private data.
+Do not manually repair output before preserving original evidence.
+
+### Baseline records and review
+
+Keep baseline evidence and records separate from `evaluations/pilot/`:
+
+- Evidence: `evaluations/baseline/evidence/<scenario-id>/run-<n>/`.
+- Run records: `evaluations/baseline/runs/<scenario-id>-run-<n>.yml`.
+- Post-run reviews: `docs/reviews/scenario-<scenario-id>.yml`.
+
+Use the existing pilot run-record template as a field reference only; baseline
+records must identify their baseline track and approved baseline rubric. Add a
+dedicated baseline record validator and report generator before large-scale
+collection. The existing `scripts/validate-execution.py` validates operational
+execution records under `executions/`; it does not validate baseline evaluation
+run records.
 
 ## Stage C — Regression evaluation
 
 Re-run affected scenarios after material skill changes.
 
 Compare against the approved baseline using the same evaluation method wherever
-possible. If the provider, model, tokenizer, or scoring rubric changes, identify
-the change and avoid presenting the results as a directly equivalent comparison.
+possible. If the provider, model, tokenizer, rubric, scenario, or material
+settings change, identify the change and avoid presenting the results as a
+directly equivalent comparison.
 
 ## Rubric principles
 
@@ -135,7 +186,7 @@ Token counts are monitoring signals, not quality scores.
 Every evaluation report must state:
 
 - Scenarios and skill versions evaluated.
-- Provider/model/configuration.
+- Provider/model/configuration cohort.
 - Run count and date.
 - Rubric version.
 - Per-criterion and aggregate scores, variation, and critical failures.
