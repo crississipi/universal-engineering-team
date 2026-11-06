@@ -37,6 +37,16 @@ Key references:
 - `docs/team/workflow-lifecycle.md` — workflow stages and overall workflow statuses.
 - `docs/team/blockers-replanning-and-state-transitions.md` — blocker and work-item execution rules.
 
+## Skill evaluation
+
+- `docs/team/evaluation-methodology.md` — pilot, baseline, and regression evaluation methodology.
+- `docs/evaluation/pilot/README.md` — completed pilot execution and review record.
+- `docs/evaluation/baseline/README.md` — repository-wide 17-role baseline plan, coverage register, readiness gates, and evidence protocol.
+
+The pilot is complete (9/9 executions; 3/3 scenario reviews recorded). The
+repository-wide baseline is a separate planned cohort of 170 executions and
+has not started. Do not count pilot runs toward baseline totals.
+
 ## How agents should use the library
 
 1. Read the project's applicable instruction file and inspect the repository before proposing changes.
