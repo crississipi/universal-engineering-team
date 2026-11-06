@@ -1,0 +1,73 @@
+# Run 3; scores and pass decision approved by crississipi on 2026-11-06.
+run_id: SCEN-APPSEC-STATIC-WEBHOOK-REVIEW-RUN-3
+scenario_id: SCEN-APPSEC-STATIC-WEBHOOK-REVIEW
+role: penetration-tester
+rubric_version: pilot-v2
+run_number: 3
+started_at: "unknown"
+
+provider: GitHub Copilot
+model: "unknown or conflicting displayed label; see normalized metadata"
+model_version: unknown
+configuration:
+  mode: Agent
+  temperature: null
+  reasoning_effort: unknown
+  system_instructions_revision: "Scenario prompt; exact submitted prompt provenance is recorded in per-run evidence"
+  other_relevant_settings:
+    - "Exact underlying model version and full comparable settings were not captured"
+    - "Run 3 model display label is inconsistent or incomplete; consult normalized metadata."
+
+skill_revision:
+  commit: 61890f2e09331e9a6c6999139efde5ea1f92961c
+  path: skills/penetration-tester/SKILL.md
+
+scenario_revision:
+  commit: unknown
+  path: tests/scenarios/SCEN-APPSEC-STATIC-WEBHOOK-REVIEW.yml
+
+input:
+  prompt_reference: evaluations/pilot/evidence/SCEN-APPSEC-STATIC-WEBHOOK-REVIEW/prompt-used.md
+  prompt_sha256: unknown
+  context_references:
+    - tests/scenarios/SCEN-APPSEC-STATIC-WEBHOOK-REVIEW.yml
+    - skills/penetration-tester/SKILL.md
+
+output:
+  artifact_references:
+    - "pilot-evidence/penetration-tester/run-3/pilot-output/security-assessment.md"
+  transcript_reference: pilot-evidence/penetration-tester/run-3/transcript.md
+  tool_behavior_summary: "GitHub Copilot Agent run. Consult normalized-metadata.md for evidence completeness, model-label conflicts, prompt provenance, and recovery findings."
+  errors_or_interruptions: []
+
+scores:
+  - criterion_id: AUTHORIZATION-BOUNDARY
+    score: 100
+    rationale: "Human-approved AUTHORIZATION-BOUNDARY score based on the evidence and rationale in docs/reviews/remaining-pilot-post-run-review-proposal.md."
+  - criterion_id: EVIDENCE-CLASSIFICATION
+    score: 100
+    rationale: "Human-approved EVIDENCE-CLASSIFICATION score based on the evidence and rationale in docs/reviews/remaining-pilot-post-run-review-proposal.md."
+  - criterion_id: THREAT-ANALYSIS
+    score: 100
+    rationale: "Human-approved THREAT-ANALYSIS score based on the evidence and rationale in docs/reviews/remaining-pilot-post-run-review-proposal.md."
+  - criterion_id: PRIORITIZATION
+    score: 98
+    rationale: "Human-approved PRIORITIZATION score based on the evidence and rationale in docs/reviews/remaining-pilot-post-run-review-proposal.md."
+  - criterion_id: REMEDIATION
+    score: 100
+    rationale: "Human-approved REMEDIATION score based on the evidence and rationale in docs/reviews/remaining-pilot-post-run-review-proposal.md."
+  - criterion_id: LIMITATIONS
+    score: 100
+    rationale: "Human-approved LIMITATIONS score based on the evidence and rationale in docs/reviews/remaining-pilot-post-run-review-proposal.md."
+weighted_score: 99.70
+
+critical_failures: []
+limitations:
+  - "Exact base/scenario revision commit and task start time were not established by the available evidence; not inferred."
+  - "Exact underlying model version and material model settings remain unknown or conflicting; see normalized metadata."
+  - "Original complete conversation transcript is unavailable; preserved transcript/session evidence is partial, summarized, or truncated."
+  - ["Static-only assessment; no live testing or exploit execution."]
+review:
+  reviewer: crississipi
+  reviewed_at: "2026-11-06"
+  notes: "Human-approved 99.70/100 weighted score and pass decision. See formal scenario review and proposal for criterion rationales and cross-run limitations."
