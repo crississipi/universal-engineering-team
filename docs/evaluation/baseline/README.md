@@ -173,20 +173,32 @@ post-run review records distinct.
   decision. Automated validation checks structure and consistency, not model
   quality or approval.
 
-## Known repository readiness gap
+## Requirement-anchor status
 
-At the start of Stage B, only the Backend Developer, Penetration Tester, and
-Delivery Lead skills contained explicit requirement anchors. This branch adds
-one draft role-level anchor to each of the other 14 canonical skills. These
-anchors remain pending review and repository validation; they are not scenario
-approvals. The traceability gate is not complete until the anchors are reviewed,
-merged, and validated against scenario requirements and criterion references.
+The 14 additional role anchors were merged to `main` in PR #33
+(merge commit `39b2f9d725fc0fb805d855669ec8738f4b4ae809`). All 17 canonical
+skills now contain a role-level anchor. Merge status is not human approval of
+the requirement wording or evidence that each anchor is a good baseline
+measurement target.
+
+The anchors require a recorded role-owner/governance review for semantic fit,
+including reassessment of the original Backend Developer, Penetration Tester,
+and Delivery Lead anchors. The repository validator checks structural presence,
+uniqueness, placement, and mapping to this register; it does not approve the
+substantive requirement or scenario quality.
 
 The repository currently has pilot run-record conventions and execution
 lifecycle schemas, but no dedicated baseline run-record validator or baseline
 report generator. Add and test those before large-scale evidence collection;
 do not imply that the execution lifecycle validator already validates these
 baseline evaluation records.
+
+The scenario validator enforces that valid criterion weights are finite,
+positive, and total exactly 100 (within a small floating-point tolerance).
+A separate requirement-traceability validator checks that each canonical
+role skill has exactly one unique, correctly placed anchor and that the same
+ID appears in its baseline register row. These are structural checks, not
+human design approval.
 
 ## Current baseline status
 
