@@ -29,7 +29,7 @@ does not substitute for the required human approval.
 | SCEN-BACKEND-WEBHOOK-VALIDATION | backend-developer | 3 | 3 |
 | SCEN-APPSEC-STATIC-WEBHOOK-REVIEW | penetration-tester | 3 | 3 |
 | SCEN-DELIVERY-CROSSROLE-WEBHOOK | delivery-lead | 3 | 3 |
-| **Total** | | **9** | **3** |
+| **Total** | | **9** | **9** |
 
 For each run:
 
