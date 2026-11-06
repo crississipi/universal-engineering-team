@@ -127,8 +127,10 @@ version, or material settings differ.
 - Scenario specifications: rubric version `pilot-v2`.
   - `SCEN-BACKEND-WEBHOOK-VALIDATION`: approved by `crississipi` on
     2026-11-03T15:10:45Z.
-  - `SCEN-APPSEC-STATIC-WEBHOOK-REVIEW`: draft, awaiting human approval.
-  - `SCEN-DELIVERY-CROSSROLE-WEBHOOK`: draft, awaiting human approval.
+  - `SCEN-APPSEC-STATIC-WEBHOOK-REVIEW`: approved by `crississipi` on
+    2026-11-06T03:55:05Z.
+  - `SCEN-DELIVERY-CROSSROLE-WEBHOOK`: approved by `crississipi` on
+    2026-11-06T03:55:05Z.
 - Model executions: 3 of 9 recorded.
 - Post-run scenario reviews: 1 of 3 formally recorded.
   - `SCEN-BACKEND-WEBHOOK-VALIDATION`: `pass`, reviewed by `crississipi`

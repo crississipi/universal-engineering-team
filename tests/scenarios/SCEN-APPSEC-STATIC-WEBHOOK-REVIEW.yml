@@ -1,6 +1,9 @@
 id: SCEN-APPSEC-STATIC-WEBHOOK-REVIEW
 role: penetration-tester
-status: draft
+status: approved
+approval:
+  approved_by: crississipi
+  approved_at: "2026-11-06T03:55:05Z"
 title: Static security assessment of an order webhook handler
 rubric_version: pilot-v2
 purpose: Evaluate authorization discipline, evidence-based finding classification, practical remediation, and safe security reporting.
