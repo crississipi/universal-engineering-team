@@ -1,0 +1,73 @@
+# Run 1; scores and pass decision approved by crississipi on 2026-11-06.
+run_id: SCEN-DELIVERY-CROSSROLE-WEBHOOK-RUN-1
+scenario_id: SCEN-DELIVERY-CROSSROLE-WEBHOOK
+role: delivery-lead
+rubric_version: pilot-v2
+run_number: 1
+started_at: "unknown"
+
+provider: GitHub Copilot
+model: "unknown or conflicting displayed label; see normalized metadata"
+model_version: unknown
+configuration:
+  mode: Agent
+  temperature: null
+  reasoning_effort: unknown
+  system_instructions_revision: "Scenario prompt; exact submitted prompt provenance is recorded in per-run evidence"
+  other_relevant_settings:
+    - "Exact underlying model version and full comparable settings were not captured"
+    - "Run 1 exact model/version and comparable settings unavailable; consult normalized metadata."
+
+skill_revision:
+  commit: e45d6535cd52ab44d8cfc7dd258317a977376b62
+  path: skills/delivery-lead/SKILL.md
+
+scenario_revision:
+  commit: unknown
+  path: tests/scenarios/SCEN-DELIVERY-CROSSROLE-WEBHOOK.yml
+
+input:
+  prompt_reference: evaluations/pilot/evidence/SCEN-DELIVERY-CROSSROLE-WEBHOOK/prompt-used.md
+  prompt_sha256: unknown
+  context_references:
+    - tests/scenarios/SCEN-DELIVERY-CROSSROLE-WEBHOOK.yml
+    - skills/delivery-lead/SKILL.md
+
+output:
+  artifact_references:
+    - "pilot-evidence/delivery-lead/run-1/pilot-output/delivery-plan.md"
+  transcript_reference: pilot-evidence/delivery-lead/run-1/transcript.md
+  tool_behavior_summary: "GitHub Copilot Agent run. Consult normalized-metadata.md for evidence completeness, model-label conflicts, prompt provenance, and recovery findings."
+  errors_or_interruptions: []
+
+scores:
+  - criterion_id: ROLE-ACTIVATION
+    score: 100
+    rationale: "Human-approved ROLE-ACTIVATION score based on the evidence and rationale in docs/reviews/remaining-pilot-post-run-review-proposal.md."
+  - criterion_id: OWNERSHIP
+    score: 100
+    rationale: "Human-approved OWNERSHIP score based on the evidence and rationale in docs/reviews/remaining-pilot-post-run-review-proposal.md."
+  - criterion_id: DEPENDENCY-SEQUENCING
+    score: 100
+    rationale: "Human-approved DEPENDENCY-SEQUENCING score based on the evidence and rationale in docs/reviews/remaining-pilot-post-run-review-proposal.md."
+  - criterion_id: BLOCKER-DISCIPLINE
+    score: 100
+    rationale: "Human-approved BLOCKER-DISCIPLINE score based on the evidence and rationale in docs/reviews/remaining-pilot-post-run-review-proposal.md."
+  - criterion_id: GOVERNANCE-ACCURACY
+    score: 100
+    rationale: "Human-approved GOVERNANCE-ACCURACY score based on the evidence and rationale in docs/reviews/remaining-pilot-post-run-review-proposal.md."
+  - criterion_id: ACCEPTANCE-AND-EVIDENCE
+    score: 100
+    rationale: "Human-approved ACCEPTANCE-AND-EVIDENCE score based on the evidence and rationale in docs/reviews/remaining-pilot-post-run-review-proposal.md."
+weighted_score: 100.00
+
+critical_failures: []
+limitations:
+  - "Exact base/scenario revision commit and task start time were not established by the available evidence; not inferred."
+  - "Exact underlying model version and material model settings remain unknown or conflicting; see normalized metadata."
+  - "Original complete conversation transcript is unavailable; preserved transcript/session evidence is partial, summarized, or truncated."
+  - ["See normalized metadata for prompt provenance and recovered whitespace-only prompt diff."]
+review:
+  reviewer: crississipi
+  reviewed_at: "2026-11-06"
+  notes: "Human-approved 100.00/100 weighted score and pass decision. See formal scenario review and proposal for criterion rationales and cross-run limitations."
