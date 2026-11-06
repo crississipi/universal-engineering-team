@@ -36,6 +36,9 @@ input:
 output:
   artifact_references:
     - "pilot-evidence/delivery-lead/run-2/pilot-output/delivery-plan.md"
+    - "pilot-evidence/delivery-lead/run-2/normalized-metadata.md"
+    - "pilot-evidence/delivery-lead/run-2/metadata.md"
+    - "pilot-evidence/delivery-lead/run-2/git-status.txt"
   transcript_reference: pilot-evidence/delivery-lead/run-2/transcript.md
   tool_behavior_summary: "GitHub Copilot Agent run. Consult normalized-metadata.md for evidence completeness, model-label conflicts, prompt provenance, and recovery findings."
   errors_or_interruptions: []
@@ -66,7 +69,7 @@ limitations:
   - "Exact base/scenario revision commit and task start time were not established by the available evidence; not inferred."
   - "Exact underlying model version and material model settings remain unknown or conflicting; see normalized metadata."
   - "Original complete conversation transcript is unavailable; preserved transcript/session evidence is partial, summarized, or truncated."
-  - ["See normalized metadata for prompt provenance and recovered whitespace-only prompt diff."]
+  - "See normalized metadata for prompt provenance and recovered whitespace-only prompt diff."
 review:
   reviewer: crississipi
   reviewed_at: "2026-11-06"
