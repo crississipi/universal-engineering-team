@@ -54,6 +54,27 @@ Copy `docs/templates/pilot-run-record.template.yml` to
 Use a separate record for each of the nine runs. Do not create placeholder run
 records to make the count appear complete.
 
+## Remaining pilot execution prompts
+
+The two remaining approved scenarios have exact reusable run prompts committed
+at:
+
+- `evaluations/pilot/evidence/SCEN-APPSEC-STATIC-WEBHOOK-REVIEW/prompt-used.md`
+- `evaluations/pilot/evidence/SCEN-DELIVERY-CROSSROLE-WEBHOOK/prompt-used.md`
+
+For each scenario, start three independent fresh GitHub Copilot Agent
+conversations. Submit the corresponding prompt unchanged. Keep provider, model,
+mode, and material settings stable across the three runs for that scenario;
+record actual values and preserve unknowns rather than guessing. Do not reuse
+prior run outputs or context. Preserve the complete conversation export,
+`pilot-output/` artifacts, and actual `git status --short` output for each
+run before making any manual changes.
+
+The Penetration Tester prompt is strictly static/documentation-only. The
+Delivery Lead prompt is strictly planning/orchestration-only. Do not create run
+records until the corresponding executions have actually occurred and their
+evidence is available.
+
 ## Backend Developer pilot evidence
 
 Three GitHub Copilot Agent-mode runs were reported for the approved Backend
