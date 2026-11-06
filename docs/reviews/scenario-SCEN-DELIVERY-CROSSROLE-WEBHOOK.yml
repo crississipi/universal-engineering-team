@@ -1,0 +1,63 @@
+scenario_id: SCEN-DELIVERY-CROSSROLE-WEBHOOK
+decision: pass
+reviewer: crississipi
+reviewed_at: "2026-11-06"
+runs: 3
+rubric_version: pilot-v2
+weighted_scores:
+  run_1: 100.00
+  run_2: 99.70
+  run_3: 100.00
+  mean: 99.90
+  range: 0.30
+criterion_scores:
+  - criterion_id: ROLE-ACTIVATION
+    weight: 20
+    run_1: 100
+    run_2: 100
+    run_3: 100
+  - criterion_id: OWNERSHIP
+    weight: 15
+    run_1: 100
+    run_2: 100
+    run_3: 100
+  - criterion_id: DEPENDENCY-SEQUENCING
+    weight: 20
+    run_1: 100
+    run_2: 100
+    run_3: 100
+  - criterion_id: BLOCKER-DISCIPLINE
+    weight: 15
+    run_1: 100
+    run_2: 100
+    run_3: 100
+  - criterion_id: GOVERNANCE-ACCURACY
+    weight: 15
+    run_1: 100
+    run_2: 98
+    run_3: 100
+  - criterion_id: ACCEPTANCE-AND-EVIDENCE
+    weight: 15
+    run_1: 100
+    run_2: 100
+    run_3: 100
+critical_failures: []
+findings:
+  - "All three plans cover the 17 canonical role IDs, use existing artifact ownership, and provide dependency-aware workstream sequencing."
+  - "All three plans distinguish planning from actual implementation, verification, formal handoff, approval, release, and deployment."
+  - "The plans identify missing provider/product/target-system inputs and scope their blocking effects to dependent work."
+  - "No critical failure was identified in the reviewed plan outputs."
+limitations:
+  - "Full original Copilot conversation exports are unavailable; preserved transcript/session evidence is partial or truncated."
+  - "Runs 1 and 2 report modifications to the canonical scenario prompt outside pilot-output. Recovered diffs show whitespace-only changes: removal of the final line terminator in Run 1 and one extra blank line at EOF in Run 2. The cause/timing cannot be established for all changes."
+  - "Run 3's exact submitted prompt remains unverified. A candidate was recovered from the retained worktree but is not established as the exact prompt submitted."
+  - "Provider/model/configuration comparability is not established. The three runs should not be represented as a controlled same-model/configuration experiment."
+evidence:
+  proposal: docs/reviews/remaining-pilot-post-run-review-proposal.md
+  scenario: tests/scenarios/SCEN-DELIVERY-CROSSROLE-WEBHOOK.yml
+  skill: skills/delivery-lead/SKILL.md
+  run_records:
+    - evaluations/pilot/runs/SCEN-DELIVERY-CROSSROLE-WEBHOOK-run-1.yml
+    - evaluations/pilot/runs/SCEN-DELIVERY-CROSSROLE-WEBHOOK-run-2.yml
+    - evaluations/pilot/runs/SCEN-DELIVERY-CROSSROLE-WEBHOOK-run-3.yml
+  prompt: evaluations/pilot/evidence/SCEN-DELIVERY-CROSSROLE-WEBHOOK/prompt-used.md
