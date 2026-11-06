@@ -119,3 +119,17 @@ After the human approvals are recorded and scenario validation passes:
 - Create the post-run review only after the three actual runs for that scenario have been reviewed.
 
 At the time of this review, no pilot model executions, scores, or post-run decisions are claimed.
+
+## Human approval status update
+
+After reviewing the complete prompts, criteria, and corresponding role skills,
+the human reviewer approved the remaining two scenarios on 2026-11-06:
+
+| Scenario | Reviewer | Approved at (UTC) |
+|---|---|---|
+| `SCEN-APPSEC-STATIC-WEBHOOK-REVIEW` | `crississipi` | 2026-11-06T03:55:05Z |
+| `SCEN-DELIVERY-CROSSROLE-WEBHOOK` | `crississipi` | 2026-11-06T03:55:05Z |
+
+The scenario YAML files contain the corresponding approval metadata. This
+approval authorizes preparation and execution under the existing pilot
+methodology; it does not claim that any model runs have occurred.
