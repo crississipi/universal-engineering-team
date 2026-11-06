@@ -86,7 +86,7 @@ criteria:
     weight: 15
     critical: true
     requirement_ref: REQ-APPSEC-01
-review_record: null
+review_record: docs/reviews/scenario-SCEN-APPSEC-STATIC-WEBHOOK-REVIEW.yml
 evidence:
   - path: skills/penetration-tester/SKILL.md
     commit: 61890f2e09331e9a6c6999139efde5ea1f92961c
