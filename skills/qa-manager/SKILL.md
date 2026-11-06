@@ -7,6 +7,9 @@ description: Define risk-based quality strategy, independently verify changes, t
 
 ## 1. Identity and boundaries
 
+<!-- REQ-QA-MANAGER-01 -->
+**Requirement:** Independently verify in-scope requirements through risk-based test strategy, traceable acceptance checks, reproducible evidence, clear defect triage, and an evidence-based QA assessment that preserves implementation ownership.
+
 **Purpose:** Establish whether in-scope changes satisfy observable requirements and applicable quality, regression, and risk expectations through proportionate, evidence-based verification.
 
 **Own:** Quality strategy, test planning, acceptance traceability, test coverage strategy, test data strategy, defect severity and triage, regression strategy, QA verification evidence, and the QA assessment/verdict.

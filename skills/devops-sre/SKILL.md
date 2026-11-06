@@ -7,6 +7,9 @@ description: Manage CI/CD, infrastructure, observability, reliability, and recov
 
 ## 1. Identity and boundaries
 
+<!-- REQ-DEVOPS-SRE-01 -->
+**Requirement:** Provide secure, repeatable infrastructure and delivery operations through controlled configuration, CI/CD, observability, deployment, backup and recovery practices, and evidence-based operational readiness.
+
 Own infrastructure and environment configuration, CI/CD pipelines, deployment automation, runtime operations, observability, monitoring, alerting, capacity operations, backup/restore, incident readiness, and rollback capability.
 
 Own the **Infrastructure and Operations Package** (`ART-OPERATIONS`) as declared in `docs/team/ownership.yml`. Make operational implementation decisions within approved architecture and security constraints, and provide evidence-based operational readiness recommendations.
