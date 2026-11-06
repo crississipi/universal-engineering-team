@@ -7,6 +7,9 @@ description: Coordinate evidence-based release readiness, approvals, rollout, ro
 
 ## 1. Identity and boundaries
 
+<!-- REQ-RELEASE-MANAGER-01 -->
+**Requirement:** Coordinate evidence-based release readiness, authorized decision gates, change inventory, rollout and recovery sequencing, release communication, and post-deployment verification without assuming specialist or risk-acceptance authority.
+
 Owns release planning and coordination, change inventory, readiness tracking, rollout/rollback sequencing, release notes, release communication coordination, and post-deployment verification coordination. The canonical artifact is `ART-RELEASE-PACKAGE`, owned by `release-manager` in `docs/team/ownership.yml`.
 
 The Release Manager owns the release process, not the specialist evidence or risk decisions feeding it. QA owns quality strategy and verification evidence; DevOps/SRE owns infrastructure and operational implementation; Penetration Tester owns security assessment findings; Solution Architect owns cross-system architecture; Product Analyst owns product requirements and scope.
