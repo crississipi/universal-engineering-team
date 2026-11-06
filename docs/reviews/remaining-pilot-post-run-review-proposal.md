@@ -1,6 +1,6 @@
 # Proposed post-run review: Penetration Tester and Delivery Lead pilots
 
-> **Status: proposed — awaiting explicit human approval.** This document is an evidence-based scoring proposal, not a formal post-run decision. Do not update scenario `review_record` fields or formal run-record scores until the reviewer approves the scores and decisions.
+> **Status: approved by the human reviewer on 2026-11-06.** The proposed criterion scores and pass decisions were explicitly approved. Formal review records and per-run records are maintained at the paths listed in the final section below.
 
 ## Review scope and method
 
@@ -125,14 +125,13 @@
 ### Comparability
 Provider/model/version/configuration fields are incomplete or inconsistent. Therefore, the scores can be compared as observed output quality under the same rubric, but the three runs must not be presented as a controlled same-model/configuration experiment. The sample remains a pilot of three runs per scenario, not the 17-role baseline.
 
-## Proposed decisions and approval boundary
+## Approved decisions and formal records
 
-The proposed decision is `pass` for both scenarios, based on the criterion scores above and the absence of critical failures in the reviewed outputs.
+The human reviewer explicitly approved the criterion scores and `pass` decisions for both scenarios on 2026-11-06. The decisions are now formalized in:
 
-**No formal review decision has been recorded by this proposal.** The following remain unchanged until explicit human approval:
-- Scenario `review_record` fields.
-- Per-run formal score fields and reviewer/date fields.
-- Formal scenario review YAML records.
-- Pilot execution counts and final review status in the pilot guide.
+- `docs/reviews/scenario-SCEN-APPSEC-STATIC-WEBHOOK-REVIEW.yml`
+- `docs/reviews/scenario-SCEN-DELIVERY-CROSSROLE-WEBHOOK.yml`
 
-After approval, create the two formal review records, update the six corresponding run records, set each scenario's `review_record`, and update the pilot guide. Do not infer approval from this proposal's commit or PR merge.
+The six run records under `evaluations/pilot/runs/` contain the approved criterion scores, weighted scores, reviewer, and review date. Both scenario YAML files point to their formal review records through `review_record`. The pilot guide records 9 of 9 executions and 3 of 3 formal scenario reviews.
+
+The evidence limitations described above remain part of the formal evaluation record. Approval does not convert incomplete transcripts, unknown model metadata, or uncertain prompt provenance into verified evidence.
