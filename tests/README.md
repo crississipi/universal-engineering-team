@@ -19,13 +19,14 @@ python scripts/validate-manifest.py
 python scripts/validate-artifacts.py
 python scripts/validate-handoffs.py
 python scripts/validate-scenarios.py
+python scripts/validate-baseline.py
 python scripts/build-agents-section.py --check
 ```
 
 The unit tests cover deterministic validator behavior, including manifest
 declarations, handoff contracts, malformed skill frontmatter, blocker
 lifecycle synchronization, integrated execution-validation orchestration,
-resolver alignment with canonical role-activation triggers, generated consolidated role-skill synchronization, and scenario approval/post-run review lifecycle.
+resolver alignment with canonical role-activation triggers, generated consolidated role-skill synchronization, scenario approval/post-run review lifecycle, and baseline run-record validation.
 The same unit-test command runs in GitHub Actions.
 
 The execution schema check meta-validates all ten record schemas and their
@@ -56,6 +57,7 @@ python -m unittest discover -s tests -p "test_blocker_status_governance.py" -v
 | `validate-artifacts.py` | Artifact package ownership |
 | `validate-handoffs.py` | Formal handoff contract governance |
 | `validate-scenarios.py` | Scenario and review-record structure |
+| `validate-baseline.py` | Baseline run-record schema, scenario/rubric references, evidence paths and prompt hashes, duplicate/missing run numbers, and cohort consistency |
 | `validate-execution.py` | Integrated execution parsing, JSON Schema, cross-record, and lifecycle validation; `--check-schemas` validates schema documents without an execution fixture |
 | `build-agents-section.py --check` | Generated `AGENTS.md` section synchronization |
 | `build-all-role-skills.py --check` | Generated `ALL-ROLE-SKILLS.md` synchronization with all canonical role skills |
