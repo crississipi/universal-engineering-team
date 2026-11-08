@@ -11,7 +11,7 @@
     "role": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
     "rubric_version": { "$ref": "#/$defs/nonEmptyString" },
     "run_number": { "type": "integer", "minimum": 1, "maximum": 10 },
-    "started_at": { "type": "string", "format": "date-time" },
+    "started_at": { "type": "string", "format": "date-time", "pattern": "Z$" },
     "execution_environment": {
       "type": "object",
       "properties": {
@@ -115,7 +115,7 @@
       "type": "object",
       "properties": {
         "reviewer": { "type": ["string", "null"] },
-        "reviewed_at": { "type": ["string", "null"], "format": "date-time" },
+        "reviewed_at": { "type": ["string", "null"], "format": "date-time", "pattern": "Z$" },
         "decision": { "type": ["string", "null"], "enum": ["pass", "needs_changes", "blocked", null] },
         "notes": { "type": ["string", "null"] }
       },
