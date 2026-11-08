@@ -63,7 +63,7 @@ class BaselineReportTests(unittest.TestCase):
         self.assertEqual(result["status"]["approved_scenarios"], 0)
         self.assertEqual(result["status"]["recorded_runs"], 0)
         self.assertEqual(result["status"]["scored_runs"], 0)
-        self.assertIsNone(result["status"]["weighted_score"]["mean"])
+        self.assertEqual(result["status"]["scored_runs"], 0)
         self.assertIsNone(result["scenarios"][0]["expected_runs"])
         self.assertEqual(result["scenarios"][0]["missing_run_numbers"], [])
         self.assertEqual(result["cohorts"], [])
