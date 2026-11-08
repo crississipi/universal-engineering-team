@@ -22,8 +22,9 @@ the pilot workflow is usable; they do not establish baseline results.
 
 Every role below must have one baseline scenario with a task that exercises its
 actual ownership boundary. The draft scenario files now exist for all 17
-roles. Their IDs and content remain proposals until independent design review
-and explicit human pre-run approval are completed.
+roles. The user waived independent human design review for this stage; the
+scenario IDs and content remain unapproved until explicit human pre-run
+approval is recorded for each scenario.
 
 | Canonical role | Pilot coverage | Baseline scenario ID (proposed) | Role requirement anchor | Design state |
 |---|---|---|---|---|
@@ -43,7 +44,7 @@ and explicit human pre-run approval are completed.
 | accessibility-specialist | None | SCEN-BASELINE-ACCESSIBILITY-SPECIALIST | REQ-ACCESSIBILITY-SPECIALIST-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
 | technical-writer-knowledge-engineer | None | SCEN-BASELINE-TECHNICAL-WRITER-KNOWLEDGE-ENGINEER | REQ-TECHNICAL-WRITER-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
 | release-manager | None | SCEN-BASELINE-RELEASE-MANAGER | REQ-RELEASE-MANAGER-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
-| delivery-lead | Pilot only | SCEN-BASELINE-DELIVERY-LEAD | REQ-DELIVERY-01 (exists; reassess baseline fit) | Drafted — anchor semantic refinement recommended |
+| delivery-lead | Pilot only | SCEN-BASELINE-DELIVERY-LEAD | REQ-DELIVERY-01 (refined; semantic owner review still pending) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
 
 Role names and order must remain aligned with `docs/team/expected-roles.yml`.
 The scenario IDs and requirement IDs above are planning proposals, not
