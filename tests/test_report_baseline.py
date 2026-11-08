@@ -92,6 +92,14 @@ class BaselineReportTests(unittest.TestCase):
         ])
         self.assertIsNone(reporter.weighted_score(run, item))
 
+    def test_weighted_score_rejects_non_finite_score(self):
+        item = scenario()
+        run = record(scores=[
+            {"criterion_id": "C1", "score": float("nan"), "rationale": "Evidence"},
+            {"criterion_id": "C2", "score": 100, "rationale": "Evidence"},
+        ])
+        self.assertIsNone(reporter.weighted_score(run, item))
+
     def test_approved_scenario_reports_missing_run_numbers(self):
         result = reporter.build_report({
             "SCEN-BASELINE-TEST": scenario(status="approved")
