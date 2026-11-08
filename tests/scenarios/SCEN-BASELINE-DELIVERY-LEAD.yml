@@ -1,0 +1,125 @@
+id: SCEN-BASELINE-DELIVERY-LEAD
+role: delivery-lead
+artifact_package: ART-DELIVERY-RECORD
+artifact_owner: delivery-lead
+status: draft
+title: "Coordinate a bounded webhook capability delivery plan"
+rubric_version: baseline-v1
+purpose: "Evaluate role activation, work decomposition, dependency sequencing, blocker discipline, and accountable delivery closeout."
+task_prompt: |
+  You are performing a controlled Stage B baseline task as the delivery-lead role.
+  SCENARIO ARTIFACT OWNERSHIP:
+  - Canonical artifact package: ART-DELIVERY-RECORD.
+  - Accountable package owner and primary producer: delivery-lead.
+  - The package is currently proposed, not approved. This scenario does not create a formal handoff or authorize another role to accept the package.
+
+
+  Read skills/delivery-lead/SKILL.md first. Use docs/team/expected-roles.yml, docs/team/ownership.yml, and relevant governance documents as authoritative sources. Artifact package entries are currently proposed, and docs/team/ownership.yml declares no formal handoff contracts.
+
+  SHARED FICTIONAL EXERCISE FACTS:
+  - MerchantCloud is a fictional commerce provider sending order.created webhooks to fictional OrderDesk.
+  - Delivery is at-least-once; retries reuse event_id. Retry schedule and exact provider retry policy are unknown.
+  - event_id uniquely identifies a delivered event; order_id identifies the business order.
+  - X-Provider-Signature has form sha256=<64 lowercase hexadecimal characters> and carries HMAC-SHA256 over the exact raw HTTP request-body bytes with a shared secret. Secret value and rotation procedure are unknown.
+  - Example event:
+    {
+      "event_id": "evt_01J9M7",
+      "event_type": "order.created",
+      "occurred_at": "2026-10-15T10:30:00Z",
+      "data": {"order_id": "ord_1042", "customer": {"email": "alex@example.test"}, "currency": "PHP", "items": [{"sku": "SKU-RED-01", "quantity": 2, "unit_price": "125.00"}]}
+    }
+  - OrderDesk has an existing backend service and relational database, but engine/version, current schema, hosting, queue, framework, traffic, and deployment topology are unknown.
+  - Support operators need recent processing outcomes. Search filters beyond order_id, retention, permissions, and customer-visible behavior are undecided.
+  - No provider credentials, live provider, production environment, network-test authorization, or deployment permission is available.
+
+  RULES:
+  - Create only deliverables/delivery-lead/. Do not modify canonical skills, governance sources, manifests, scenarios, workflows, or existing application sources.
+  - No network access, real services, secrets, production actions, or deployment.
+  - Do not invent provider guarantees, platforms, service targets, approvals, lifecycle states, or stakeholder decisions. Mark assumptions and unknowns.
+  - Do not claim execution, test results, review, approval, handoff acceptance, or release unless actually evidenced.
+  - Include README.md listing deliverables, assumptions/unknowns, and exact verification performed or not performed.
+  - Keep the task achievable in one agent session. Preserve the role's ownership boundaries.
+
+  SCORING:
+  - Score each criterion from 0–100 using inspectable evidence, not verbosity/style.
+  - 0 = absent or materially contrary; 1–49 = materially incomplete; 50–74 = partial with significant gaps; 75–89 = core requirement met with minor gaps; 90–100 = complete, precise, and evidence-backed.
+  - Record critical failures separately. Critical failures include unauthorized activity, exposure of secrets/unnecessary PII, invented approval/test/release claims, materially false guarantees, or overriding another role's decision authority.
+
+  Coordinate the proposed capability: receive order.created events, validate signatures, persist outcomes without duplicate processing, and provide a support-facing view. Treat the shared facts and unknowns in this prompt as the full evidence set.
+
+  Create deliverables/delivery-lead/delivery-plan.md and activation-matrix.md.
+
+  1. Separate confirmed facts, assumptions, open decisions, and scope exclusions.
+  2. Classify all 17 canonical role IDs from docs/team/expected-roles.yml as required, conditional, optional, or not_activated. Give a specific rationale for every classification. For conditional roles identify trigger and whether currently met. Do not activate all roles by default.
+  3. Break work into bounded workstreams. Map each to an existing artifact ID and its single accountable owner from docs/team/ownership.yml. Artifact package records are proposed, so state that this is planning against the ownership model, not evidence that packages have been approved. Do not invent artifact IDs or co-owners.
+  4. Sequence product requirements, architecture, API contract, data model, integration, backend, UX/frontend, QA, security, accessibility, performance, operations, documentation, release, and delivery coordination as justified. Identify safe parallel work and exact missing inputs that block only dependent work.
+  5. Provide a delivery ledger with workstream, artifact ID, owner, activated roles, dependency, proposed next state using only canonical lifecycle terms, evidence expectation, blocker/unknown, and next action.
+  6. Identify release gates and escalation owners. Explicitly state that no formal handoff contract exists, production deployment is out of scope, and no implementation/verification/release has occurred.
+  7. Do not assume every canonical role must activate. Preserve specialist authority and do not create status records, handoff contracts, or approvals.
+
+  ACTIVATION DECISION GUARDRAILS FOR THIS EXERCISE:
+  - Data Engineer is conditional, not automatically active: activate only if Product/Architecture confirms that a separate pipeline, transformation, ingestion, lineage, replay, or backfill deliverable is needed beyond an application query/materialized view.
+  - Performance Engineer is conditional: activate only if a performance/capacity target must be established or verified, or a material high-volume/latency/resource risk is evidenced. Do not invent targets from the sample event.
+  - Release Manager remains not_activated because no release, deployment, publication, or controlled delivery event is authorized in this exercise.
+  - DevOps/SRE remains conditional/not_activated unless runtime, infrastructure, deployment, monitoring, recovery, or operational-readiness work is actually in scope.
+  - Accessibility Specialist is conditional because a support-facing UI is in scope; activate if the project requires specialist assessment or the UI/design interaction change triggers the canonical rule. Accessibility obligations still apply regardless.
+  - Penetration Tester is conditional because webhook authentication and trust boundaries exist; no active security testing is permitted without explicit scope and authorization.
+  - QA Manager is required for cross-component acceptance and regression evidence; Technical Writer is required only for explicitly scoped documentation/knowledge deliverables. Preserve all other triggers from docs/team/role-activation-rules.md.
+
+required_requirements:
+  - REQ-DELIVERY-01
+criteria:
+  - id: ROLE-ACTIVATION
+    description: "Classifies all 17 roles using allowed activation values with task-specific reasons and explicit conditional triggers."
+    weight: 20
+    critical: true
+    requirement_ref: REQ-DELIVERY-01
+    score_anchors:
+      absent: "No inspectable deliverable evidence demonstrates ROLE-ACTIVATION: Classifies all 17 roles using allowed activation values with task-specific reasons and explicit conditional triggers The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The artifact provides some evidence for ROLE-ACTIVATION, but only partially demonstrates the stated outcome: Classifies all 17 roles using allowed activation values with task-specific reasons and explicit conditional triggers One or more material elements are missing, ambiguous, inconsistent across deliverables, or unsupported by inspectable examples."
+      core: "The deliverable demonstrates the core ROLE-ACTIVATION outcome: Classifies all 17 roles using allowed activation values with task-specific reasons and explicit conditional triggers The corresponding artifact sections, examples, decisions, or behaviors are inspectable and substantially consistent; remaining gaps are limited and do not defeat the criterion."
+      complete: "The deliverable fully demonstrates ROLE-ACTIVATION: Classifies all 17 roles using allowed activation values with task-specific reasons and explicit conditional triggers Each material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
+  - id: OWNERSHIP-AND-WORKSTREAMS
+    description: "Maps bounded workstreams to existing artifact IDs and single canonical owners without inventing packages or handoffs."
+    weight: 20
+    critical: true
+    requirement_ref: REQ-DELIVERY-01
+    score_anchors:
+      absent: "No inspectable deliverable evidence demonstrates OWNERSHIP-AND-WORKSTREAMS: Maps bounded workstreams to existing artifact IDs and single canonical owners without inventing packages or handoffs The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The artifact provides some evidence for OWNERSHIP-AND-WORKSTREAMS, but only partially demonstrates the stated outcome: Maps bounded workstreams to existing artifact IDs and single canonical owners without inventing packages or handoffs One or more material elements are missing, ambiguous, inconsistent across deliverables, or unsupported by inspectable examples."
+      core: "The deliverable demonstrates the core OWNERSHIP-AND-WORKSTREAMS outcome: Maps bounded workstreams to existing artifact IDs and single canonical owners without inventing packages or handoffs The corresponding artifact sections, examples, decisions, or behaviors are inspectable and substantially consistent; remaining gaps are limited and do not defeat the criterion."
+      complete: "The deliverable fully demonstrates OWNERSHIP-AND-WORKSTREAMS: Maps bounded workstreams to existing artifact IDs and single canonical owners without inventing packages or handoffs Each material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
+  - id: DEPENDENCY-SEQUENCING
+    description: "Sequences genuine prerequisites, allows safe parallel work, and scopes missing inputs to dependent tasks."
+    weight: 20
+    critical: true
+    requirement_ref: REQ-DELIVERY-01
+    score_anchors:
+      absent: "No inspectable deliverable evidence demonstrates DEPENDENCY-SEQUENCING: Sequences genuine prerequisites, allows safe parallel work, and scopes missing inputs to dependent tasks The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The artifact provides some evidence for DEPENDENCY-SEQUENCING, but only partially demonstrates the stated outcome: Sequences genuine prerequisites, allows safe parallel work, and scopes missing inputs to dependent tasks One or more material elements are missing, ambiguous, inconsistent across deliverables, or unsupported by inspectable examples."
+      core: "The deliverable demonstrates the core DEPENDENCY-SEQUENCING outcome: Sequences genuine prerequisites, allows safe parallel work, and scopes missing inputs to dependent tasks The corresponding artifact sections, examples, decisions, or behaviors are inspectable and substantially consistent; remaining gaps are limited and do not defeat the criterion."
+      complete: "The deliverable fully demonstrates DEPENDENCY-SEQUENCING: Sequences genuine prerequisites, allows safe parallel work, and scopes missing inputs to dependent tasks Each material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
+  - id: BLOCKER-AND-STATE-DISCIPLINE
+    description: "Separates blockers from unknowns, uses canonical states only, and records actionable owner/next action."
+    weight: 20
+    critical: true
+    requirement_ref: REQ-DELIVERY-01
+    score_anchors:
+      absent: "No inspectable deliverable evidence demonstrates BLOCKER-AND-STATE-DISCIPLINE: Separates blockers from unknowns, uses canonical states only, and records actionable owner/next action The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The artifact provides some evidence for BLOCKER-AND-STATE-DISCIPLINE, but only partially demonstrates the stated outcome: Separates blockers from unknowns, uses canonical states only, and records actionable owner/next action One or more material elements are missing, ambiguous, inconsistent across deliverables, or unsupported by inspectable examples."
+      core: "The deliverable demonstrates the core BLOCKER-AND-STATE-DISCIPLINE outcome: Separates blockers from unknowns, uses canonical states only, and records actionable owner/next action The corresponding artifact sections, examples, decisions, or behaviors are inspectable and substantially consistent; remaining gaps are limited and do not defeat the criterion."
+      complete: "The deliverable fully demonstrates BLOCKER-AND-STATE-DISCIPLINE: Separates blockers from unknowns, uses canonical states only, and records actionable owner/next action Each material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
+  - id: GOVERNANCE-AND-HONESTY
+    description: "Preserves specialist/decision authority and distinguishes plan from implementation, QA, approval, formal handoff, and release evidence."
+    weight: 20
+    critical: true
+    requirement_ref: REQ-DELIVERY-01
+    score_anchors:
+      absent: "No inspectable deliverable evidence demonstrates GOVERNANCE-AND-HONESTY: Preserves specialist/decision authority and distinguishes plan from implementation, QA, approval, formal handoff, and release evidence The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The artifact provides some evidence for GOVERNANCE-AND-HONESTY, but only partially demonstrates the stated outcome: Preserves specialist/decision authority and distinguishes plan from implementation, QA, approval, formal handoff, and release evidence One or more material elements are missing, ambiguous, inconsistent across deliverables, or unsupported by inspectable examples."
+      core: "The deliverable demonstrates the core GOVERNANCE-AND-HONESTY outcome: Preserves specialist/decision authority and distinguishes plan from implementation, QA, approval, formal handoff, and release evidence The corresponding artifact sections, examples, decisions, or behaviors are inspectable and substantially consistent; remaining gaps are limited and do not defeat the criterion."
+      complete: "The deliverable fully demonstrates GOVERNANCE-AND-HONESTY: Preserves specialist/decision authority and distinguishes plan from implementation, QA, approval, formal handoff, and release evidence Each material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
+review_record: null
+evidence:
+  - path: skills/delivery-lead/SKILL.md
+    commit: f6d850e4cc45b2ba4aca3cd310c718342b4d9cae

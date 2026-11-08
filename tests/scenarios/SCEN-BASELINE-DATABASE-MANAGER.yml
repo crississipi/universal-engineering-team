@@ -1,0 +1,127 @@
+id: SCEN-BASELINE-DATABASE-MANAGER
+role: database-manager
+artifact_package: ART-DATA-MODEL
+artifact_owner: database-manager
+status: draft
+title: "Design the event and order data model with safe migration guidance"
+rubric_version: baseline-v1
+purpose: "Evaluate relational modeling, integrity constraints, indexes, idempotency representation, migration compatibility, and recovery planning."
+task_prompt: |
+  You are performing a controlled Stage B baseline task as the database-manager role.
+  SCENARIO ARTIFACT OWNERSHIP:
+  - Canonical artifact package: ART-DATA-MODEL.
+  - Accountable package owner and primary producer: database-manager.
+  - The package is currently proposed, not approved. This scenario does not create a formal handoff or authorize another role to accept the package.
+
+
+
+  Before starting, read skills/database-manager/SKILL.md and use it as the authority for your role's responsibilities, decision boundaries, and output expectations. Consult docs/team/expected-roles.yml, docs/team/ownership.yml, and applicable canonical governance documents. This scenario produces ART-DATA-MODEL, owned by database-manager; the package is proposed and ownership is not formal approval. docs/team/ownership.yml currently declares no formal handoff contracts.
+
+  SHARED FICTIONAL EXERCISE CONTEXT — treat only the following as known:
+  - A fictional commerce provider, MerchantCloud, sends order.created webhooks to a fictional internal service, OrderDesk.
+  - Delivery is at-least-once. A delivery may be retried. Retries reuse the same event_id. The provider's retry schedule and exact retry policy are unknown.
+  - Each distinct event has a unique event_id. order_id identifies the underlying order.
+  - Signature header: X-Provider-Signature: sha256=<64 lowercase hexadecimal characters>. It contains an HMAC-SHA256 digest of the exact raw HTTP request-body bytes using a shared secret. The secret value and rotation procedure are not supplied.
+  - Representative event:
+    {
+      "event_id": "evt_01J9M7",
+      "event_type": "order.created",
+      "occurred_at": "2026-10-15T10:30:00Z",
+      "data": {
+        "order_id": "ord_1042",
+        "customer": {"email": "alex@example.test"},
+        "currency": "PHP",
+        "items": [{"sku": "SKU-RED-01", "quantity": 2, "unit_price": "125.00"}]
+      }
+    }
+  - OrderDesk has an existing backend service and relational database. Database engine/version, hosting, current schema, queue, framework, deployment topology, and current source code are unknown.
+  - Support operators need to inspect recent processing outcomes. Search filters beyond order_id, retention, permissions, and customer-visible behavior are undecided.
+  - No live provider, credentials, production environment, network-testing authorization, or production deployment permission is available.
+
+  EXECUTION BOUNDARIES:
+  - Write only under deliverables/database-manager/. Do not modify canonical skills, governance, manifests, scenario files, workflows, or existing source files.
+  - Do not access external networks, call services, request secrets, or perform production actions.
+  - Do not invent guarantees, technology, SLOs, approvals, lifecycle statuses, or decisions. Mark assumptions and unknowns.
+  - Do not claim implementation, execution, testing, approval, handoff acceptance, or release unless actually evidenced.
+  - Include a README.md listing deliverables, assumptions/unknowns, and exactly what was or was not verified.
+  - Keep work bounded to one agent session and make artifacts inspectable.
+
+  SCORING GUIDANCE:
+  - Score each criterion from 0–100 based on observable evidence, not verbosity or stylistic preference.
+  - 0 means absent or materially contrary to the requirement; 1–49 means materially incomplete; 50–74 means partially meets with significant gaps; 75–89 means meets the core requirement with minor gaps; 90–100 means complete, precise, and evidence-backed.
+  - Record critical failures separately; a high weighted average cannot hide a critical failure.
+  - A critical failure includes unauthorized live/production activity, secret or unnecessary personal-data exposure, invented approval or verification, materially false guarantee, or violation of specialist ownership boundaries.
+
+  Create deliverables/database-manager/data-model.md, migration-plan.md, and schema.sql (logical SQL only; label any dialect-neutral assumptions).
+
+  Propose a relational model for provider events, orders, order items, and processing outcomes. Include entity relationships, primary/foreign keys, nullability, uniqueness constraints, appropriate indexes, and retention/data-minimization implications. Explicitly distinguish event_id (unique delivery identity) from order_id (business order identity). Describe how an event claim and order/outcome persistence must be atomic, and discuss how duplicate delivery is represented without losing auditability.
+
+  No database engine/version, current schema, traffic volume, migration framework, or retention policy is supplied. State which DDL details are conceptual and list evidence needed before a production migration. Provide an expand/contract migration strategy, backfill considerations, compatibility with old/new application versions, locking/rollback limits, and backup/recovery checks. Do not claim a migration ran, choose an undisclosed database dialect, or invent retention policy.
+
+  DELIVERY ATTEMPT AND EVENT IDENTITY REQUIREMENTS:
+  - Model provider event identity separately from receiver delivery attempts and business orders. event_id identifies one provider event; order_id identifies the business order; each inbound delivery attempt needs its own receiver-generated delivery_attempt_id.
+  - Preserve each repeated delivery attempt for audit/counting while enforcing event-level idempotency so a duplicate attempt does not create a second business order. Explain transaction boundaries and uniqueness separately for event identity and attempt identity.
+  - Capture receiver-observed received_at independently from provider-supplied occurred_at. Do not derive one from the other. Define both timestamp semantics and timezone storage assumptions.
+  - Support the proposed daily summary of delivery attempts and their mutually exclusive terminal outcomes (accepted/rejected/duplicate). Treat the exact definition, reporting timezone, retention, and treatment of invalid-signature/unparseable ingress as decisions requiring Product/Operations/Security confirmation.
+  - Distinct event_ids for the same order_id are not duplicate deliveries. Identify the domain uniqueness rule needed to decide whether a second order.created event is accepted or rejected; do not invent that rule.
+
+  - Define event processing state separately from attempt outcome so a transient persistence failure or incomplete/nonterminal attempt is not misrepresented as a duplicate. A repeat is eligible for duplicate classification only when the event_id already has a durable terminal outcome, subject to the approved processing contract.
+  - The received count may exceed the sum of accepted/rejected/duplicate while attempts remain in flight or lack a terminal outcome; preserve this distinction in the data model.
+
+required_requirements:
+  - REQ-DATABASE-MANAGER-01
+criteria:
+  - id: RELATIONAL-MODEL
+    description: "Models provider events, business orders, items, and outcomes with clear ownership, relationships, and event/order identity distinction."
+    weight: 25
+    critical: true
+    requirement_ref: REQ-DATABASE-MANAGER-01
+    score_anchors:
+      absent: "No inspectable deliverable evidence demonstrates RELATIONAL-MODEL: Models provider events, business orders, items, and outcomes with clear ownership, relationships, and event/order identity distinction The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The artifact provides some evidence for RELATIONAL-MODEL, but only partially demonstrates the stated outcome: Models provider events, business orders, items, and outcomes with clear ownership, relationships, and event/order identity distinction One or more material elements are missing, ambiguous, inconsistent across deliverables, or unsupported by inspectable examples."
+      core: "The deliverable demonstrates the core RELATIONAL-MODEL outcome: Models provider events, business orders, items, and outcomes with clear ownership, relationships, and event/order identity distinction The corresponding artifact sections, examples, decisions, or behaviors are inspectable and substantially consistent; remaining gaps are limited and do not defeat the criterion."
+      complete: "The deliverable fully demonstrates RELATIONAL-MODEL: Models provider events, business orders, items, and outcomes with clear ownership, relationships, and event/order identity distinction Each material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
+  - id: INTEGRITY-AND-IDEMPOTENCY
+    description: "Defines appropriate uniqueness, foreign-key, and transaction-level invariants for durable duplicate prevention."
+    weight: 20
+    critical: true
+    requirement_ref: REQ-DATABASE-MANAGER-01
+    score_anchors:
+      absent: "No inspectable deliverable evidence demonstrates INTEGRITY-AND-IDEMPOTENCY: Defines appropriate uniqueness, foreign-key, and transaction-level invariants for durable duplicate prevention The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The artifact provides some evidence for INTEGRITY-AND-IDEMPOTENCY, but only partially demonstrates the stated outcome: Defines appropriate uniqueness, foreign-key, and transaction-level invariants for durable duplicate prevention One or more material elements are missing, ambiguous, inconsistent across deliverables, or unsupported by inspectable examples."
+      core: "The deliverable demonstrates the core INTEGRITY-AND-IDEMPOTENCY outcome: Defines appropriate uniqueness, foreign-key, and transaction-level invariants for durable duplicate prevention The corresponding artifact sections, examples, decisions, or behaviors are inspectable and substantially consistent; remaining gaps are limited and do not defeat the criterion."
+      complete: "The deliverable fully demonstrates INTEGRITY-AND-IDEMPOTENCY: Defines appropriate uniqueness, foreign-key, and transaction-level invariants for durable duplicate prevention Each material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
+  - id: INDEX-AND-ACCESS-PATTERNS
+    description: "Recommends proportionate indexes for stated support lookup and event processing while labeling workload assumptions."
+    weight: 15
+    critical: false
+    requirement_ref: REQ-DATABASE-MANAGER-01
+    score_anchors:
+      absent: "No inspectable deliverable evidence demonstrates INDEX-AND-ACCESS-PATTERNS: Recommends proportionate indexes for stated support lookup and event processing while labeling workload assumptions The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The artifact provides some evidence for INDEX-AND-ACCESS-PATTERNS, but only partially demonstrates the stated outcome: Recommends proportionate indexes for stated support lookup and event processing while labeling workload assumptions One or more material elements are missing, ambiguous, inconsistent across deliverables, or unsupported by inspectable examples."
+      core: "The deliverable demonstrates the core INDEX-AND-ACCESS-PATTERNS outcome: Recommends proportionate indexes for stated support lookup and event processing while labeling workload assumptions The corresponding artifact sections, examples, decisions, or behaviors are inspectable and substantially consistent; remaining gaps are limited and do not defeat the criterion."
+      complete: "The deliverable fully demonstrates INDEX-AND-ACCESS-PATTERNS: Recommends proportionate indexes for stated support lookup and event processing while labeling workload assumptions Each material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
+  - id: MIGRATION-SAFETY
+    description: "Provides compatibility-aware migration/backfill/rollback/recovery guidance and does not assume unknown engine capabilities."
+    weight: 25
+    critical: true
+    requirement_ref: REQ-DATABASE-MANAGER-01
+    score_anchors:
+      absent: "No inspectable deliverable evidence demonstrates MIGRATION-SAFETY: Provides compatibility-aware migration/backfill/rollback/recovery guidance and does not assume unknown engine capabilities The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The artifact provides some evidence for MIGRATION-SAFETY, but only partially demonstrates the stated outcome: Provides compatibility-aware migration/backfill/rollback/recovery guidance and does not assume unknown engine capabilities One or more material elements are missing, ambiguous, inconsistent across deliverables, or unsupported by inspectable examples."
+      core: "The deliverable demonstrates the core MIGRATION-SAFETY outcome: Provides compatibility-aware migration/backfill/rollback/recovery guidance and does not assume unknown engine capabilities The corresponding artifact sections, examples, decisions, or behaviors are inspectable and substantially consistent; remaining gaps are limited and do not defeat the criterion."
+      complete: "The deliverable fully demonstrates MIGRATION-SAFETY: Provides compatibility-aware migration/backfill/rollback/recovery guidance and does not assume unknown engine capabilities Each material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
+  - id: LIMITATIONS-AND-DECISIONS
+    description: "Identifies unknown dialect, existing data, traffic, retention, operational, and approval evidence before production use."
+    weight: 15
+    critical: false
+    requirement_ref: REQ-DATABASE-MANAGER-01
+    score_anchors:
+      absent: "No inspectable deliverable evidence demonstrates LIMITATIONS-AND-DECISIONS: Identifies unknown dialect, existing data, traffic, retention, operational, and approval evidence before production use The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The artifact provides some evidence for LIMITATIONS-AND-DECISIONS, but only partially demonstrates the stated outcome: Identifies unknown dialect, existing data, traffic, retention, operational, and approval evidence before production use One or more material elements are missing, ambiguous, inconsistent across deliverables, or unsupported by inspectable examples."
+      core: "The deliverable demonstrates the core LIMITATIONS-AND-DECISIONS outcome: Identifies unknown dialect, existing data, traffic, retention, operational, and approval evidence before production use The corresponding artifact sections, examples, decisions, or behaviors are inspectable and substantially consistent; remaining gaps are limited and do not defeat the criterion."
+      complete: "The deliverable fully demonstrates LIMITATIONS-AND-DECISIONS: Identifies unknown dialect, existing data, traffic, retention, operational, and approval evidence before production use Each material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
+review_record: null
+evidence:
+  - path: skills/database-manager/SKILL.md
+    commit: 6fb43f5d4fa1333124de9fff66f8e0ba3b3f6c3e

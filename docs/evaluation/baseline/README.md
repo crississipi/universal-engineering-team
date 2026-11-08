@@ -21,28 +21,29 @@ the pilot workflow is usable; they do not establish baseline results.
 ## Canonical role coverage and scenario design register
 
 Every role below must have one baseline scenario with a task that exercises its
-actual ownership boundary. Scenario IDs are proposed identifiers until the
-scenario files exist and receive human pre-run approval.
+actual ownership boundary. The draft scenario files now exist for all 17
+roles. Their IDs and content remain proposals until independent design review
+and explicit human pre-run approval are completed.
 
 | Canonical role | Pilot coverage | Baseline scenario ID (proposed) | Role requirement anchor | Design state |
 |---|---|---|---|---|
-| product-analyst | None | SCEN-BASELINE-PRODUCT-ANALYST | REQ-PRODUCT-ANALYST-01 (drafted in role skill; pending review) | Not designed |
-| solution-architect | None | SCEN-BASELINE-SOLUTION-ARCHITECT | REQ-SOLUTION-ARCHITECT-01 (drafted in role skill; pending review) | Not designed |
-| api-manager | None | SCEN-BASELINE-API-MANAGER | REQ-API-MANAGER-01 (drafted in role skill; pending review) | Not designed |
-| backend-developer | Pilot only | SCEN-BASELINE-BACKEND-DEVELOPER | REQ-BACKEND-01 (exists; reassess baseline fit) | Not designed |
-| frontend-developer | None | SCEN-BASELINE-FRONTEND-DEVELOPER | REQ-FRONTEND-DEVELOPER-01 (drafted in role skill; pending review) | Not designed |
-| ux-ui-designer | None | SCEN-BASELINE-UX-UI-DESIGNER | REQ-UX-UI-DESIGNER-01 (drafted in role skill; pending review) | Not designed |
-| database-manager | None | SCEN-BASELINE-DATABASE-MANAGER | REQ-DATABASE-MANAGER-01 (drafted in role skill; pending review) | Not designed |
-| integration-engineer | None | SCEN-BASELINE-INTEGRATION-ENGINEER | REQ-INTEGRATION-ENGINEER-01 (drafted in role skill; pending review) | Not designed |
-| data-engineer | None | SCEN-BASELINE-DATA-ENGINEER | REQ-DATA-ENGINEER-01 (drafted in role skill; pending review) | Not designed |
-| qa-manager | None | SCEN-BASELINE-QA-MANAGER | REQ-QA-MANAGER-01 (drafted in role skill; pending review) | Not designed |
-| penetration-tester | Pilot only | SCEN-BASELINE-PENETRATION-TESTER | REQ-APPSEC-01 (exists; reassess baseline fit) | Not designed |
-| devops-sre | None | SCEN-BASELINE-DEVOPS-SRE | REQ-DEVOPS-SRE-01 (drafted in role skill; pending review) | Not designed |
-| performance-engineer | None | SCEN-BASELINE-PERFORMANCE-ENGINEER | REQ-PERFORMANCE-ENGINEER-01 (drafted in role skill; pending review) | Not designed |
-| accessibility-specialist | None | SCEN-BASELINE-ACCESSIBILITY-SPECIALIST | REQ-ACCESSIBILITY-SPECIALIST-01 (drafted in role skill; pending review) | Not designed |
-| technical-writer-knowledge-engineer | None | SCEN-BASELINE-TECHNICAL-WRITER-KNOWLEDGE-ENGINEER | REQ-TECHNICAL-WRITER-01 (drafted in role skill; pending review) | Not designed |
-| release-manager | None | SCEN-BASELINE-RELEASE-MANAGER | REQ-RELEASE-MANAGER-01 (drafted in role skill; pending review) | Not designed |
-| delivery-lead | Pilot only | SCEN-BASELINE-DELIVERY-LEAD | REQ-DELIVERY-01 (exists; reassess baseline fit) | Not designed |
+| product-analyst | None | SCEN-BASELINE-PRODUCT-ANALYST | REQ-PRODUCT-ANALYST-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| solution-architect | None | SCEN-BASELINE-SOLUTION-ARCHITECT | REQ-SOLUTION-ARCHITECT-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| api-manager | None | SCEN-BASELINE-API-MANAGER | REQ-API-MANAGER-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| backend-developer | Pilot only | SCEN-BASELINE-BACKEND-DEVELOPER | REQ-BACKEND-01 (exists; reassess baseline fit) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| frontend-developer | None | SCEN-BASELINE-FRONTEND-DEVELOPER | REQ-FRONTEND-DEVELOPER-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| ux-ui-designer | None | SCEN-BASELINE-UX-UI-DESIGNER | REQ-UX-UI-DESIGNER-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| database-manager | None | SCEN-BASELINE-DATABASE-MANAGER | REQ-DATABASE-MANAGER-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| integration-engineer | None | SCEN-BASELINE-INTEGRATION-ENGINEER | REQ-INTEGRATION-ENGINEER-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| data-engineer | None | SCEN-BASELINE-DATA-ENGINEER | REQ-DATA-ENGINEER-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| qa-manager | None | SCEN-BASELINE-QA-MANAGER | REQ-QA-MANAGER-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| penetration-tester | Pilot only | SCEN-BASELINE-PENETRATION-TESTER | REQ-APPSEC-01 (exists; reassess baseline fit) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| devops-sre | None | SCEN-BASELINE-DEVOPS-SRE | REQ-DEVOPS-SRE-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| performance-engineer | None | SCEN-BASELINE-PERFORMANCE-ENGINEER | REQ-PERFORMANCE-ENGINEER-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| accessibility-specialist | None | SCEN-BASELINE-ACCESSIBILITY-SPECIALIST | REQ-ACCESSIBILITY-SPECIALIST-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| technical-writer-knowledge-engineer | None | SCEN-BASELINE-TECHNICAL-WRITER-KNOWLEDGE-ENGINEER | REQ-TECHNICAL-WRITER-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| release-manager | None | SCEN-BASELINE-RELEASE-MANAGER | REQ-RELEASE-MANAGER-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| delivery-lead | Pilot only | SCEN-BASELINE-DELIVERY-LEAD | REQ-DELIVERY-01 (exists; reassess baseline fit) | Drafted — anchor semantic refinement recommended |
 
 Role names and order must remain aligned with `docs/team/expected-roles.yml`.
 The scenario IDs and requirement IDs above are planning proposals, not
@@ -72,10 +73,11 @@ Complete these gates in order:
    - Define criterion IDs, weights totaling 100, criticality, and evidence-based
      score guidance. Keep scenario scope achievable in one agent session.
 3. **Scenario design review**
-   - Review all 17 drafts against the role skill, canonical ownership, activation
-     rules, artifact catalog, producer-consumer boundaries, and safety policy.
-   - Record design findings and revise ambiguous or unscorable criteria.
-   - A design review is advisory and is not human approval.
+   - The user waived the independent human design-review step for this stage.
+     The AI-assisted audit is recorded in `AI-DESIGN-AUDIT-2026-11-08.md` and
+     remains advisory; it is not an independent human review or approval.
+   - Resolve objective design findings and retain stakeholder decisions as open
+     where an authorized decision owner has not confirmed them.
 4. **Human pre-run approval**
    - Each scenario must have `status: approved`, `approval.approved_by`, and
      `approval.approved_at` before any baseline execution.
@@ -173,14 +175,19 @@ post-run review records distinct.
   decision. Automated validation checks structure and consistency, not model
   quality or approval.
 
-## Known repository readiness gap
+## Requirement-anchor status
 
-At the start of Stage B, only the Backend Developer, Penetration Tester, and
-Delivery Lead skills contained explicit requirement anchors. This branch adds
-one draft role-level anchor to each of the other 14 canonical skills. These
-anchors remain pending review and repository validation; they are not scenario
-approvals. The traceability gate is not complete until the anchors are reviewed,
-merged, and validated against scenario requirements and criterion references.
+The 14 additional role anchors were merged to `main` in PR #33
+(merge commit `39b2f9d725fc0fb805d855669ec8738f4b4ae809`). All 17 canonical
+skills now contain a role-level anchor. Merge status is not human approval of
+the requirement wording or evidence that each anchor is a good baseline
+measurement target.
+
+The anchors require a recorded role-owner/governance review for semantic fit,
+including reassessment of the original Backend Developer, Penetration Tester,
+and Delivery Lead anchors. The repository validator checks structural presence,
+uniqueness, placement, and mapping to this register; it does not approve the
+substantive requirement or scenario quality.
 
 The repository currently has pilot run-record conventions and execution
 lifecycle schemas, but no dedicated baseline run-record validator or baseline
@@ -188,11 +195,22 @@ report generator. Add and test those before large-scale evidence collection;
 do not imply that the execution lifecycle validator already validates these
 baseline evaluation records.
 
+The scenario validator enforces that valid criterion weights are finite,
+positive, and total exactly 100 (within a small floating-point tolerance).
+A separate requirement-traceability validator checks that each canonical
+role skill has exactly one unique, correctly placed anchor and that the same
+ID appears in its baseline register row. These are structural checks, not
+human design approval.
+
 ## Current baseline status
+
+All 17 role-specific baseline scenario YAML drafts are present on branch `chore/stage-b-repository-health` under `tests/scenarios/SCEN-BASELINE-<ROLE>.yml`. Each draft is pinned to the audited baseline commit and has five criteria totaling 100 points. An author-side structural preflight found valid role IDs, scenario IDs, one matching requirement anchor per scenario, unique criterion IDs, complete criterion references, and valid 40-character evidence commit references. This preflight is not an independent design review or human approval. See `DESIGN-PREFLIGHT-2026-11-08.md` for role-by-role review notes and open issues.
 
 - Planned roles: 17.
 - Planned scenarios: 17.
-- Scenarios designed: 0.
+- Scenario drafts authored: 17.
+- Scenario drafts structurally preflighted: 17.
+- Independent scenario design reviews completed: 0.
 - Scenarios approved: 0.
 - Planned runs per scenario: 10.
 - Planned executions: 170.
@@ -201,3 +219,88 @@ baseline evaluation records.
 
 Update these counts only from committed scenario approvals, actual run evidence,
 and formal review records.
+
+
+## Second-pass design review — 2026-11-08
+
+An AI-assisted second-pass review of all 17 scenario drafts is recorded in
+`DESIGN-REVIEW-2026-11-08.md`. It inspected the task prompts, rubric criteria,
+canonical role identity/boundary sections, artifact ownership, activation rules,
+and producer-consumer relationships.
+
+A subsequent AI-assisted design audit is recorded in
+`AI-DESIGN-AUDIT-2026-11-08.md`. The user explicitly waived the independent
+human design-review step for this stage. That waiver is recorded as a waiver,
+not as a completed independent review. The AI audit is advisory and does not
+replace the separate human pre-run approval gate.
+
+The review identified required cross-scenario corrections before approval:
+- Add the missing canonical artifact package ID and owner to each scenario.
+- Connect the daily operational summary requirement to its intended consumer.
+- Distinguish provider event occurrence time from receiver receipt time.
+- Define duplicate delivery-attempt auditability and daily duplicate-count semantics.
+- Clarify the Backend Developer rejection path without inventing domain policy.
+- Complete semantic review of the Backend Developer, Penetration Tester, and
+  Delivery Lead requirement anchors.
+- Add criterion-specific scoring anchors and preserve the unknown delay threshold.
+
+This AI-assisted review is not an independent human review and does not satisfy
+the independent human design-review gate. Therefore:
+- Independent human scenario design reviews completed: 0 (waived by user for this stage; not performed).
+- AI-assisted design audit completed: 17/17; advisory only.
+- Human pre-run approvals: 0/17.
+- Baseline executions: 0/170.
+
+The user reported that after pulling commit
+`0ff6f9c968404489f2e83cc062531f495ff1b4f7`, the full local unit suite passed
+65/65 tests, the requirement and scenario validators passed, and
+`git diff --check` reported no errors. These are user-reported local results;
+they are not a GitHub Actions result or an independently reproduced run.
+
+Do not change scenario statuses or create pre-run approval metadata based on
+this review. Resolve the findings, obtain the required human review and
+scenario-by-scenario approval, and complete execution-readiness tooling before
+starting baseline runs.
+
+
+## Scenario remediation status — 2026-11-08
+
+The second-pass findings have been addressed in the draft scenario definitions. The detailed change record is in
+`DESIGN-REVIEW-2026-11-08.md`, section 8.
+
+- All 17 scenarios now identify their canonical artifact package ID and accountable owner. Package status remains proposed; no handoffs are declared.
+- Product, UX, frontend, data, and QA prompts now share a proposed support-facing daily summary contract.
+- Event occurrence time (`occurred_at`) is distinguished from receiver receipt time (`received_at`).
+- Delivery attempt identity (`delivery_attempt_id`) is distinguished from event identity (`event_id`) and order identity (`order_id`).
+- The proposed summary counts eligible delivery attempts; accepted/rejected/duplicate are terminal-outcome subtotals and may be lower than received while attempts remain in flight. A repeat event_id is duplicate only after a durable terminal event outcome exists. Product/Operations confirmation remains required for metric inclusion and reporting timezone.
+- Backend domain rejection is handled through an injected policy decision; the scenario does not authorize Backend to invent domain rules.
+- All 85 criteria have absent/partial/core/complete score anchors.
+- Backend Developer, Penetration Tester, and Delivery Lead requirement statements were refined while retaining their stable requirement IDs; the consolidated role-skill file and scenario evidence pins were updated.
+- Delayed/not-yet-visible behavior does not use an invented numeric threshold.
+
+The scenario validator now checks baseline artifact package ownership and the presence of all four score anchors. Unit tests were added for these checks.
+
+**Verification is pending:** the latest remediation commit series has not yet been pulled and validated locally. The previously reported 65/65 full-suite result predates these latest changes and must not be reused as evidence for this revision.
+
+Gate status remains:
+- Draft scenarios: 17/17.
+- Independent human design reviews: 0/17.
+- Human pre-run approvals: 0/17.
+- Baseline executions: 0/170.
+
+Do not change scenario status to approved or start baseline runs until the latest local checks pass, remaining Product/Operations decisions are confirmed or explicitly retained as open/non-scored, each scenario receives explicit human pre-run approval, and execution-readiness tooling is complete. The independent human design-review step is waived for this stage by user instruction; the AI audit does not count as a human review.
+
+
+## Scoring remediation update — 2026-11-08
+
+Following the AI-assisted audit, the draft rubrics were revised:
+
+- All 85 criteria now contain criterion-specific absent/partial/core/complete evidence anchors. The anchors name the assessed criterion and distinguish missing, partial, core, and complete evidence. Their semantic usefulness still requires human judgment; structural validation alone cannot prove scoring reliability.
+- The Frontend Developer functional-interaction criterion explicitly includes the daily delivery-attempt summary and its attempt-level count semantics.
+- The UX/UI Designer interaction-and-states criterion explicitly includes the daily summary experience, in-flight subtotal explanation, and illustrative receipt-date basis.
+- Existing criterion weights were retained; each scenario still totals 100.
+
+The audit report records the remediation and its limitations. AI-03 stakeholder decisions remain open, AI-04 package/handoff governance remains proposed, all 17 scenarios remain drafts, and human pre-run approval is still required. The user is responsible for local test and validator execution against the resulting commit; no verification result is asserted here.
+
+
+The initial audit findings AI-01 and AI-02 have since been remediated in the 17 scenario drafts. See section 7 of `AI-DESIGN-AUDIT-2026-11-08.md` for the change details. The original finding descriptions remain in the report for audit history; the remediation section supersedes their original required-action status.

@@ -66,20 +66,23 @@ The reference model is derived from:
 
 ## Governance inconsistency discovered
 
-The blocker lifecycle vocabulary is inconsistent across current canonical
-materials:
+Historical finding (resolved in PR #10): the blocker lifecycle vocabulary was
+inconsistent across canonical materials at the time this report was written.
+The current canonical records, lifecycle guidance, and JSON Schema now share
+the same eight statuses. This report preserves the original discovery and
+probe limitation as historical evidence; it is not a statement of the current
+canonical status vocabulary.
 
-- `docs/team/blockers-replanning-and-state-transitions.md` describes
-  `escalated` and `closed` blocker statuses.
-- `docs/team/blocker-records.md` defines a different set, including
-  `blocked` but not `escalated` or `closed`.
-- `schemas/executions/blockers.schema.json` also omits `escalated` and
-  `closed`.
+- PR #10, merged as `41f29d4ad5f6452024279e99c6697af0c65c3a4b`, aligned
+  `docs/team/blocker-records.md`, lifecycle guidance, and
+  `schemas/executions/blockers.schema.json`.
+- The current shared status set is `open`, `in_progress`, `blocked`,
+  `escalated`, `deferred`, `resolved`, `closed`, and `cancelled`.
 
-The immediate-escalation probe therefore does not write an `escalated`
-blocker status. This discrepancy needs a separate governance decision before
-status persistence can be validated. No status was invented or silently
-changed in this proof work.
+The historical reference probe did not persist an `escalated` status. The
+canonical vocabulary is now aligned, but live status persistence, escalation
+notification/routing, stop-work enforcement, and authority routing remain
+unverified.
 
 ## Local validation instructions
 
@@ -107,8 +110,8 @@ scenarios. The Phase 2B gate should not be marked fully accepted until:
 
 - The local reference-model test execution is complete: 37 tests passed across
   governance, Backend, and QA suites.
-- The blocker status vocabulary inconsistency is resolved or explicitly
-  dispositioned by the appropriate governance review.
+- The blocker status vocabulary has been aligned by PR #10; live persistence
+  and escalation routing still require separate evidence.
 - Any desired live-agent behavior is tested separately with traceable prompts,
   outputs, and execution records.
 - Formal handoff behavior remains deferred until an approved formal handoff

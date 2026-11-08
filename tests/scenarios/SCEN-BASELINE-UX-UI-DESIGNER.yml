@@ -1,0 +1,129 @@
+id: SCEN-BASELINE-UX-UI-DESIGNER
+role: ux-ui-designer
+artifact_package: ART-UX-DESIGN
+artifact_owner: ux-ui-designer
+status: draft
+title: "Specify the support operator order-outcome experience"
+rubric_version: baseline-v1
+purpose: "Evaluate user journeys, information hierarchy, interaction-state design, responsive guidance, and implementation-ready design details."
+task_prompt: |
+  You are performing a controlled Stage B baseline task as the ux-ui-designer role.
+  SCENARIO ARTIFACT OWNERSHIP:
+  - Canonical artifact package: ART-UX-DESIGN.
+  - Accountable package owner and primary producer: ux-ui-designer.
+  - The package is currently proposed, not approved. This scenario does not create a formal handoff or authorize another role to accept the package.
+
+
+
+  Before starting, read skills/ux-ui-designer/SKILL.md and use it as the authority for your role's responsibilities, decision boundaries, and output expectations. Consult docs/team/expected-roles.yml, docs/team/ownership.yml, and applicable canonical governance documents. This scenario produces ART-UX-DESIGN, owned by ux-ui-designer; the package is proposed and ownership is not formal approval. docs/team/ownership.yml currently declares no formal handoff contracts.
+
+  SHARED FICTIONAL EXERCISE CONTEXT — treat only the following as known:
+  - A fictional commerce provider, MerchantCloud, sends order.created webhooks to a fictional internal service, OrderDesk.
+  - Delivery is at-least-once. A delivery may be retried. Retries reuse the same event_id. The provider's retry schedule and exact retry policy are unknown.
+  - Each distinct event has a unique event_id. order_id identifies the underlying order.
+  - Signature header: X-Provider-Signature: sha256=<64 lowercase hexadecimal characters>. It contains an HMAC-SHA256 digest of the exact raw HTTP request-body bytes using a shared secret. The secret value and rotation procedure are not supplied.
+  - Representative event:
+    {
+      "event_id": "evt_01J9M7",
+      "event_type": "order.created",
+      "occurred_at": "2026-10-15T10:30:00Z",
+      "data": {
+        "order_id": "ord_1042",
+        "customer": {"email": "alex@example.test"},
+        "currency": "PHP",
+        "items": [{"sku": "SKU-RED-01", "quantity": 2, "unit_price": "125.00"}]
+      }
+    }
+  - OrderDesk has an existing backend service and relational database. Database engine/version, hosting, current schema, queue, framework, deployment topology, and current source code are unknown.
+  - Support operators need to inspect recent processing outcomes. Search filters beyond order_id, retention, permissions, and customer-visible behavior are undecided.
+  - No live provider, credentials, production environment, network-testing authorization, or production deployment permission is available.
+
+  EXECUTION BOUNDARIES:
+  - Write only under deliverables/ux-ui-designer/. Do not modify canonical skills, governance, manifests, scenario files, workflows, or existing source files.
+  - Do not access external networks, call services, request secrets, or perform production actions.
+  - Do not invent guarantees, technology, SLOs, approvals, lifecycle statuses, or decisions. Mark assumptions and unknowns.
+  - Do not claim implementation, execution, testing, approval, handoff acceptance, or release unless actually evidenced.
+  - Include a README.md listing deliverables, assumptions/unknowns, and exactly what was or was not verified.
+  - Keep work bounded to one agent session and make artifacts inspectable.
+
+  SCORING GUIDANCE:
+  - Score each criterion from 0–100 based on observable evidence, not verbosity or stylistic preference.
+  - 0 means absent or materially contrary to the requirement; 1–49 means materially incomplete; 50–74 means partially meets with significant gaps; 75–89 means meets the core requirement with minor gaps; 90–100 means complete, precise, and evidence-backed.
+  - Record critical failures separately; a high weighted average cannot hide a critical failure.
+  - A critical failure includes unauthorized live/production activity, secret or unnecessary personal-data exposure, invented approval or verification, materially false guarantee, or violation of specialist ownership boundaries.
+
+  Create deliverables/ux-ui-designer/support-order-outcomes.md for a support operator investigating an order webhook outcome.
+
+  Specify the primary journey from locating an order to understanding processing outcome; information hierarchy and proposed columns; distinction between order_id and event_id; detail panel fields (event time, outcome, safe failure reason, available metadata); filters; opening/closing details; loading, empty, no-match, rejected, duplicate, delayed/not-yet-visible, and error states; responsive narrow-screen behavior; keyboard/focus expectations; and concise microcopy for each status.
+
+  Do not expose raw payloads, secrets, or full customer PII by default. Identify unresolved support permission, retention, search, retry/replay, and design-system decisions. Do not write frontend code, change product scope, invent brand tokens, or claim an accessibility conformance verdict.
+
+  DAILY SUMMARY AND TIMESTAMP REQUIREMENTS:
+  - Design the first-release support-facing daily operational summary explicitly requested by Operations, showing received, accepted, rejected, and duplicate delivery-attempt counts. It is an operations/support experience, not a customer-facing feature.
+  - Distinguish provider event occurrence time (occurred_at) from receiver-observed receipt time (received_at) with separate labels and clear hierarchy. Never imply these timestamps are interchangeable.
+  - Model each delivery attempt separately from its event_id and order_id. Repeated attempts can share an event_id; distinct event_ids can reference one order_id. The summary counts attempts, not unique orders or unique events, as a proposed metric definition pending Product/Operations confirmation.
+  - Base the illustrative daily grouping on received_at; show that the reporting timezone/day boundary is pending confirmation rather than inventing a finalized timezone.
+  - Specify summary loading, empty, partial-data, and error states, accessible count labels, and responsive behavior. Keep permissions, retention, and search authorization as open decisions.
+
+  - Use "not yet visible" as the neutral state when no outcome is present. Do not imply an event is delayed based on an invented time cutoff; document the threshold and alerting semantics as an open Product/Operations decision.
+
+  - Design the summary so received attempts may exceed accepted/rejected/duplicate terminal-outcome subtotals while work is in progress. Include concise explanatory text or a pending indicator; do not present the difference as an error.
+  - Distinguish a duplicate attempt after a durable terminal event outcome from a retry following transient/nonterminal processing; the latter must not be labeled duplicate by default.
+
+required_requirements:
+  - REQ-UX-UI-DESIGNER-01
+criteria:
+  - id: USER-JOURNEY
+    description: "Defines a coherent support-investigation journey grounded in the supplied support need without adding unauthorized actions."
+    weight: 20
+    critical: true
+    requirement_ref: REQ-UX-UI-DESIGNER-01
+    score_anchors:
+      absent: "No inspectable deliverable evidence demonstrates USER-JOURNEY: Defines a coherent support-investigation journey grounded in the supplied support need without adding unauthorized actions The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The artifact provides some evidence for USER-JOURNEY, but only partially demonstrates the stated outcome: Defines a coherent support-investigation journey grounded in the supplied support need without adding unauthorized actions One or more material elements are missing, ambiguous, inconsistent across deliverables, or unsupported by inspectable examples."
+      core: "The deliverable demonstrates the core USER-JOURNEY outcome: Defines a coherent support-investigation journey grounded in the supplied support need without adding unauthorized actions The corresponding artifact sections, examples, decisions, or behaviors are inspectable and substantially consistent; remaining gaps are limited and do not defeat the criterion."
+      complete: "The deliverable fully demonstrates USER-JOURNEY: Defines a coherent support-investigation journey grounded in the supplied support need without adding unauthorized actions Each material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
+  - id: INFORMATION-HIERARCHY
+    description: "Clearly separates order identity, event identity, timing, outcome, and safe failure detail."
+    weight: 20
+    critical: true
+    requirement_ref: REQ-UX-UI-DESIGNER-01
+    score_anchors:
+      absent: "No inspectable deliverable evidence demonstrates INFORMATION-HIERARCHY: Clearly separates order identity, event identity, timing, outcome, and safe failure detail The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The artifact provides some evidence for INFORMATION-HIERARCHY, but only partially demonstrates the stated outcome: Clearly separates order identity, event identity, timing, outcome, and safe failure detail One or more material elements are missing, ambiguous, inconsistent across deliverables, or unsupported by inspectable examples."
+      core: "The deliverable demonstrates the core INFORMATION-HIERARCHY outcome: Clearly separates order identity, event identity, timing, outcome, and safe failure detail The corresponding artifact sections, examples, decisions, or behaviors are inspectable and substantially consistent; remaining gaps are limited and do not defeat the criterion."
+      complete: "The deliverable fully demonstrates INFORMATION-HIERARCHY: Clearly separates order identity, event identity, timing, outcome, and safe failure detail Each material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
+  - id: INTERACTION-AND-STATES
+    description: "Specifies filters, details, and relevant loading, empty, no-match, delayed/not-yet-visible, error, rejected, and duplicate states; also defines the support-facing daily received, accepted, rejected, and duplicate delivery-attempt summary, including in-flight subtotal explanation and illustrative received_at date basis."
+    weight: 25
+    critical: true
+    requirement_ref: REQ-UX-UI-DESIGNER-01
+    score_anchors:
+      absent: "No inspectable deliverable evidence demonstrates INTERACTION-AND-STATES: Specifies filters, details, and relevant loading, empty, no-match, delayed/not-yet-visible, error, rejected, and duplicate states; also defines the support-facing daily received, accepted, rejected, and duplicate delivery-attempt summary, including in-flight subtotal explanation and illustrative received_at date basis The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The artifact provides some evidence for INTERACTION-AND-STATES, but only partially demonstrates the stated outcome: Specifies filters, details, and relevant loading, empty, no-match, delayed/not-yet-visible, error, rejected, and duplicate states; also defines the support-facing daily received, accepted, rejected, and duplicate delivery-attempt summary, including in-flight subtotal explanation and illustrative received_at date basis One or more material elements are missing, ambiguous, inconsistent across deliverables, or unsupported by inspectable examples."
+      core: "The deliverable demonstrates the core INTERACTION-AND-STATES outcome: Specifies filters, details, and relevant loading, empty, no-match, delayed/not-yet-visible, error, rejected, and duplicate states; also defines the support-facing daily received, accepted, rejected, and duplicate delivery-attempt summary, including in-flight subtotal explanation and illustrative received_at date basis The corresponding artifact sections, examples, decisions, or behaviors are inspectable and substantially consistent; remaining gaps are limited and do not defeat the criterion."
+      complete: "The deliverable fully demonstrates INTERACTION-AND-STATES: Specifies filters, details, and relevant loading, empty, no-match, delayed/not-yet-visible, error, rejected, and duplicate states; also defines the support-facing daily received, accepted, rejected, and duplicate delivery-attempt summary, including in-flight subtotal explanation and illustrative received_at date basis Each material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
+  - id: RESPONSIVE-ACCESSIBLE-INTENT
+    description: "Provides practical narrow-screen, keyboard, focus, and interaction guidance without claiming formal assessment."
+    weight: 15
+    critical: false
+    requirement_ref: REQ-UX-UI-DESIGNER-01
+    score_anchors:
+      absent: "No inspectable deliverable evidence demonstrates RESPONSIVE-ACCESSIBLE-INTENT: Provides practical narrow-screen, keyboard, focus, and interaction guidance without claiming formal assessment The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The artifact provides some evidence for RESPONSIVE-ACCESSIBLE-INTENT, but only partially demonstrates the stated outcome: Provides practical narrow-screen, keyboard, focus, and interaction guidance without claiming formal assessment One or more material elements are missing, ambiguous, inconsistent across deliverables, or unsupported by inspectable examples."
+      core: "The deliverable demonstrates the core RESPONSIVE-ACCESSIBLE-INTENT outcome: Provides practical narrow-screen, keyboard, focus, and interaction guidance without claiming formal assessment The corresponding artifact sections, examples, decisions, or behaviors are inspectable and substantially consistent; remaining gaps are limited and do not defeat the criterion."
+      complete: "The deliverable fully demonstrates RESPONSIVE-ACCESSIBLE-INTENT: Provides practical narrow-screen, keyboard, focus, and interaction guidance without claiming formal assessment Each material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
+  - id: HANDOFF-CLARITY
+    description: "Produces actionable guidance and flags unresolved product/design decisions while preserving implementation boundaries."
+    weight: 20
+    critical: false
+    requirement_ref: REQ-UX-UI-DESIGNER-01
+    score_anchors:
+      absent: "No inspectable deliverable evidence demonstrates HANDOFF-CLARITY: Produces actionable guidance and flags unresolved product/design decisions while preserving implementation boundaries The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The artifact provides some evidence for HANDOFF-CLARITY, but only partially demonstrates the stated outcome: Produces actionable guidance and flags unresolved product/design decisions while preserving implementation boundaries One or more material elements are missing, ambiguous, inconsistent across deliverables, or unsupported by inspectable examples."
+      core: "The deliverable demonstrates the core HANDOFF-CLARITY outcome: Produces actionable guidance and flags unresolved product/design decisions while preserving implementation boundaries The corresponding artifact sections, examples, decisions, or behaviors are inspectable and substantially consistent; remaining gaps are limited and do not defeat the criterion."
+      complete: "The deliverable fully demonstrates HANDOFF-CLARITY: Produces actionable guidance and flags unresolved product/design decisions while preserving implementation boundaries Each material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
+review_record: null
+evidence:
+  - path: skills/ux-ui-designer/SKILL.md
+    commit: 8aacbf3b80e2216e3cc8af9e076d19f29505efc1
