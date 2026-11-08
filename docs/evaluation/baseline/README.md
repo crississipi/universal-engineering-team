@@ -334,5 +334,37 @@ Structural validation does not authenticate a human approval, judge output
 quality, or replace post-run human scoring.
 
 No baseline records are currently authorized or present. The validator must
-not be used to manufacture approvals or run evidence. The reporting generator
-and expanded cohort-level score summaries remain the next tooling increment.
+not be used to manufacture approvals or run evidence.
+
+## Baseline reporting
+
+The report generator is `scripts/report-baseline.py`. It first runs the
+canonical baseline validator and refuses to generate a report when records
+contain validation errors. It reads the existing scenario catalog and actual
+run YAML files; it does not create, repair, approve, score, or alter records.
+
+Run from the repository root:
+
+```powershell
+python scripts/report-baseline.py
+python scripts/report-baseline.py --format json
+```
+
+Markdown is written to standard output by default. JSON is available for
+downstream analysis. Redirect output to a file when needed; do not place
+generated reports in the evidence directory.
+
+The report distinguishes planned scenarios/runs, draft and approved scenarios,
+actual records, and records with complete numeric scores. A weighted run score
+is calculated only when every rubric criterion has a numeric score. Scenario
+score summaries are separated by cohort. Cross-role cohort summaries include
+only records explicitly marked
+`comparable_within_scenario_cohort: true`; false or unconfirmed records are
+counted but excluded from those aggregates. Each role remains visible beside
+the cohort aggregate.
+
+Critical failures and human review decisions are reported separately from
+scores. Missing run numbers are reported only for approved scenarios; draft
+scenarios are not represented as missing executions. The report does not
+authenticate approvals, assess evidence authenticity, or replace human scoring
+and review.
