@@ -189,11 +189,17 @@ and Delivery Lead anchors. The repository validator checks structural presence,
 uniqueness, placement, and mapping to this register; it does not approve the
 substantive requirement or scenario quality.
 
-The repository currently has pilot run-record conventions and execution
-lifecycle schemas, but no dedicated baseline run-record validator or baseline
-report generator. Add and test those before large-scale evidence collection;
-do not imply that the execution lifecycle validator already validates these
-baseline evaluation records.
+The repository has pilot run-record conventions and separate operational
+execution lifecycle schemas. Those operational schemas do not validate baseline
+evaluation records.
+
+A dedicated Draft 2020-12 baseline run-record schema and validator are being
+introduced separately from the operational execution lifecycle. The current
+implementation is on the focused branch
+`feat/baseline-run-record-validation`; it is not yet merged or locally
+verified. The baseline report generator and richer cohort summary remain
+pending. Do not start evidence collection based only on the presence of this
+schema or validator.
 
 The scenario validator enforces that valid criterion weights are finite,
 positive, and total exactly 100 (within a small floating-point tolerance).
@@ -204,7 +210,7 @@ human design approval.
 
 ## Current baseline status
 
-All 17 role-specific baseline scenario YAML drafts are present on branch `chore/stage-b-repository-health` under `tests/scenarios/SCEN-BASELINE-<ROLE>.yml`. Each draft is pinned to the audited baseline commit and has five criteria totaling 100 points. An author-side structural preflight found valid role IDs, scenario IDs, one matching requirement anchor per scenario, unique criterion IDs, complete criterion references, and valid 40-character evidence commit references. This preflight is not an independent design review or human approval. See `DESIGN-PREFLIGHT-2026-11-08.md` for role-by-role review notes and open issues.
+All 17 role-specific baseline scenario YAML drafts are present on `main` under `tests/scenarios/SCEN-BASELINE-<ROLE>.yml` (merged through PR #34). Each draft is pinned to the audited baseline commit and has five criteria totaling 100 points. An author-side structural preflight found valid role IDs, scenario IDs, one matching requirement anchor per scenario, unique criterion IDs, complete criterion references, and valid 40-character evidence commit references. This preflight is not an independent design review or human approval. See `DESIGN-PREFLIGHT-2026-11-08.md` for role-by-role review notes and open issues.
 
 - Planned roles: 17.
 - Planned scenarios: 17.
@@ -304,3 +310,28 @@ The audit report records the remediation and its limitations. AI-03 stakeholder 
 
 
 The initial audit findings AI-01 and AI-02 have since been remediated in the 17 scenario drafts. See section 7 of `AI-DESIGN-AUDIT-2026-11-08.md` for the change details. The original finding descriptions remain in the report for audit history; the remediation section supersedes their original required-action status.
+
+
+## Baseline run-record tooling status
+
+The dedicated baseline record contract is defined in
+`schemas/baseline/baseline-run-record.schema.json`. The validator entry point
+is `scripts/validate-baseline.py`; run it from the repository root:
+
+```powershell
+python scripts/validate-baseline.py
+```
+
+The validator is intentionally separate from
+`scripts/validate-execution.py`, which covers operational execution records.
+It checks baseline record shape, scenario approval and role/rubric references,
+criterion coverage, pinned revision syntax, prompt SHA-256 against preserved
+prompt bytes, evidence paths, duplicate run numbers, missing run numbers for
+approved scenarios, and provider/model/configuration consistency within named
+cohorts. Missing run numbers are warnings while a cohort is incomplete.
+Structural validation does not authenticate a human approval, judge output
+quality, or replace post-run human scoring.
+
+No baseline records are currently authorized or present. The validator must
+not be used to manufacture approvals or run evidence. The reporting generator
+and expanded cohort-level score summaries remain the next tooling increment.
