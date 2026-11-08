@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://crississipi.github.io/universal-engineering-team/schemas/baseline/baseline-run-record.schema.json",
+  "title": "Repository baseline evaluation run record",
+  "description": "One record for one actual baseline model execution. This schema does not establish scenario approval or prove evidence authenticity.",
+  "type": "object",
+  "properties": {
+    "evaluation_track": { "const": "repository-baseline" },
+    "run_id": { "type": "string", "pattern": "^BASELINE-[A-Z0-9-]+-RUN-(0[1-9]|10)$" },
+    "scenario_id": { "type": "string", "pattern": "^SCEN-BASELINE-[A-Z0-9-]+$" },
+    "role": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+    "rubric_version": { "$ref": "#/$defs/nonEmptyString" },
+    "run_number": { "type": "integer", "minimum": 1, "maximum": 10 },
+    "started_at": { "type": "string", "format": "date-time" },
+    "execution_environment": {
+      "type": "object",
+      "properties": {
+        "provider": { "$ref": "#/$defs/nonEmptyString" },
+        "model_display_label": { "$ref": "#/$defs/nonEmptyString" },
+        "model_identifier": { "$ref": "#/$defs/nonEmptyString" },
+        "model_version": { "$ref": "#/$defs/nonEmptyString" },
+        "mode": { "$ref": "#/$defs/nonEmptyString" },
+        "configuration": {
+          "type": "object",
+          "properties": {
+            "temperature": { "$ref": "#/$defs/unknownScalar" },
+            "reasoning_effort": { "$ref": "#/$defs/unknownScalar" },
+            "other_material_settings": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" } }
+          },
+          "required": ["temperature", "reasoning_effort", "other_material_settings"],
+          "additionalProperties": false
+        },
+        "tool_permissions": { "$ref": "#/$defs/nonEmptyString" },
+        "operating_environment": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "required": ["provider", "model_display_label", "model_identifier", "model_version", "mode", "configuration", "tool_permissions", "operating_environment"],
+      "additionalProperties": false
+    },
+    "revisions": {
+      "type": "object",
+      "properties": {
+        "repository_base_commit": { "$ref": "#/$defs/gitSha" },
+        "scenario_commit": { "$ref": "#/$defs/gitSha" },
+        "skill_commit": { "$ref": "#/$defs/gitSha" },
+        "scenario_path": { "$ref": "#/$defs/nonEmptyString" },
+        "skill_path": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "required": ["repository_base_commit", "scenario_commit", "skill_commit", "scenario_path", "skill_path"],
+      "additionalProperties": false
+    },
+    "input": {
+      "type": "object",
+      "properties": {
+        "prompt_path": { "$ref": "#/$defs/nonEmptyString" },
+        "prompt_sha256": { "$ref": "#/$defs/sha256" },
+        "additional_context_references": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" } }
+      },
+      "required": ["prompt_path", "prompt_sha256", "additional_context_references"],
+      "additionalProperties": false
+    },
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "output_artifacts": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" } },
+        "transcript_path": { "$ref": "#/$defs/nonEmptyString" },
+        "git_status_path": { "$ref": "#/$defs/nonEmptyString" },
+        "command_results": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "command": { "$ref": "#/$defs/nonEmptyString" },
+              "exit_code": { "type": ["integer", "null"] },
+              "output_path": { "$ref": "#/$defs/nonEmptyString" },
+              "result": { "$ref": "#/$defs/nonEmptyString" }
+            },
+            "required": ["command", "exit_code", "output_path", "result"],
+            "additionalProperties": false
+          }
+        },
+        "tool_behavior_summary": { "$ref": "#/$defs/nonEmptyString" },
+        "errors_or_interruptions": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" } },
+        "redactions_performed": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" } }
+      },
+      "required": ["output_artifacts", "transcript_path", "git_status_path", "command_results", "tool_behavior_summary", "errors_or_interruptions", "redactions_performed"],
+      "additionalProperties": false
+    },
+    "scores": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "criterion_id": { "$ref": "#/$defs/nonEmptyString" },
+          "score": { "type": ["number", "null"], "minimum": 0, "maximum": 100 },
+          "rationale": { "type": ["string", "null"] }
+        },
+        "required": ["criterion_id", "score", "rationale"],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "critical_failures": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" } },
+    "limitations": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" } },
+    "comparability": {
+      "type": "object",
+      "properties": {
+        "cohort_id": { "$ref": "#/$defs/nonEmptyString" },
+        "comparable_within_scenario_cohort": { "type": ["boolean", "null"] },
+        "deviations": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" } }
+      },
+      "required": ["cohort_id", "comparable_within_scenario_cohort", "deviations"],
+      "additionalProperties": false
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "reviewer": { "type": ["string", "null"] },
+        "reviewed_at": { "type": ["string", "null"], "format": "date-time" },
+        "decision": { "type": ["string", "null"], "enum": ["pass", "needs_changes", "blocked", null] },
+        "notes": { "type": ["string", "null"] }
+      },
+      "required": ["reviewer", "reviewed_at", "decision", "notes"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["evaluation_track", "run_id", "scenario_id", "role", "rubric_version", "run_number", "started_at", "execution_environment", "revisions", "input", "evidence", "scores", "critical_failures", "limitations", "comparability", "review"],
+  "additionalProperties": false,
+  "$defs": {
+    "nonEmptyString": { "type": "string", "minLength": 1, "pattern": ".*\\S.*" },
+    "unknownScalar": { "type": ["string", "number", "null"] },
+    "gitSha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  }
+}
