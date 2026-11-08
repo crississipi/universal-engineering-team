@@ -1,0 +1,89 @@
+# Stakeholder decisions affecting the repository baseline.
+# Open entries are an inventory of unresolved questions, not proposed answers.
+# Only an authorized human decision owner may change status to confirmed/non_scored.
+schema_version: 1
+decisions:
+  - id: DAILY-SUMMARY-METRIC-SEMANTICS
+    question: Confirm the proposed eligible delivery-attempt counting contract and received/accepted/rejected/duplicate terminal-outcome semantics.
+    owner: Product and Operations
+    affected_roles:
+      - product-analyst
+      - ux-ui-designer
+      - frontend-developer
+      - data-engineer
+      - qa-manager
+    status: open
+    decision: null
+    rationale: null
+    authorized_by: null
+    authorized_at: null
+    evidence_ref: null
+    non_scored_scope: null
+
+  - id: REPORTING-TIMEZONE-DAY-BOUNDARY
+    question: Confirm the reporting timezone and day-boundary rule for the support-facing daily summary.
+    owner: Operations, with Product confirmation
+    affected_roles:
+      - product-analyst
+      - ux-ui-designer
+      - frontend-developer
+      - data-engineer
+      - qa-manager
+    status: open
+    decision: null
+    rationale: null
+    authorized_by: null
+    authorized_at: null
+    evidence_ref: null
+    non_scored_scope: null
+
+  - id: INGRESS-TELEMETRY-TREATMENT
+    question: Confirm whether invalid-signature and unparseable ingress attempts are counted, retained, exposed, or excluded from operational telemetry.
+    owner: Security and Operations
+    affected_roles:
+      - api-manager
+      - integration-engineer
+      - data-engineer
+      - qa-manager
+    status: open
+    decision: null
+    rationale: null
+    authorized_by: null
+    authorized_at: null
+    evidence_ref: null
+    non_scored_scope: null
+
+  - id: SAME-ORDER-DISTINCT-EVENT-POLICY
+    question: Confirm the domain policy when distinct event IDs refer to the same order ID.
+    owner: Product
+    affected_roles:
+      - product-analyst
+      - api-manager
+      - backend-developer
+      - database-manager
+      - integration-engineer
+      - qa-manager
+    status: open
+    decision: null
+    rationale: null
+    authorized_by: null
+    authorized_at: null
+    evidence_ref: null
+    non_scored_scope: null
+
+  - id: DELAY-THRESHOLD-OR-RETRY-INTERVAL
+    question: Decide whether a numeric delayed-event threshold or provider retry interval is required for this cohort; do not invent one if it remains undefined.
+    owner: Operations, with API and Integration input
+    affected_roles:
+      - api-manager
+      - integration-engineer
+      - data-engineer
+      - qa-manager
+      - devops-sre
+    status: open
+    decision: null
+    rationale: null
+    authorized_by: null
+    authorized_at: null
+    evidence_ref: null
+    non_scored_scope: null
