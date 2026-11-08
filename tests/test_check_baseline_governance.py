@@ -166,5 +166,24 @@ class BaselineGovernanceTests(unittest.TestCase):
         self.assertTrue(any("expected 2 baseline scenarios; found 3" in item for item in errors))
 
 
+    def test_rejects_non_string_decision_status_and_scenario_role(self):
+        self.decisions("open")
+        data = yaml.safe_load(self.register_path.read_text(encoding="utf-8"))
+        data["decisions"][0]["status"] = ["open"]
+        self.write_yaml(self.register_path, data)
+        with patch.object(checker, "EXPECTED_DECISIONS", self.decision_ids), patch.object(checker, "expected_roles", lambda: self.roles):
+            decision_errors, _ = checker.validate_decision_register(self.register_path)
+        self.assertTrue(any("status must be open, confirmed, or non_scored" in item for item in decision_errors))
+
+        self.scenarios(approved=True)
+        scenario_path = next(self.scenario_dir.glob("*.yml"))
+        scenario = yaml.safe_load(scenario_path.read_text(encoding="utf-8"))
+        scenario["role"] = ["backend-developer"]
+        self.write_yaml(scenario_path, scenario)
+        with patch.object(checker, "SCENARIO_DIR", self.scenario_dir), patch.object(checker, "expected_roles", lambda: self.roles):
+            scenario_errors, _ = checker.validate_scenario_approvals()
+        self.assertTrue(any("role is not canonical" in item for item in scenario_errors))
+
+
 if __name__ == "__main__":
     unittest.main()
