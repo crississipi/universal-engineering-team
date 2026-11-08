@@ -27,22 +27,22 @@ and explicit human pre-run approval are completed.
 
 | Canonical role | Pilot coverage | Baseline scenario ID (proposed) | Role requirement anchor | Design state |
 |---|---|---|---|---|
-| product-analyst | None | SCEN-BASELINE-PRODUCT-ANALYST | REQ-PRODUCT-ANALYST-01 (drafted in role skill; pending review) | Drafted — author preflighted; independent review pending |
-| solution-architect | None | SCEN-BASELINE-SOLUTION-ARCHITECT | REQ-SOLUTION-ARCHITECT-01 (drafted in role skill; pending review) | Drafted — author preflighted; independent review pending |
-| api-manager | None | SCEN-BASELINE-API-MANAGER | REQ-API-MANAGER-01 (drafted in role skill; pending review) | Drafted — author preflighted; independent review pending |
-| backend-developer | Pilot only | SCEN-BASELINE-BACKEND-DEVELOPER | REQ-BACKEND-01 (exists; reassess baseline fit) | Drafted — anchor semantic review recommended |
-| frontend-developer | None | SCEN-BASELINE-FRONTEND-DEVELOPER | REQ-FRONTEND-DEVELOPER-01 (drafted in role skill; pending review) | Drafted — author preflighted; independent review pending |
-| ux-ui-designer | None | SCEN-BASELINE-UX-UI-DESIGNER | REQ-UX-UI-DESIGNER-01 (drafted in role skill; pending review) | Drafted — author preflighted; independent review pending |
-| database-manager | None | SCEN-BASELINE-DATABASE-MANAGER | REQ-DATABASE-MANAGER-01 (drafted in role skill; pending review) | Drafted — author preflighted; independent review pending |
-| integration-engineer | None | SCEN-BASELINE-INTEGRATION-ENGINEER | REQ-INTEGRATION-ENGINEER-01 (drafted in role skill; pending review) | Drafted — author preflighted; independent review pending |
-| data-engineer | None | SCEN-BASELINE-DATA-ENGINEER | REQ-DATA-ENGINEER-01 (drafted in role skill; pending review) | Drafted — author preflighted; independent review pending |
-| qa-manager | None | SCEN-BASELINE-QA-MANAGER | REQ-QA-MANAGER-01 (drafted in role skill; pending review) | Drafted — author preflighted; independent review pending |
-| penetration-tester | Pilot only | SCEN-BASELINE-PENETRATION-TESTER | REQ-APPSEC-01 (exists; reassess baseline fit) | Drafted — anchor semantic review recommended |
-| devops-sre | None | SCEN-BASELINE-DEVOPS-SRE | REQ-DEVOPS-SRE-01 (drafted in role skill; pending review) | Drafted — author preflighted; independent review pending |
-| performance-engineer | None | SCEN-BASELINE-PERFORMANCE-ENGINEER | REQ-PERFORMANCE-ENGINEER-01 (drafted in role skill; pending review) | Drafted — author preflighted; independent review pending |
-| accessibility-specialist | None | SCEN-BASELINE-ACCESSIBILITY-SPECIALIST | REQ-ACCESSIBILITY-SPECIALIST-01 (drafted in role skill; pending review) | Drafted — author preflighted; independent review pending |
-| technical-writer-knowledge-engineer | None | SCEN-BASELINE-TECHNICAL-WRITER-KNOWLEDGE-ENGINEER | REQ-TECHNICAL-WRITER-01 (drafted in role skill; pending review) | Drafted — author preflighted; independent review pending |
-| release-manager | None | SCEN-BASELINE-RELEASE-MANAGER | REQ-RELEASE-MANAGER-01 (drafted in role skill; pending review) | Drafted — author preflighted; independent review pending |
+| product-analyst | None | SCEN-BASELINE-PRODUCT-ANALYST | REQ-PRODUCT-ANALYST-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| solution-architect | None | SCEN-BASELINE-SOLUTION-ARCHITECT | REQ-SOLUTION-ARCHITECT-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| api-manager | None | SCEN-BASELINE-API-MANAGER | REQ-API-MANAGER-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| backend-developer | Pilot only | SCEN-BASELINE-BACKEND-DEVELOPER | REQ-BACKEND-01 (exists; reassess baseline fit) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| frontend-developer | None | SCEN-BASELINE-FRONTEND-DEVELOPER | REQ-FRONTEND-DEVELOPER-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| ux-ui-designer | None | SCEN-BASELINE-UX-UI-DESIGNER | REQ-UX-UI-DESIGNER-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| database-manager | None | SCEN-BASELINE-DATABASE-MANAGER | REQ-DATABASE-MANAGER-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| integration-engineer | None | SCEN-BASELINE-INTEGRATION-ENGINEER | REQ-INTEGRATION-ENGINEER-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| data-engineer | None | SCEN-BASELINE-DATA-ENGINEER | REQ-DATA-ENGINEER-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| qa-manager | None | SCEN-BASELINE-QA-MANAGER | REQ-QA-MANAGER-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| penetration-tester | Pilot only | SCEN-BASELINE-PENETRATION-TESTER | REQ-APPSEC-01 (exists; reassess baseline fit) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| devops-sre | None | SCEN-BASELINE-DEVOPS-SRE | REQ-DEVOPS-SRE-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| performance-engineer | None | SCEN-BASELINE-PERFORMANCE-ENGINEER | REQ-PERFORMANCE-ENGINEER-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| accessibility-specialist | None | SCEN-BASELINE-ACCESSIBILITY-SPECIALIST | REQ-ACCESSIBILITY-SPECIALIST-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| technical-writer-knowledge-engineer | None | SCEN-BASELINE-TECHNICAL-WRITER-KNOWLEDGE-ENGINEER | REQ-TECHNICAL-WRITER-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
+| release-manager | None | SCEN-BASELINE-RELEASE-MANAGER | REQ-RELEASE-MANAGER-01 (drafted in role skill; pending review) | Drafted — AI audit completed; independent human review waived for this stage; pre-run approval pending |
 | delivery-lead | Pilot only | SCEN-BASELINE-DELIVERY-LEAD | REQ-DELIVERY-01 (exists; reassess baseline fit) | Drafted — anchor semantic refinement recommended |
 
 Role names and order must remain aligned with `docs/team/expected-roles.yml`.
@@ -73,10 +73,11 @@ Complete these gates in order:
    - Define criterion IDs, weights totaling 100, criticality, and evidence-based
      score guidance. Keep scenario scope achievable in one agent session.
 3. **Scenario design review**
-   - Review all 17 drafts against the role skill, canonical ownership, activation
-     rules, artifact catalog, producer-consumer boundaries, and safety policy.
-   - Record design findings and revise ambiguous or unscorable criteria.
-   - A design review is advisory and is not human approval.
+   - The user waived the independent human design-review step for this stage.
+     The AI-assisted audit is recorded in `AI-DESIGN-AUDIT-2026-11-08.md` and
+     remains advisory; it is not an independent human review or approval.
+   - Resolve objective design findings and retain stakeholder decisions as open
+     where an authorized decision owner has not confirmed them.
 4. **Human pre-run approval**
    - Each scenario must have `status: approved`, `approval.approved_by`, and
      `approval.approved_at` before any baseline execution.
@@ -287,4 +288,4 @@ Gate status remains:
 - Human pre-run approvals: 0/17.
 - Baseline executions: 0/170.
 
-Do not change scenario status to approved or start baseline runs until the latest local checks pass, remaining Product/Operations decisions are confirmed or explicitly retained as open/non-scored, an independent human review is recorded, each scenario receives human pre-run approval, and execution-readiness tooling is complete.
+Do not change scenario status to approved or start baseline runs until the latest local checks pass, remaining Product/Operations decisions are confirmed or explicitly retained as open/non-scored, each scenario receives explicit human pre-run approval, and execution-readiness tooling is complete. The independent human design-review step is waived for this stage by user instruction; the AI audit does not count as a human review.
