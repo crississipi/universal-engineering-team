@@ -194,13 +194,17 @@ The repository has pilot run-record conventions and separate operational
 execution lifecycle schemas. Those operational schemas do not validate baseline
 evaluation records.
 
-A dedicated Draft 2020-12 baseline run-record schema and validator are being
-introduced separately from the operational execution lifecycle. The current
-implementation is on the focused branch
-`feat/baseline-run-record-validation`; it is not yet merged or locally
-verified. The baseline report generator and richer cohort summary remain
-pending. Do not start evidence collection based only on the presence of this
-schema or validator.
+A dedicated Draft 2020-12 baseline run-record schema and validator are
+implemented separately from the operational execution lifecycle. They are
+part of PR #35, which remains open and draft; its GitHub Actions failure is
+unresolved and was not rerun because of the repository billing constraint.
+The reporting generator is implemented on the stacked
+`feat/baseline-reporting` branch. The user reported successful local
+verification of that reporting revision at
+`0910c744f7656c6e55f09480726f29e15155a39d` (90 unit tests, both report
+formats, and the baseline validator). Those results do not verify later
+commits on `feat/baseline-execution-readiness`. Do not start evidence
+collection based only on the presence of these tools.
 
 The scenario validator enforces that valid criterion weights are finite,
 positive, and total exactly 100 (within a small floating-point tolerance).
