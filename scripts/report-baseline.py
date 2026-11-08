@@ -8,6 +8,7 @@ from collections import Counter, defaultdict
 from datetime import datetime, timezone
 import importlib.util
 import json
+import math
 from pathlib import Path
 import sys
 
@@ -39,6 +40,7 @@ def score_statistics(values):
     numeric = [
         float(value) for value in values
         if isinstance(value, (int, float)) and not isinstance(value, bool)
+        and math.isfinite(value)
     ]
     return {
         "count": len(numeric),
@@ -66,8 +68,10 @@ def weighted_score(record, scenario):
     if any(
         not isinstance(scores[key], (int, float))
         or isinstance(scores[key], bool)
+        or not math.isfinite(scores[key])
         or not isinstance(weights[key], (int, float))
         or isinstance(weights[key], bool)
+        or not math.isfinite(weights[key])
         for key in weights
     ):
         return None
