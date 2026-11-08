@@ -301,3 +301,6 @@ Following the AI-assisted audit, the draft rubrics were revised:
 - Existing criterion weights were retained; each scenario still totals 100.
 
 The audit report records the remediation and its limitations. AI-03 stakeholder decisions remain open, AI-04 package/handoff governance remains proposed, all 17 scenarios remain drafts, and human pre-run approval is still required. The user is responsible for local test and validator execution against the resulting commit; no verification result is asserted here.
+
+
+The initial audit findings AI-01 and AI-02 have since been remediated in the 17 scenario drafts. See section 7 of `AI-DESIGN-AUDIT-2026-11-08.md` for the change details. The original finding descriptions remain in the report for audit history; the remediation section supersedes their original required-action status.
