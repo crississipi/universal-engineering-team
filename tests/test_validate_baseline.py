@@ -149,7 +149,7 @@ class BaselineRunRecordValidationTests(unittest.TestCase):
 
     def test_utc_yaml_timestamps_keep_z_suffix(self):
         path = self.evidence_dir / "timestamp.yml"
-        path.write_text('started_at: "2026-11-08T10:01:00Z"\\n', encoding="utf-8")
+        path.write_text('started_at: "2026-11-08T10:01:00Z"\n', encoding="utf-8")
         self.assertEqual(
             validator.load_yaml(path)["started_at"],
             "2026-11-08T10:01:00Z",
