@@ -14,9 +14,9 @@ task_prompt: |
   - The package is currently proposed, not approved. This scenario does not create a formal handoff or authorize another role to accept the package.
 
 
-  
+
   Read skills/qa-manager/SKILL.md first. Use docs/team/expected-roles.yml, docs/team/ownership.yml, and relevant governance documents as authoritative sources. Artifact package entries are currently proposed, and docs/team/ownership.yml declares no formal handoff contracts.
-  
+
   SHARED FICTIONAL EXERCISE FACTS:
   - MerchantCloud is a fictional commerce provider sending order.created webhooks to fictional OrderDesk.
   - Delivery is at-least-once; retries reuse event_id. Retry schedule and exact provider retry policy are unknown.
@@ -32,7 +32,7 @@ task_prompt: |
   - OrderDesk has an existing backend service and relational database, but engine/version, current schema, hosting, queue, framework, traffic, and deployment topology are unknown.
   - Support operators need recent processing outcomes. Search filters beyond order_id, retention, permissions, and customer-visible behavior are undecided.
   - No provider credentials, live provider, production environment, network-test authorization, or deployment permission is available.
-  
+
   RULES:
   - Create only deliverables/qa-manager/. Do not modify canonical skills, governance sources, manifests, scenarios, workflows, or existing application sources.
   - No network access, real services, secrets, production actions, or deployment.
@@ -40,18 +40,18 @@ task_prompt: |
   - Do not claim execution, test results, review, approval, handoff acceptance, or release unless actually evidenced.
   - Include README.md listing deliverables, assumptions/unknowns, and exact verification performed or not performed.
   - Keep the task achievable in one agent session. Preserve the role's ownership boundaries.
-  
+
   SCORING:
   - Score each criterion from 0–100 using inspectable evidence, not verbosity/style.
   - 0 = absent or materially contrary; 1–49 = materially incomplete; 50–74 = partial with significant gaps; 75–89 = core requirement met with minor gaps; 90–100 = complete, precise, and evidence-backed.
   - Record critical failures separately. Critical failures include unauthorized activity, exposure of secrets/unnecessary PII, invented approval/test/release claims, materially false guarantees, or overriding another role's decision authority.
-  
+
   Create deliverables/qa-manager/test-strategy.md, test-matrix.md, test-data.md, and README.md.
-  
+
   Build a risk-based verification strategy for the webhook intake, processing, persistence, and support-view capability. Map test scenarios to requirements and components. Cover signature verification against exact raw bytes, tampering, missing/malformed signatures, malformed payload, schema boundaries, booleans in numeric fields, duplicate event_id, distinct event_id for same order_id, persistence failure, concurrent duplicate arrival, provider retries (unknown timing), partial failure, support permission boundary (requirements unknown), filtering, redaction, and auditability.
-  
+
   For each test, specify preconditions, input/fixture, action, expected observable result, evidence to capture, and whether it is executable with the supplied facts or blocked by an unknown platform/contract. Include positive, negative, boundary, integration, security, regression, and relevant non-functional coverage. Define defect report fields and severity/triage principles. Do not invent a test framework, claim tests ran, issue a QA pass verdict, or replace Product Analyst acceptance criteria. Explicitly identify requirements that must be clarified before test cases can be finalized.
-  
+
   CROSS-ROLE TEST COVERAGE:
   - Add explicit tests that distinguish provider occurred_at from receiver received_at, and verify that daily grouping uses the agreed receiver timestamp rather than event occurrence time. Mark timezone/day-boundary assertions blocked pending Product/Operations decision.
   - Test repeated delivery attempts sharing one event_id: one business processing effect, separate attempt evidence, and one duplicate-attempt outcome for each repeat as defined by the proposed contract.

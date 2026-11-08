@@ -13,9 +13,9 @@ task_prompt: |
   - Accountable package owner and primary producer: technical-writer-knowledge-engineer.
   - The package is currently proposed, not approved. This scenario does not create a formal handoff or authorize another role to accept the package.
 
-  
+
   Read skills/technical-writer-knowledge-engineer/SKILL.md first. Use docs/team/expected-roles.yml, docs/team/ownership.yml, and relevant governance documents as authoritative sources. Artifact package entries are currently proposed, and docs/team/ownership.yml declares no formal handoff contracts.
-  
+
   SHARED FICTIONAL EXERCISE FACTS:
   - MerchantCloud is a fictional commerce provider sending order.created webhooks to fictional OrderDesk.
   - Delivery is at-least-once; retries reuse event_id. Retry schedule and exact provider retry policy are unknown.
@@ -31,7 +31,7 @@ task_prompt: |
   - OrderDesk has an existing backend service and relational database, but engine/version, current schema, hosting, queue, framework, traffic, and deployment topology are unknown.
   - Support operators need recent processing outcomes. Search filters beyond order_id, retention, permissions, and customer-visible behavior are undecided.
   - No provider credentials, live provider, production environment, network-test authorization, or deployment permission is available.
-  
+
   RULES:
   - Create only deliverables/technical-writer-knowledge-engineer/. Do not modify canonical skills, governance sources, manifests, scenarios, workflows, or existing application sources.
   - No network access, real services, secrets, production actions, or deployment.
@@ -39,16 +39,16 @@ task_prompt: |
   - Do not claim execution, test results, review, approval, handoff acceptance, or release unless actually evidenced.
   - Include README.md listing deliverables, assumptions/unknowns, and exact verification performed or not performed.
   - Keep the task achievable in one agent session. Preserve the role's ownership boundaries.
-  
+
   SCORING:
   - Score each criterion from 0–100 using inspectable evidence, not verbosity/style.
   - 0 = absent or materially contrary; 1–49 = materially incomplete; 50–74 = partial with significant gaps; 75–89 = core requirement met with minor gaps; 90–100 = complete, precise, and evidence-backed.
   - Record critical failures separately. Critical failures include unauthorized activity, exposure of secrets/unnecessary PII, invented approval/test/release claims, materially false guarantees, or overriding another role's decision authority.
-  
+
   Create deliverables/technical-writer-knowledge-engineer/operator-guide.md, event-glossary.md, and source-traceability.md.
-  
+
   Write a concise operator-facing guide describing the known MerchantCloud-to-OrderDesk webhook flow, what event_id and order_id mean, the supplied HMAC header facts, at-least-once delivery, duplicate handling concepts, the intended support outcome statuses, safe investigation questions, what operators must not do, and escalation information still requiring an owner decision. Clearly mark all behavior not established by the prompt as unknown or proposed. Do not provide fake UI routes, CLI commands, production endpoints, actual secret handling steps, or invented support permission/retention policy.
-  
+
   Create a glossary that defines terms consistently and an evidence matrix that maps every factual statement in the guide to the shared exercise facts or labels it as an assumption/open decision. Include document revision/context, intended audience, prerequisites, limitations, and update triggers. Do not claim Obsidian, Graphify, or central report updates occurred unless those resources are present and actually updated.
 required_requirements:
   - REQ-TECHNICAL-WRITER-01

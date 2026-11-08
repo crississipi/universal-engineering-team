@@ -14,9 +14,9 @@ task_prompt: |
   - The package is currently proposed, not approved. This scenario does not create a formal handoff or authorize another role to accept the package.
 
 
-  
+
   Before starting, read skills/frontend-developer/SKILL.md and use it as the authority for your role's responsibilities, decision boundaries, and output expectations. Consult docs/team/expected-roles.yml, docs/team/ownership.yml, and applicable canonical governance documents. This scenario produces ART-FRONTEND, owned by frontend-developer; the package is proposed and ownership is not formal approval. docs/team/ownership.yml currently declares no formal handoff contracts.
-  
+
   SHARED FICTIONAL EXERCISE CONTEXT — treat only the following as known:
   - A fictional commerce provider, MerchantCloud, sends order.created webhooks to a fictional internal service, OrderDesk.
   - Delivery is at-least-once. A delivery may be retried. Retries reuse the same event_id. The provider's retry schedule and exact retry policy are unknown.
@@ -37,7 +37,7 @@ task_prompt: |
   - OrderDesk has an existing backend service and relational database. Database engine/version, hosting, current schema, queue, framework, deployment topology, and current source code are unknown.
   - Support operators need to inspect recent processing outcomes. Search filters beyond order_id, retention, permissions, and customer-visible behavior are undecided.
   - No live provider, credentials, production environment, network-testing authorization, or production deployment permission is available.
-  
+
   EXECUTION BOUNDARIES:
   - Write only under deliverables/frontend-developer/. Do not modify canonical skills, governance, manifests, scenario files, workflows, or existing source files.
   - Do not access external networks, call services, request secrets, or perform production actions.
@@ -45,17 +45,17 @@ task_prompt: |
   - Do not claim implementation, execution, testing, approval, handoff acceptance, or release unless actually evidenced.
   - Include a README.md listing deliverables, assumptions/unknowns, and exactly what was or was not verified.
   - Keep work bounded to one agent session and make artifacts inspectable.
-  
+
   SCORING GUIDANCE:
   - Score each criterion from 0–100 based on observable evidence, not verbosity or stylistic preference.
   - 0 means absent or materially contrary to the requirement; 1–49 means materially incomplete; 50–74 means partially meets with significant gaps; 75–89 means meets the core requirement with minor gaps; 90–100 means complete, precise, and evidence-backed.
   - Record critical failures separately; a high weighted average cannot hide a critical failure.
   - A critical failure includes unauthorized live/production activity, secret or unnecessary personal-data exposure, invented approval or verification, materially false guarantee, or violation of specialist ownership boundaries.
-  
+
   Build a dependency-free browser UI with local fixtures only. Create deliverables/frontend-developer/index.html, styles.css, orders.js, and README.md.
-  
+
   Show recent processing outcomes with order_id, event_id, received time, status (accepted/rejected/duplicate), and safe failure reason when available. Include filters by order_id and status, a selected-row detail view, and distinct loading, empty, no-match, error, and populated states that can be demonstrated without a server. Supply at least five fixtures covering all statuses, long failure reason, and multiple events for one order. Render untrusted values as text, not HTML. Use semantic controls/table/list, keyboard-operable interactions, responsive desktop/narrow-screen behavior, and clearly indicate that the page is using local demonstration fixtures. Do not add a backend, real API requests, authentication, invented support permissions, or customer-facing features. Include a manual interaction checklist; do not claim browser tests ran unless they actually ran.
-  
+
   DAILY SUMMARY AND TIMESTAMP REQUIREMENTS:
   - In addition to recent outcomes, implement a local-fixture demonstration of the first-release support-facing daily operational summary requested by Operations: received, accepted, rejected, and duplicate delivery-attempt counts. Do not imply customer-facing access.
   - Distinguish provider event occurrence time (occurred_at) from receiver-observed receipt time (received_at). Show separate, explicit labels; never derive received_at from occurred_at. Fixture receipt times must be clearly marked as synthetic demonstration values.

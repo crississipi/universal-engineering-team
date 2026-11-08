@@ -14,9 +14,9 @@ task_prompt: |
   - The package is currently proposed, not approved. This scenario does not create a formal handoff or authorize another role to accept the package.
 
 
-  
+
   Before starting, read skills/ux-ui-designer/SKILL.md and use it as the authority for your role's responsibilities, decision boundaries, and output expectations. Consult docs/team/expected-roles.yml, docs/team/ownership.yml, and applicable canonical governance documents. This scenario produces ART-UX-DESIGN, owned by ux-ui-designer; the package is proposed and ownership is not formal approval. docs/team/ownership.yml currently declares no formal handoff contracts.
-  
+
   SHARED FICTIONAL EXERCISE CONTEXT — treat only the following as known:
   - A fictional commerce provider, MerchantCloud, sends order.created webhooks to a fictional internal service, OrderDesk.
   - Delivery is at-least-once. A delivery may be retried. Retries reuse the same event_id. The provider's retry schedule and exact retry policy are unknown.
@@ -37,7 +37,7 @@ task_prompt: |
   - OrderDesk has an existing backend service and relational database. Database engine/version, hosting, current schema, queue, framework, deployment topology, and current source code are unknown.
   - Support operators need to inspect recent processing outcomes. Search filters beyond order_id, retention, permissions, and customer-visible behavior are undecided.
   - No live provider, credentials, production environment, network-testing authorization, or production deployment permission is available.
-  
+
   EXECUTION BOUNDARIES:
   - Write only under deliverables/ux-ui-designer/. Do not modify canonical skills, governance, manifests, scenario files, workflows, or existing source files.
   - Do not access external networks, call services, request secrets, or perform production actions.
@@ -45,19 +45,19 @@ task_prompt: |
   - Do not claim implementation, execution, testing, approval, handoff acceptance, or release unless actually evidenced.
   - Include a README.md listing deliverables, assumptions/unknowns, and exactly what was or was not verified.
   - Keep work bounded to one agent session and make artifacts inspectable.
-  
+
   SCORING GUIDANCE:
   - Score each criterion from 0–100 based on observable evidence, not verbosity or stylistic preference.
   - 0 means absent or materially contrary to the requirement; 1–49 means materially incomplete; 50–74 means partially meets with significant gaps; 75–89 means meets the core requirement with minor gaps; 90–100 means complete, precise, and evidence-backed.
   - Record critical failures separately; a high weighted average cannot hide a critical failure.
   - A critical failure includes unauthorized live/production activity, secret or unnecessary personal-data exposure, invented approval or verification, materially false guarantee, or violation of specialist ownership boundaries.
-  
+
   Create deliverables/ux-ui-designer/support-order-outcomes.md for a support operator investigating an order webhook outcome.
-  
+
   Specify the primary journey from locating an order to understanding processing outcome; information hierarchy and proposed columns; distinction between order_id and event_id; detail panel fields (event time, outcome, safe failure reason, available metadata); filters; opening/closing details; loading, empty, no-match, rejected, duplicate, delayed/not-yet-visible, and error states; responsive narrow-screen behavior; keyboard/focus expectations; and concise microcopy for each status.
-  
+
   Do not expose raw payloads, secrets, or full customer PII by default. Identify unresolved support permission, retention, search, retry/replay, and design-system decisions. Do not write frontend code, change product scope, invent brand tokens, or claim an accessibility conformance verdict.
-  
+
   DAILY SUMMARY AND TIMESTAMP REQUIREMENTS:
   - Design the first-release support-facing daily operational summary explicitly requested by Operations, showing received, accepted, rejected, and duplicate delivery-attempt counts. It is an operations/support experience, not a customer-facing feature.
   - Distinguish provider event occurrence time (occurred_at) from receiver-observed receipt time (received_at) with separate labels and clear hierarchy. Never imply these timestamps are interchangeable.

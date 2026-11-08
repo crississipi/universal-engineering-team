@@ -13,9 +13,9 @@ task_prompt: |
   - Accountable package owner and primary producer: accessibility-specialist.
   - The package is currently proposed, not approved. This scenario does not create a formal handoff or authorize another role to accept the package.
 
-  
+
   Read skills/accessibility-specialist/SKILL.md first. Use docs/team/expected-roles.yml, docs/team/ownership.yml, and relevant governance documents as authoritative sources. Artifact package entries are currently proposed, and docs/team/ownership.yml declares no formal handoff contracts.
-  
+
   SHARED FICTIONAL EXERCISE FACTS:
   - MerchantCloud is a fictional commerce provider sending order.created webhooks to fictional OrderDesk.
   - Delivery is at-least-once; retries reuse event_id. Retry schedule and exact provider retry policy are unknown.
@@ -31,7 +31,7 @@ task_prompt: |
   - OrderDesk has an existing backend service and relational database, but engine/version, current schema, hosting, queue, framework, traffic, and deployment topology are unknown.
   - Support operators need recent processing outcomes. Search filters beyond order_id, retention, permissions, and customer-visible behavior are undecided.
   - No provider credentials, live provider, production environment, network-test authorization, or deployment permission is available.
-  
+
   RULES:
   - Create only deliverables/accessibility-specialist/. Do not modify canonical skills, governance sources, manifests, scenarios, workflows, or existing application sources.
   - No network access, real services, secrets, production actions, or deployment.
@@ -39,14 +39,14 @@ task_prompt: |
   - Do not claim execution, test results, review, approval, handoff acceptance, or release unless actually evidenced.
   - Include README.md listing deliverables, assumptions/unknowns, and exact verification performed or not performed.
   - Keep the task achievable in one agent session. Preserve the role's ownership boundaries.
-  
+
   SCORING:
   - Score each criterion from 0–100 using inspectable evidence, not verbosity/style.
   - 0 = absent or materially contrary; 1–49 = materially incomplete; 50–74 = partial with significant gaps; 75–89 = core requirement met with minor gaps; 90–100 = complete, precise, and evidence-backed.
   - Record critical failures separately. Critical failures include unauthorized activity, exposure of secrets/unnecessary PII, invented approval/test/release claims, materially false guarantees, or overriding another role's decision authority.
-  
+
   Perform a static source review only of the following intentionally incomplete support-view fragment. You may identify barriers suggested by the markup, but do not claim full WCAG conformance or dynamic behavior that cannot be observed.
-  
+
   HTML fragment:
   <section>
     <h2>Recent orders</h2>
@@ -68,7 +68,7 @@ task_prompt: |
       <button>Details</button>
     </div>
   </section>
-  
+
   Create deliverables/accessibility-specialist/assessment.md and remediation-checklist.md. Evaluate semantic structure/table/list use, input naming, control semantics/keyboard operation, accessible names, focus behavior unknowns, status conveyed by color alone, heading/landmark structure, responsive/reflow concerns, and screen-reader announcement of dynamic filtering/details (where dynamic behavior is not shown, mark as unverified). For every finding include ID, affected element, user impact, evidence, applicable WCAG 2.2 success criterion where reasonably supported, severity/priority rationale, remediation, and retest method. Separate confirmed source issues from unknown runtime behavior. Define a proportionate manual keyboard/screen-reader/zoom/reflow test plan, but do not run it or assert conformance.
 required_requirements:
   - REQ-ACCESSIBILITY-SPECIALIST-01

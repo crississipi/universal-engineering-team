@@ -14,9 +14,9 @@ task_prompt: |
   - The package is currently proposed, not approved. This scenario does not create a formal handoff or authorize another role to accept the package.
 
 
-  
+
   Read skills/data-engineer/SKILL.md first. Use docs/team/expected-roles.yml, docs/team/ownership.yml, and relevant governance documents as authoritative sources. Artifact package entries are currently proposed, and docs/team/ownership.yml declares no formal handoff contracts.
-  
+
   SHARED FICTIONAL EXERCISE FACTS:
   - MerchantCloud is a fictional commerce provider sending order.created webhooks to fictional OrderDesk.
   - Delivery is at-least-once; retries reuse event_id. Retry schedule and exact provider retry policy are unknown.
@@ -32,7 +32,7 @@ task_prompt: |
   - OrderDesk has an existing backend service and relational database, but engine/version, current schema, hosting, queue, framework, traffic, and deployment topology are unknown.
   - Support operators need recent processing outcomes. Search filters beyond order_id, retention, permissions, and customer-visible behavior are undecided.
   - No provider credentials, live provider, production environment, network-test authorization, or deployment permission is available.
-  
+
   RULES:
   - Create only deliverables/data-engineer/. Do not modify canonical skills, governance sources, manifests, scenarios, workflows, or existing application sources.
   - No network access, real services, secrets, production actions, or deployment.
@@ -40,18 +40,18 @@ task_prompt: |
   - Do not claim execution, test results, review, approval, handoff acceptance, or release unless actually evidenced.
   - Include README.md listing deliverables, assumptions/unknowns, and exact verification performed or not performed.
   - Keep the task achievable in one agent session. Preserve the role's ownership boundaries.
-  
+
   SCORING:
   - Score each criterion from 0–100 using inspectable evidence, not verbosity/style.
   - 0 = absent or materially contrary; 1–49 = materially incomplete; 50–74 = partial with significant gaps; 75–89 = core requirement met with minor gaps; 90–100 = complete, precise, and evidence-backed.
   - Record critical failures separately. Critical failures include unauthorized activity, exposure of secrets/unnecessary PII, invented approval/test/release claims, materially false guarantees, or overriding another role's decision authority.
-  
+
   Create deliverables/data-engineer/pipeline-design.md, data-contract.md, and quality-checks.md.
-  
+
   Design an analytical pipeline that derives a support-facing daily event-outcome summary from an authoritative event/outcome store. Do not invent an upstream store schema; define the minimum source fields required and mark them as proposed contract requirements to be confirmed with their owner.
-  
+
   Specify source-to-target lineage, field mappings, event_id and order_id semantics, deduplication, timestamp/timezone handling, currency handling (preserve currency; do not sum mixed currencies), invalid/null data handling, late-arriving events, correction of previously recorded outcomes, deterministic aggregation, incremental checkpoints/watermarks, idempotent writes, restart, replay, and backfill boundaries. Define data-quality checks and quarantine behavior. Identify product definitions needed for metrics and retention/privacy constraints. Include a small illustrative transformation pseudocode only; do not implement or run a pipeline. State what evidence is required before a real backfill or production schedule is authorized.
-  
+
   DAILY SUMMARY METRIC AND SOURCE CONTRACT:
   - Treat the daily summary as a support/operations-facing first-release requirement, but do not assume a separate pipeline is automatically necessary. Explain when a database query/materialized view is sufficient versus when a pipeline is justified; mark the trigger as an architecture/operations decision.
   - Distinguish a provider event (event_id) from each receiver-observed delivery attempt (proposed delivery_attempt_id). Repeated attempts share event_id but have distinct attempt IDs and received_at values. order_id is the business order identity and must not be used as the event deduplication key.

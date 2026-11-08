@@ -14,9 +14,9 @@ task_prompt: |
   - The package is currently proposed, not approved. This scenario does not create a formal handoff or authorize another role to accept the package.
 
 
-  
+
   Before starting, read skills/backend-developer/SKILL.md and use it as the authority for your role's responsibilities, decision boundaries, and output expectations. Consult docs/team/expected-roles.yml, docs/team/ownership.yml, and applicable canonical governance documents. This scenario produces ART-BACKEND, owned by backend-developer; the package is proposed and ownership is not formal approval. docs/team/ownership.yml currently declares no formal handoff contracts.
-  
+
   SHARED FICTIONAL EXERCISE CONTEXT — treat only the following as known:
   - A fictional commerce provider, MerchantCloud, sends order.created webhooks to a fictional internal service, OrderDesk.
   - Delivery is at-least-once. A delivery may be retried. Retries reuse the same event_id. The provider's retry schedule and exact retry policy are unknown.
@@ -37,7 +37,7 @@ task_prompt: |
   - OrderDesk has an existing backend service and relational database. Database engine/version, hosting, current schema, queue, framework, deployment topology, and current source code are unknown.
   - Support operators need to inspect recent processing outcomes. Search filters beyond order_id, retention, permissions, and customer-visible behavior are undecided.
   - No live provider, credentials, production environment, network-testing authorization, or production deployment permission is available.
-  
+
   EXECUTION BOUNDARIES:
   - Write only under deliverables/backend-developer/. Do not modify canonical skills, governance, manifests, scenario files, workflows, or existing source files.
   - Do not access external networks, call services, request secrets, or perform production actions.
@@ -45,15 +45,15 @@ task_prompt: |
   - Do not claim implementation, execution, testing, approval, handoff acceptance, or release unless actually evidenced.
   - Include a README.md listing deliverables, assumptions/unknowns, and exactly what was or was not verified.
   - Keep work bounded to one agent session and make artifacts inspectable.
-  
+
   SCORING GUIDANCE:
   - Score each criterion from 0–100 based on observable evidence, not verbosity or stylistic preference.
   - 0 means absent or materially contrary to the requirement; 1–49 means materially incomplete; 50–74 means partially meets with significant gaps; 75–89 means meets the core requirement with minor gaps; 90–100 means complete, precise, and evidence-backed.
   - Record critical failures separately; a high weighted average cannot hide a critical failure.
   - A critical failure includes unauthorized live/production activity, secret or unnecessary personal-data exposure, invented approval or verification, materially false guarantee, or violation of specialist ownership boundaries.
-  
+
   Use Python standard library only. Create deliverables/backend-developer/processor.py, test_processor.py, and README.md.
-  
+
   Implement a framework-independent application service that:
   - Accepts a previously authenticated and validated normalized event with delivery_attempt_id, receiver-generated received_at, event_id, order_id, customer email, currency, and line items. received_at must not be derived from provider occurred_at.
   - Calls a caller-supplied repository protocol/callback that records the individual delivery attempt, atomically claims event_id, and persists the order plus event/attempt outcomes under one durable transaction boundary. Clearly document the required uniqueness and atomicity contracts; do not implement a fake database or assert a normal in-memory set is concurrency-safe/durable.
@@ -61,7 +61,7 @@ task_prompt: |
   - Separates delivery_attempt_id, event_id, and order_id. Distinct event_ids for the same order_id must not be mislabeled as duplicate delivery. Handle the same-order case through a caller-supplied domain-policy decision; do not invent the business rule. The service must propagate an injected accept/reject decision and persist its outcome consistently.
   - Does not acknowledge a provider request or perform network, signature, logging, or secret management; these are outside this service's boundary.
   - Does not swallow repository errors or report a durable success when the repository raises/does not confirm commit.
-  
+
   Add tests using a deterministic fake repository and injected domain-policy callback for new event, repeated delivery with same event_id but distinct attempt IDs, same order with distinct event IDs under both policy outcomes, repository exception, and transaction-boundary outcomes. Assert that duplicate attempts are auditable while business processing is not repeated. State explicitly that fake tests do not establish production transaction isolation or concurrency safety.
   - Treat a repeat event_id as duplicate only when a durable terminal outcome for that event already exists. A repository exception or incomplete/nonterminal processing must not be converted into a duplicate result. Persist a separate attempt record for each receiver-observed delivery.
 

@@ -14,9 +14,9 @@ task_prompt: |
   - The package is currently proposed, not approved. This scenario does not create a formal handoff or authorize another role to accept the package.
 
 
-  
+
   Before starting, read skills/solution-architect/SKILL.md and use it as the authority for your role's responsibilities, decision boundaries, and output expectations. Consult docs/team/expected-roles.yml, docs/team/ownership.yml, and applicable canonical governance documents. This scenario produces ART-ARCHITECTURE, owned by solution-architect; the package is proposed and ownership is not formal approval. docs/team/ownership.yml currently declares no formal handoff contracts.
-  
+
   SHARED FICTIONAL EXERCISE CONTEXT — treat only the following as known:
   - A fictional commerce provider, MerchantCloud, sends order.created webhooks to a fictional internal service, OrderDesk.
   - Delivery is at-least-once. A delivery may be retried. Retries reuse the same event_id. The provider's retry schedule and exact retry policy are unknown.
@@ -37,7 +37,7 @@ task_prompt: |
   - OrderDesk has an existing backend service and relational database. Database engine/version, hosting, current schema, queue, framework, deployment topology, and current source code are unknown.
   - Support operators need to inspect recent processing outcomes. Search filters beyond order_id, retention, permissions, and customer-visible behavior are undecided.
   - No live provider, credentials, production environment, network-testing authorization, or production deployment permission is available.
-  
+
   EXECUTION BOUNDARIES:
   - Write only under deliverables/solution-architect/. Do not modify canonical skills, governance, manifests, scenario files, workflows, or existing source files.
   - Do not access external networks, call services, request secrets, or perform production actions.
@@ -45,20 +45,20 @@ task_prompt: |
   - Do not claim implementation, execution, testing, approval, handoff acceptance, or release unless actually evidenced.
   - Include a README.md listing deliverables, assumptions/unknowns, and exactly what was or was not verified.
   - Keep work bounded to one agent session and make artifacts inspectable.
-  
+
   SCORING GUIDANCE:
   - Score each criterion from 0–100 based on observable evidence, not verbosity or stylistic preference.
   - 0 means absent or materially contrary to the requirement; 1–49 means materially incomplete; 50–74 means partially meets with significant gaps; 75–89 means meets the core requirement with minor gaps; 90–100 means complete, precise, and evidence-backed.
   - Record critical failures separately; a high weighted average cannot hide a critical failure.
   - A critical failure includes unauthorized live/production activity, secret or unnecessary personal-data exposure, invented approval or verification, materially false guarantee, or violation of specialist ownership boundaries.
-  
+
   The requested capability is to receive order.created events, verify signatures, prevent duplicate order creation, persist processing outcomes, and expose recent outcomes to support operators. Product details not specified remain open.
-  
+
   Create:
   - deliverables/solution-architect/architecture.md with system context, logical components, responsibilities, trust boundaries, data ownership, principal interfaces, reliability and observability concerns, constraints, and unknowns.
   - deliverables/solution-architect/sequence.mmd with Mermaid sequences for valid, invalid-signature, duplicate-delivery, and persistence-failure paths.
   - deliverables/solution-architect/decisions.md comparing at least two acknowledgement designs: acknowledge after synchronous durable write, and acknowledge after durable queue acceptance with asynchronous processing. Identify evidence needed before selecting either option; do not assume a queue exists.
-  
+
   Explain exact raw-body signature verification, event_id idempotency, durable state transitions, retry/partial failure, and support visibility. Distinguish provider delivery guarantees from internal processing guarantees. Do not write application code, select undisclosed technologies, or accept business/security risk on behalf of an owner.
 required_requirements:
   - REQ-SOLUTION-ARCHITECT-01
