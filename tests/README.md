@@ -88,3 +88,23 @@ python scripts/build-all-role-skills.py --write
 ```
 
 Use `--check` to detect drift without modifying files. The check runs in CI.
+
+## Baseline pre-run governance check
+
+The read-only governance check reports whether all baseline scenarios have
+explicit approval metadata and whether the stakeholder decision register has
+an authorized `confirmed` or `non_scored` disposition for each required
+topic. It does not create approvals, authenticate decision authority, validate
+cohort revision pins, or authorize execution.
+
+```powershell
+python scripts/check-baseline-governance.py
+python scripts/check-baseline-governance.py --format json
+python -m unittest discover -s tests -p "test_check_baseline_governance.py" -v
+```
+
+An unresolved decision or draft scenario is reported as a blocker. Malformed
+register data, incomplete authorization metadata, missing decision entries,
+or invalid scenario approval metadata are reported as errors. The check is
+read-only and must not be used to manufacture human decisions or approvals.
+
