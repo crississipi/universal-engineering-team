@@ -138,7 +138,7 @@ class BaselineGovernanceTests(unittest.TestCase):
         self.write_yaml(self.register_path, data)
         with patch.object(checker, "EXPECTED_DECISIONS", self.decision_ids):
             errors, _ = checker.validate_decision_register(self.register_path)
-        self.assertTrue(any("authorized_at must be an ISO-8601 timestamp" in item for item in errors))
+        self.assertTrue(any("authorized_at must be a valid ISO-8601 timestamp" in item for item in errors))
 
     def test_approved_scenario_requires_complete_metadata(self):
         self.scenarios(approved=True)
