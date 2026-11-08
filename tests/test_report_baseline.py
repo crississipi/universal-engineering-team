@@ -153,6 +153,18 @@ class BaselineReportTests(unittest.TestCase):
         self.assertIn("| 0 |", markdown)
         self.assertNotIn("0.00", markdown)
 
+    def test_report_preserves_individual_run_score_and_review(self):
+        run = record(4, decision="needs_changes", failures=["Missing test evidence"])
+        result = reporter.build_report({"SCEN-BASELINE-TEST": scenario()}, [run])
+        details = result["scenarios"][0]["runs"][0]
+        self.assertEqual(details["run_number"], 4)
+        self.assertEqual(details["weighted_score"], 88.0)
+        self.assertEqual(details["review_decision"], "needs_changes")
+        self.assertEqual(details["critical_failures"], ["Missing test evidence"])
+        markdown = reporter.render_markdown(result)
+        self.assertIn("Individual run scores", markdown)
+        self.assertIn("needs_changes", markdown)
+
 
 if __name__ == "__main__":
     unittest.main()
