@@ -20,6 +20,8 @@ python scripts/validate-artifacts.py
 python scripts/validate-handoffs.py
 python scripts/validate-scenarios.py
 python scripts/validate-baseline.py
+python scripts/report-baseline.py
+python scripts/report-baseline.py --format json
 python scripts/build-agents-section.py --check
 ```
 
@@ -58,6 +60,7 @@ python -m unittest discover -s tests -p "test_blocker_status_governance.py" -v
 | `validate-handoffs.py` | Formal handoff contract governance |
 | `validate-scenarios.py` | Scenario and review-record structure |
 | `validate-baseline.py` | Baseline run-record schema, scenario/rubric references, evidence paths and prompt hashes, duplicate/missing run numbers, and cohort consistency |
+| `report-baseline.py` | Validates and summarizes actual baseline records, criterion and weighted scores, critical failures, human review decisions, and comparable cohort results |
 | `validate-execution.py` | Integrated execution parsing, JSON Schema, cross-record, and lifecycle validation; `--check-schemas` validates schema documents without an execution fixture |
 | `build-agents-section.py --check` | Generated `AGENTS.md` section synchronization |
 | `build-all-role-skills.py --check` | Generated `ALL-ROLE-SKILLS.md` synchronization with all canonical role skills |
