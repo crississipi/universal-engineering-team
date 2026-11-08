@@ -76,50 +76,50 @@ criteria:
     critical: true
     requirement_ref: REQ-INTEGRATION-ENGINEER-01
     score_anchors:
-      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
-      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
-      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
-      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+      absent: "No inspectable deliverable evidence demonstrates SYSTEM-AND-DATA-MAPPING: Maps the systems, owners, trust boundaries, source-of-truth rules, and explicit event/order field semantics The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The SYSTEM-AND-DATA-MAPPING evidence covers only part of the criterion (for example, Maps the systems; owners) while material elements such as trust boundaries; source-of-truth rules; and explicit event/order field semantics are missing, ambiguous, inconsistent, or unsupported."
+      core: "The deliverable demonstrates the core SYSTEM-AND-DATA-MAPPING outcome: Maps the systems, owners, trust boundaries, source-of-truth rules, and explicit event/order field semantics The corresponding artifact sections and examples are inspectable and substantially consistent, with only limited gaps that do not defeat the criterion."
+      complete: "The deliverable fully demonstrates SYSTEM-AND-DATA-MAPPING: Maps the systems, owners, trust boundaries, source-of-truth rules, and explicit event/order field semantics Every material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
   - id: DELIVERY-AND-IDEMPOTENCY
     description: "Correctly treats at-least-once delivery and event_id deduplication without claiming exactly-once processing."
     weight: 20
     critical: true
     requirement_ref: REQ-INTEGRATION-ENGINEER-01
     score_anchors:
-      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
-      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
-      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
-      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+      absent: "No inspectable deliverable evidence demonstrates DELIVERY-AND-IDEMPOTENCY: Correctly treats at-least-once delivery and event_id deduplication without claiming exactly-once processing The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The DELIVERY-AND-IDEMPOTENCY evidence covers only part of the criterion (for example, Correctly treats at-least-once delivery and event_id deduplication without claiming exactly-once processing) while material elements such as Correctly treats at-least-once delivery and event_id deduplication without claiming exactly-once processing are missing, ambiguous, inconsistent, or unsupported."
+      core: "The deliverable demonstrates the core DELIVERY-AND-IDEMPOTENCY outcome: Correctly treats at-least-once delivery and event_id deduplication without claiming exactly-once processing The corresponding artifact sections and examples are inspectable and substantially consistent, with only limited gaps that do not defeat the criterion."
+      complete: "The deliverable fully demonstrates DELIVERY-AND-IDEMPOTENCY: Correctly treats at-least-once delivery and event_id deduplication without claiming exactly-once processing Every material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
   - id: FAILURE-AND-RECOVERY
     description: "Provides bounded retry, quarantine, reconciliation, partial-failure, and replay handling with unknowns explicit."
     weight: 25
     critical: true
     requirement_ref: REQ-INTEGRATION-ENGINEER-01
     score_anchors:
-      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
-      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
-      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
-      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+      absent: "No inspectable deliverable evidence demonstrates FAILURE-AND-RECOVERY: Provides bounded retry, quarantine, reconciliation, partial-failure, and replay handling with unknowns explicit The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The FAILURE-AND-RECOVERY evidence covers only part of the criterion (for example, Provides bounded retry; quarantine) while material elements such as reconciliation; partial-failure; and replay handling with unknowns explicit are missing, ambiguous, inconsistent, or unsupported."
+      core: "The deliverable demonstrates the core FAILURE-AND-RECOVERY outcome: Provides bounded retry, quarantine, reconciliation, partial-failure, and replay handling with unknowns explicit The corresponding artifact sections and examples are inspectable and substantially consistent, with only limited gaps that do not defeat the criterion."
+      complete: "The deliverable fully demonstrates FAILURE-AND-RECOVERY: Provides bounded retry, quarantine, reconciliation, partial-failure, and replay handling with unknowns explicit Every material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
   - id: CONTRACT-COORDINATION
     description: "Identifies provider/API/database/security/operations decisions and does not override their ownership."
     weight: 15
     critical: false
     requirement_ref: REQ-INTEGRATION-ENGINEER-01
     score_anchors:
-      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
-      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
-      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
-      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+      absent: "No inspectable deliverable evidence demonstrates CONTRACT-COORDINATION: Identifies provider/API/database/security/operations decisions and does not override their ownership The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The CONTRACT-COORDINATION evidence covers only part of the criterion (for example, Identifies provider/API/database/security/operations decisions and does not override their ownership) while material elements such as Identifies provider/API/database/security/operations decisions and does not override their ownership are missing, ambiguous, inconsistent, or unsupported."
+      core: "The deliverable demonstrates the core CONTRACT-COORDINATION outcome: Identifies provider/API/database/security/operations decisions and does not override their ownership The corresponding artifact sections and examples are inspectable and substantially consistent, with only limited gaps that do not defeat the criterion."
+      complete: "The deliverable fully demonstrates CONTRACT-COORDINATION: Identifies provider/API/database/security/operations decisions and does not override their ownership Every material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
   - id: OPERATIONAL-CLARITY
     description: "Supplies actionable failure matrix, recovery steps, sanitized examples, and evidence requirements without claiming live provider verification."
     weight: 20
     critical: false
     requirement_ref: REQ-INTEGRATION-ENGINEER-01
     score_anchors:
-      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
-      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
-      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
-      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+      absent: "No inspectable deliverable evidence demonstrates OPERATIONAL-CLARITY: Supplies actionable failure matrix, recovery steps, sanitized examples, and evidence requirements without claiming live provider verification The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The OPERATIONAL-CLARITY evidence covers only part of the criterion (for example, Supplies actionable failure matrix; recovery steps) while material elements such as sanitized examples; and evidence requirements without claiming live provider verification are missing, ambiguous, inconsistent, or unsupported."
+      core: "The deliverable demonstrates the core OPERATIONAL-CLARITY outcome: Supplies actionable failure matrix, recovery steps, sanitized examples, and evidence requirements without claiming live provider verification The corresponding artifact sections and examples are inspectable and substantially consistent, with only limited gaps that do not defeat the criterion."
+      complete: "The deliverable fully demonstrates OPERATIONAL-CLARITY: Supplies actionable failure matrix, recovery steps, sanitized examples, and evidence requirements without claiming live provider verification Every material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
 review_record: null
 evidence:
   - path: skills/integration-engineer/SKILL.md
