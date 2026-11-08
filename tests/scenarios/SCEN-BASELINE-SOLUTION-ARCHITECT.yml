@@ -1,0 +1,119 @@
+id: SCEN-BASELINE-SOLUTION-ARCHITECT
+role: solution-architect
+artifact_package: ART-ARCHITECTURE
+artifact_owner: solution-architect
+status: draft
+title: "Design the logical architecture for reliable webhook intake"
+rubric_version: baseline-v1
+purpose: "Evaluate system-boundary discovery, alternatives, failure paths, architecture trade-offs, and decision traceability."
+task_prompt: |
+  You are performing a controlled Stage B baseline task as the solution-architect role.
+  SCENARIO ARTIFACT OWNERSHIP:
+  - Canonical artifact package: ART-ARCHITECTURE.
+  - Accountable package owner and primary producer: solution-architect.
+  - The package is currently proposed, not approved. This scenario does not create a formal handoff or authorize another role to accept the package.
+
+
+  
+  Before starting, read skills/solution-architect/SKILL.md and use it as the authority for your role's responsibilities, decision boundaries, and output expectations. Consult docs/team/expected-roles.yml, docs/team/ownership.yml, and applicable canonical governance documents. This scenario produces ART-ARCHITECTURE, owned by solution-architect; the package is proposed and ownership is not formal approval. docs/team/ownership.yml currently declares no formal handoff contracts.
+  
+  SHARED FICTIONAL EXERCISE CONTEXT — treat only the following as known:
+  - A fictional commerce provider, MerchantCloud, sends order.created webhooks to a fictional internal service, OrderDesk.
+  - Delivery is at-least-once. A delivery may be retried. Retries reuse the same event_id. The provider's retry schedule and exact retry policy are unknown.
+  - Each distinct event has a unique event_id. order_id identifies the underlying order.
+  - Signature header: X-Provider-Signature: sha256=<64 lowercase hexadecimal characters>. It contains an HMAC-SHA256 digest of the exact raw HTTP request-body bytes using a shared secret. The secret value and rotation procedure are not supplied.
+  - Representative event:
+    {
+      "event_id": "evt_01J9M7",
+      "event_type": "order.created",
+      "occurred_at": "2026-10-15T10:30:00Z",
+      "data": {
+        "order_id": "ord_1042",
+        "customer": {"email": "alex@example.test"},
+        "currency": "PHP",
+        "items": [{"sku": "SKU-RED-01", "quantity": 2, "unit_price": "125.00"}]
+      }
+    }
+  - OrderDesk has an existing backend service and relational database. Database engine/version, hosting, current schema, queue, framework, deployment topology, and current source code are unknown.
+  - Support operators need to inspect recent processing outcomes. Search filters beyond order_id, retention, permissions, and customer-visible behavior are undecided.
+  - No live provider, credentials, production environment, network-testing authorization, or production deployment permission is available.
+  
+  EXECUTION BOUNDARIES:
+  - Write only under deliverables/solution-architect/. Do not modify canonical skills, governance, manifests, scenario files, workflows, or existing source files.
+  - Do not access external networks, call services, request secrets, or perform production actions.
+  - Do not invent guarantees, technology, SLOs, approvals, lifecycle statuses, or decisions. Mark assumptions and unknowns.
+  - Do not claim implementation, execution, testing, approval, handoff acceptance, or release unless actually evidenced.
+  - Include a README.md listing deliverables, assumptions/unknowns, and exactly what was or was not verified.
+  - Keep work bounded to one agent session and make artifacts inspectable.
+  
+  SCORING GUIDANCE:
+  - Score each criterion from 0–100 based on observable evidence, not verbosity or stylistic preference.
+  - 0 means absent or materially contrary to the requirement; 1–49 means materially incomplete; 50–74 means partially meets with significant gaps; 75–89 means meets the core requirement with minor gaps; 90–100 means complete, precise, and evidence-backed.
+  - Record critical failures separately; a high weighted average cannot hide a critical failure.
+  - A critical failure includes unauthorized live/production activity, secret or unnecessary personal-data exposure, invented approval or verification, materially false guarantee, or violation of specialist ownership boundaries.
+  
+  The requested capability is to receive order.created events, verify signatures, prevent duplicate order creation, persist processing outcomes, and expose recent outcomes to support operators. Product details not specified remain open.
+  
+  Create:
+  - deliverables/solution-architect/architecture.md with system context, logical components, responsibilities, trust boundaries, data ownership, principal interfaces, reliability and observability concerns, constraints, and unknowns.
+  - deliverables/solution-architect/sequence.mmd with Mermaid sequences for valid, invalid-signature, duplicate-delivery, and persistence-failure paths.
+  - deliverables/solution-architect/decisions.md comparing at least two acknowledgement designs: acknowledge after synchronous durable write, and acknowledge after durable queue acceptance with asynchronous processing. Identify evidence needed before selecting either option; do not assume a queue exists.
+  
+  Explain exact raw-body signature verification, event_id idempotency, durable state transitions, retry/partial failure, and support visibility. Distinguish provider delivery guarantees from internal processing guarantees. Do not write application code, select undisclosed technologies, or accept business/security risk on behalf of an owner.
+required_requirements:
+  - REQ-SOLUTION-ARCHITECT-01
+criteria:
+  - id: SYSTEM-BOUNDARIES
+    description: "Defines coherent provider, ingress, verification, processing, persistence, and support-view boundaries and preserves data authority."
+    weight: 20
+    critical: true
+    requirement_ref: REQ-SOLUTION-ARCHITECT-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: ALTERNATIVES-TRADEOFFS
+    description: "Compares acknowledgement/processing alternatives with correctness, reliability, complexity, operations, and compatibility trade-offs."
+    weight: 20
+    critical: true
+    requirement_ref: REQ-SOLUTION-ARCHITECT-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: FLOWS-AND-FAILURES
+    description: "Provides valid, invalid, duplicate, and persistence-failure flows including retries and acknowledgements."
+    weight: 20
+    critical: true
+    requirement_ref: REQ-SOLUTION-ARCHITECT-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: SECURITY-AND-RESILIENCE
+    description: "Addresses raw-body HMAC, idempotency, trust boundaries, failure recovery, and observability without unsupported guarantees."
+    weight: 20
+    critical: true
+    requirement_ref: REQ-SOLUTION-ARCHITECT-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: DECISION-QUALITY
+    description: "Records bounded decisions, assumptions, unresolved evidence, and downstream impacts without taking specialist authority."
+    weight: 20
+    critical: false
+    requirement_ref: REQ-SOLUTION-ARCHITECT-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+review_record: null
+evidence:
+  - path: skills/solution-architect/SKILL.md
+    commit: 3ff6206fd3a831d05c92dc0f53bd040b726c3974

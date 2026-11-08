@@ -1,0 +1,109 @@
+id: SCEN-BASELINE-RELEASE-MANAGER
+role: release-manager
+artifact_package: ART-RELEASE-PACKAGE
+artifact_owner: release-manager
+status: draft
+title: "Prepare an evidence-gated release readiness plan"
+rubric_version: baseline-v1
+purpose: "Evaluate release scope inventory, gate traceability, rollout/recovery planning, decision routing, and no-go discipline."
+task_prompt: |
+  You are performing a controlled Stage B baseline task as the release-manager role.
+  SCENARIO ARTIFACT OWNERSHIP:
+  - Canonical artifact package: ART-RELEASE-PACKAGE.
+  - Accountable package owner and primary producer: release-manager.
+  - The package is currently proposed, not approved. This scenario does not create a formal handoff or authorize another role to accept the package.
+
+  
+  Read skills/release-manager/SKILL.md first. Use docs/team/expected-roles.yml, docs/team/ownership.yml, and relevant governance documents as authoritative sources. Artifact package entries are currently proposed, and docs/team/ownership.yml declares no formal handoff contracts.
+  
+  SHARED FICTIONAL EXERCISE FACTS:
+  - MerchantCloud is a fictional commerce provider sending order.created webhooks to fictional OrderDesk.
+  - Delivery is at-least-once; retries reuse event_id. Retry schedule and exact provider retry policy are unknown.
+  - event_id uniquely identifies a delivered event; order_id identifies the business order.
+  - X-Provider-Signature has form sha256=<64 lowercase hexadecimal characters> and carries HMAC-SHA256 over the exact raw HTTP request-body bytes with a shared secret. Secret value and rotation procedure are unknown.
+  - Example event:
+    {
+      "event_id": "evt_01J9M7",
+      "event_type": "order.created",
+      "occurred_at": "2026-10-15T10:30:00Z",
+      "data": {"order_id": "ord_1042", "customer": {"email": "alex@example.test"}, "currency": "PHP", "items": [{"sku": "SKU-RED-01", "quantity": 2, "unit_price": "125.00"}]}
+    }
+  - OrderDesk has an existing backend service and relational database, but engine/version, current schema, hosting, queue, framework, traffic, and deployment topology are unknown.
+  - Support operators need recent processing outcomes. Search filters beyond order_id, retention, permissions, and customer-visible behavior are undecided.
+  - No provider credentials, live provider, production environment, network-test authorization, or deployment permission is available.
+  
+  RULES:
+  - Create only deliverables/release-manager/. Do not modify canonical skills, governance sources, manifests, scenarios, workflows, or existing application sources.
+  - No network access, real services, secrets, production actions, or deployment.
+  - Do not invent provider guarantees, platforms, service targets, approvals, lifecycle states, or stakeholder decisions. Mark assumptions and unknowns.
+  - Do not claim execution, test results, review, approval, handoff acceptance, or release unless actually evidenced.
+  - Include README.md listing deliverables, assumptions/unknowns, and exact verification performed or not performed.
+  - Keep the task achievable in one agent session. Preserve the role's ownership boundaries.
+  
+  SCORING:
+  - Score each criterion from 0–100 using inspectable evidence, not verbosity/style.
+  - 0 = absent or materially contrary; 1–49 = materially incomplete; 50–74 = partial with significant gaps; 75–89 = core requirement met with minor gaps; 90–100 = complete, precise, and evidence-backed.
+  - Record critical failures separately. Critical failures include unauthorized activity, exposure of secrets/unnecessary PII, invented approval/test/release claims, materially false guarantees, or overriding another role's decision authority.
+  
+  Assume the capability is proposed for a first internal support-operator release, but no implementation revision, QA report, security assessment, operational runbook, deployment window, or authorized go/no-go decision has been supplied.
+  
+  Create deliverables/release-manager/release-readiness.md, change-inventory.md, and rollout-recovery-plan.md.
+  
+  Define release scope and explicit exclusions; a change-inventory template mapping each component to its accountable artifact owner and required evidence; readiness gates for product acceptance, API contract, implementation, database migration, integration, QA, security, accessibility, performance where applicable, operations, documentation, and stakeholder authorization; decision authorities and evidence required at each gate; a sequenced rollout plan with monitoring checkpoints, abort criteria, rollback/forward-fix strategy, communication, and post-deployment verification. Mark every gate as not verified/not available where evidence is absent. Identify which gates are conditional on actual scope. Do not infer accepted risk, approvals, release date, version, deployment platform, or production permission. Conclude with the correct current recommendation based on missing evidence, not a fabricated go decision.
+required_requirements:
+  - REQ-RELEASE-MANAGER-01
+criteria:
+  - id: SCOPE-AND-INVENTORY
+    description: "Defines bounded first-release scope/exclusions and traceable change inventory with single accountable owners."
+    weight: 20
+    critical: true
+    requirement_ref: REQ-RELEASE-MANAGER-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: GATE-TRACEABILITY
+    description: "Maps applicable readiness gates to the correct owner and required evidence, marking absent evidence not verified."
+    weight: 25
+    critical: true
+    requirement_ref: REQ-RELEASE-MANAGER-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: ROLLOUT-AND-RECOVERY
+    description: "Provides sequenced rollout, monitoring, abort criteria, rollback/forward-fix, and post-deployment verification planning without executing it."
+    weight: 20
+    critical: true
+    requirement_ref: REQ-RELEASE-MANAGER-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: RISK-AND-AUTHORITY
+    description: "Routes decisions and risk acceptance to authorized roles and does not self-approve release or accept specialist risk."
+    weight: 20
+    critical: true
+    requirement_ref: REQ-RELEASE-MANAGER-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: RECOMMENDATION-HONESTY
+    description: "Makes a defensible evidence-based go/no-go recommendation and clearly identifies missing artifacts, dates, permissions, and facts."
+    weight: 15
+    critical: false
+    requirement_ref: REQ-RELEASE-MANAGER-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+review_record: null
+evidence:
+  - path: skills/release-manager/SKILL.md
+    commit: 52ec9ac461434711e3b5d843c40659873df8255d

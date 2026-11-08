@@ -31,7 +31,7 @@ class ScenarioLifecycleTests(unittest.TestCase):
         self.review_dir = self.root / "reviews"
         self.scenario_dir.mkdir()
         self.review_dir.mkdir()
-        self.scenario_id = "SCEN-TEST-BACKEND"
+        self.scenario_id = "SCEN-BASELINE-TEST-BACKEND"
         self.scenario_path = self.scenario_dir / "scenario.yml"
 
     def tearDown(self):
@@ -41,6 +41,8 @@ class ScenarioLifecycleTests(unittest.TestCase):
         data = {
             "id": self.scenario_id,
             "role": "backend-developer",
+            "artifact_package": "ART-BACKEND",
+            "artifact_owner": "backend-developer",
             "status": "draft",
             "required_requirements": ["REQ-BACKEND-01"],
             "criteria": [{
@@ -49,6 +51,12 @@ class ScenarioLifecycleTests(unittest.TestCase):
                 "weight": 100,
                 "critical": True,
                 "requirement_ref": "REQ-BACKEND-01",
+                "score_anchors": {
+                    "absent": "No evidence or materially contrary evidence.",
+                    "partial": "Some evidence with major gaps.",
+                    "core": "Core expectations met with minor gaps.",
+                    "complete": "All expectations met with precise, traceable evidence.",
+                },
             }],
             "review_record": None,
             "evidence": [{
@@ -85,6 +93,34 @@ class ScenarioLifecycleTests(unittest.TestCase):
         code, output = self.run_validator()
         self.assertEqual(code, 0, output)
         self.assertIn("Scenario validation passed", output)
+
+
+    def test_baseline_scenario_requires_canonical_artifact_owner(self):
+        self.write_yaml(
+            self.scenario_path,
+            self.scenario(artifact_owner="product-analyst"),
+        )
+        code, output = self.run_validator()
+        self.assertEqual(code, 1)
+        self.assertIn("artifact_owner must match the canonical package owner", output)
+
+
+    def test_rejects_unknown_or_non_string_artifact_package(self):
+        self.write_yaml(
+            self.scenario_path,
+            self.scenario(artifact_package=[]),
+        )
+        code, output = self.run_validator()
+        self.assertEqual(code, 1)
+        self.assertIn("artifact_package must reference a canonical ownership package", output)
+
+    def test_baseline_scenario_requires_criterion_score_anchors(self):
+        data = self.scenario()
+        del data["criteria"][0]["score_anchors"]
+        self.write_yaml(self.scenario_path, data)
+        code, output = self.run_validator()
+        self.assertEqual(code, 1)
+        self.assertIn("score_anchors must define non-empty", output)
 
     def test_approved_scenario_requires_pre_run_approval_metadata(self):
         self.write_yaml(
@@ -145,6 +181,37 @@ class ScenarioLifecycleTests(unittest.TestCase):
         code, output = self.run_validator()
         self.assertEqual(code, 1)
         self.assertIn("runs must be a positive integer", output)
+
+
+    def test_rejects_criteria_whose_weights_do_not_total_100(self):
+        criteria = [
+            {
+                "id": "CORRECTNESS",
+                "description": "Implements the stated behavior correctly.",
+                "weight": 60,
+                "critical": True,
+                "requirement_ref": "REQ-BACKEND-01",
+            },
+            {
+                "id": "EVIDENCE",
+                "description": "Provides reproducible verification evidence.",
+                "weight": 50,
+                "critical": False,
+                "requirement_ref": "REQ-BACKEND-01",
+            },
+        ]
+        self.write_yaml(self.scenario_path, self.scenario(criteria=criteria))
+        code, output = self.run_validator()
+        self.assertEqual(code, 1)
+        self.assertIn("criterion weights must total 100; found 110", output)
+
+    def test_rejects_non_finite_criterion_weights(self):
+        criteria = self.scenario()["criteria"]
+        criteria[0]["weight"] = float("nan")
+        self.write_yaml(self.scenario_path, self.scenario(criteria=criteria))
+        code, output = self.run_validator()
+        self.assertEqual(code, 1)
+        self.assertIn("weight must be a finite positive number", output)
 
 
 if __name__ == "__main__":

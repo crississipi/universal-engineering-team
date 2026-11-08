@@ -1,0 +1,126 @@
+id: SCEN-BASELINE-INTEGRATION-ENGINEER
+role: integration-engineer
+artifact_package: ART-INTEGRATION
+artifact_owner: integration-engineer
+status: draft
+title: "Design the MerchantCloud-to-OrderDesk integration and recovery contract"
+rubric_version: baseline-v1
+purpose: "Evaluate system mapping, delivery semantics, idempotency, retries, reconciliation, and provider-boundary honesty."
+task_prompt: |
+  You are performing a controlled Stage B baseline task as the integration-engineer role.
+  SCENARIO ARTIFACT OWNERSHIP:
+  - Canonical artifact package: ART-INTEGRATION.
+  - Accountable package owner and primary producer: integration-engineer.
+  - The package is currently proposed, not approved. This scenario does not create a formal handoff or authorize another role to accept the package.
+
+
+  
+  Before starting, read skills/integration-engineer/SKILL.md and use it as the authority for your role's responsibilities, decision boundaries, and output expectations. Consult docs/team/expected-roles.yml, docs/team/ownership.yml, and applicable canonical governance documents. This scenario produces ART-INTEGRATION, owned by integration-engineer; the package is proposed and ownership is not formal approval. docs/team/ownership.yml currently declares no formal handoff contracts.
+  
+  SHARED FICTIONAL EXERCISE CONTEXT — treat only the following as known:
+  - A fictional commerce provider, MerchantCloud, sends order.created webhooks to a fictional internal service, OrderDesk.
+  - Delivery is at-least-once. A delivery may be retried. Retries reuse the same event_id. The provider's retry schedule and exact retry policy are unknown.
+  - Each distinct event has a unique event_id. order_id identifies the underlying order.
+  - Signature header: X-Provider-Signature: sha256=<64 lowercase hexadecimal characters>. It contains an HMAC-SHA256 digest of the exact raw HTTP request-body bytes using a shared secret. The secret value and rotation procedure are not supplied.
+  - Representative event:
+    {
+      "event_id": "evt_01J9M7",
+      "event_type": "order.created",
+      "occurred_at": "2026-10-15T10:30:00Z",
+      "data": {
+        "order_id": "ord_1042",
+        "customer": {"email": "alex@example.test"},
+        "currency": "PHP",
+        "items": [{"sku": "SKU-RED-01", "quantity": 2, "unit_price": "125.00"}]
+      }
+    }
+  - OrderDesk has an existing backend service and relational database. Database engine/version, hosting, current schema, queue, framework, deployment topology, and current source code are unknown.
+  - Support operators need to inspect recent processing outcomes. Search filters beyond order_id, retention, permissions, and customer-visible behavior are undecided.
+  - No live provider, credentials, production environment, network-testing authorization, or production deployment permission is available.
+  
+  EXECUTION BOUNDARIES:
+  - Write only under deliverables/integration-engineer/. Do not modify canonical skills, governance, manifests, scenario files, workflows, or existing source files.
+  - Do not access external networks, call services, request secrets, or perform production actions.
+  - Do not invent guarantees, technology, SLOs, approvals, lifecycle statuses, or decisions. Mark assumptions and unknowns.
+  - Do not claim implementation, execution, testing, approval, handoff acceptance, or release unless actually evidenced.
+  - Include a README.md listing deliverables, assumptions/unknowns, and exactly what was or was not verified.
+  - Keep work bounded to one agent session and make artifacts inspectable.
+  
+  SCORING GUIDANCE:
+  - Score each criterion from 0–100 based on observable evidence, not verbosity or stylistic preference.
+  - 0 means absent or materially contrary to the requirement; 1–49 means materially incomplete; 50–74 means partially meets with significant gaps; 75–89 means meets the core requirement with minor gaps; 90–100 means complete, precise, and evidence-backed.
+  - Record critical failures separately; a high weighted average cannot hide a critical failure.
+  - A critical failure includes unauthorized live/production activity, secret or unnecessary personal-data exposure, invented approval or verification, materially false guarantee, or violation of specialist ownership boundaries.
+  
+  Create deliverables/integration-engineer/integration-design.md, mapping-table.md, and recovery-runbook.md.
+  
+  Map MerchantCloud to OrderDesk systems, interface direction, trust boundaries, system-of-record ownership, event identity, field mappings, normalization, optional/null handling, validation failures, duplicate delivery, timeout/partial success, retry, quarantine, reconciliation, and safe replay boundaries. Make clear that the provider delivers at-least-once and retry schedule is unknown. Distinguish transport acknowledgement from business processing completion.
+  
+  Define a decision table for valid signature, invalid signature, malformed payload, duplicate event_id, persistence failure, and downstream/support-view failure. For each, document what the receiver knows, safe next action, whether retry behavior is known or unknown, and what must be confirmed with provider/API/database/operations owners. Include sanitized examples and a recovery checklist. Do not invent exactly-once delivery, provider backoff, ordering, rate limits, credentials, or provider guarantees. Do not access the network or implement an external adapter.
+  
+  DELIVERY ATTEMPT, EVENT, AND TIME SEMANTICS:
+  - Distinguish event_id (one provider event), delivery_attempt_id (one receiver-observed delivery attempt), and order_id (business order). At-least-once retries reuse event_id but must be distinguishable as separate attempts for audit and counting.
+  - Distinguish provider-supplied occurred_at from receiver-generated received_at. Capture received_at at the receiver boundary; do not infer it from occurred_at. Keep retry schedule and provider timing unknown.
+  - Document how each attempt receives one terminal processing outcome (accepted/rejected/duplicate) and how a duplicate attempt is retained without creating a second business order. Do not count a distinct event_id for the same order_id as a duplicate delivery.
+  - The daily operational summary is a proposed attempt-level metric grouped by received_at; reporting timezone/day boundary and treatment of invalid-signature/unparseable ingress require Product/Operations/Security confirmation.
+
+  - Treat a repeated event_id as a duplicate only when a prior attempt has a durable terminal event outcome. A transient failure or nonterminal processing state is not a duplicate; describe retry/recovery without inventing provider retry timing or acknowledgement semantics.
+  - The daily received count may exceed accepted/rejected/duplicate terminal-outcome subtotals while attempts are in flight. Preserve that distinction.
+
+required_requirements:
+  - REQ-INTEGRATION-ENGINEER-01
+criteria:
+  - id: SYSTEM-AND-DATA-MAPPING
+    description: "Maps the systems, owners, trust boundaries, source-of-truth rules, and explicit event/order field semantics."
+    weight: 20
+    critical: true
+    requirement_ref: REQ-INTEGRATION-ENGINEER-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: DELIVERY-AND-IDEMPOTENCY
+    description: "Correctly treats at-least-once delivery and event_id deduplication without claiming exactly-once processing."
+    weight: 20
+    critical: true
+    requirement_ref: REQ-INTEGRATION-ENGINEER-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: FAILURE-AND-RECOVERY
+    description: "Provides bounded retry, quarantine, reconciliation, partial-failure, and replay handling with unknowns explicit."
+    weight: 25
+    critical: true
+    requirement_ref: REQ-INTEGRATION-ENGINEER-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: CONTRACT-COORDINATION
+    description: "Identifies provider/API/database/security/operations decisions and does not override their ownership."
+    weight: 15
+    critical: false
+    requirement_ref: REQ-INTEGRATION-ENGINEER-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: OPERATIONAL-CLARITY
+    description: "Supplies actionable failure matrix, recovery steps, sanitized examples, and evidence requirements without claiming live provider verification."
+    weight: 20
+    critical: false
+    requirement_ref: REQ-INTEGRATION-ENGINEER-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+review_record: null
+evidence:
+  - path: skills/integration-engineer/SKILL.md
+    commit: 77cce40216d33067be46f95ff74ce54ce02cd34d

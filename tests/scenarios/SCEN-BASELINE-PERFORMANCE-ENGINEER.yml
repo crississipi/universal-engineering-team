@@ -1,0 +1,109 @@
+id: SCEN-BASELINE-PERFORMANCE-ENGINEER
+role: performance-engineer
+artifact_package: ART-PERFORMANCE-EVIDENCE
+artifact_owner: performance-engineer
+status: draft
+title: "Design a reproducible webhook performance evaluation"
+rubric_version: baseline-v1
+purpose: "Evaluate workload modeling, measurement methodology, bottleneck hypotheses, capacity reasoning, and comparability without fabricated measurements."
+task_prompt: |
+  You are performing a controlled Stage B baseline task as the performance-engineer role.
+  SCENARIO ARTIFACT OWNERSHIP:
+  - Canonical artifact package: ART-PERFORMANCE-EVIDENCE.
+  - Accountable package owner and primary producer: performance-engineer.
+  - The package is currently proposed, not approved. This scenario does not create a formal handoff or authorize another role to accept the package.
+
+  
+  Read skills/performance-engineer/SKILL.md first. Use docs/team/expected-roles.yml, docs/team/ownership.yml, and relevant governance documents as authoritative sources. Artifact package entries are currently proposed, and docs/team/ownership.yml declares no formal handoff contracts.
+  
+  SHARED FICTIONAL EXERCISE FACTS:
+  - MerchantCloud is a fictional commerce provider sending order.created webhooks to fictional OrderDesk.
+  - Delivery is at-least-once; retries reuse event_id. Retry schedule and exact provider retry policy are unknown.
+  - event_id uniquely identifies a delivered event; order_id identifies the business order.
+  - X-Provider-Signature has form sha256=<64 lowercase hexadecimal characters> and carries HMAC-SHA256 over the exact raw HTTP request-body bytes with a shared secret. Secret value and rotation procedure are unknown.
+  - Example event:
+    {
+      "event_id": "evt_01J9M7",
+      "event_type": "order.created",
+      "occurred_at": "2026-10-15T10:30:00Z",
+      "data": {"order_id": "ord_1042", "customer": {"email": "alex@example.test"}, "currency": "PHP", "items": [{"sku": "SKU-RED-01", "quantity": 2, "unit_price": "125.00"}]}
+    }
+  - OrderDesk has an existing backend service and relational database, but engine/version, current schema, hosting, queue, framework, traffic, and deployment topology are unknown.
+  - Support operators need recent processing outcomes. Search filters beyond order_id, retention, permissions, and customer-visible behavior are undecided.
+  - No provider credentials, live provider, production environment, network-test authorization, or deployment permission is available.
+  
+  RULES:
+  - Create only deliverables/performance-engineer/. Do not modify canonical skills, governance sources, manifests, scenarios, workflows, or existing application sources.
+  - No network access, real services, secrets, production actions, or deployment.
+  - Do not invent provider guarantees, platforms, service targets, approvals, lifecycle states, or stakeholder decisions. Mark assumptions and unknowns.
+  - Do not claim execution, test results, review, approval, handoff acceptance, or release unless actually evidenced.
+  - Include README.md listing deliverables, assumptions/unknowns, and exact verification performed or not performed.
+  - Keep the task achievable in one agent session. Preserve the role's ownership boundaries.
+  
+  SCORING:
+  - Score each criterion from 0–100 using inspectable evidence, not verbosity/style.
+  - 0 = absent or materially contrary; 1–49 = materially incomplete; 50–74 = partial with significant gaps; 75–89 = core requirement met with minor gaps; 90–100 = complete, precise, and evidence-backed.
+  - Record critical failures separately. Critical failures include unauthorized activity, exposure of secrets/unnecessary PII, invented approval/test/release claims, materially false guarantees, or overriding another role's decision authority.
+  
+  Create deliverables/performance-engineer/workload-model.md, benchmark-plan.md, and results-template.md.
+  
+  Define representative workload dimensions for webhook intake and support lookup: event payload sizes, arrival rates, concurrency, duplicates/retries, item counts, persistence latency, queueing if present, support query mix, and read/write ratios. Separate known requirements from hypothetical workload scenarios. Propose low/nominal/peak stress profiles as explicitly illustrative parameter placeholders, not business targets.
+  
+  Define a reproducible test protocol including environment capture, warm-up, duration, repetitions, load generation, dataset shape, latency percentiles, throughput, error rate, resource saturation, queue lag if applicable, database behavior, and correctness checks under load. Include baseline-versus-change comparability rules and hypotheses for likely bottlenecks with evidence needed to confirm them. Identify the product/operations decisions needed to set performance budgets and capacity goals. Do not run load tests, invent observed metrics, optimize code, or claim a bottleneck exists without profiling evidence.
+required_requirements:
+  - REQ-PERFORMANCE-ENGINEER-01
+criteria:
+  - id: WORKLOAD-REPRESENTATIVENESS
+    description: "Models relevant event, duplicate, concurrency, data-shape, persistence, and support-query dimensions while labeling assumptions."
+    weight: 20
+    critical: true
+    requirement_ref: REQ-PERFORMANCE-ENGINEER-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: MEASUREMENT-METHOD
+    description: "Defines reproducible environment, load, warm-up, duration, repetitions, telemetry, latency percentiles, throughput, and error measurement."
+    weight: 25
+    critical: true
+    requirement_ref: REQ-PERFORMANCE-ENGINEER-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: CORRECTNESS-UNDER-LOAD
+    description: "Includes idempotency, data integrity, error, and processing correctness checks under concurrency and failure."
+    weight: 15
+    critical: true
+    requirement_ref: REQ-PERFORMANCE-ENGINEER-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: BOTTLENECK-AND-CAPACITY
+    description: "Frames testable bottleneck hypotheses and capacity questions without asserting unmeasured causes or invented targets."
+    weight: 20
+    critical: false
+    requirement_ref: REQ-PERFORMANCE-ENGINEER-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: COMPARABILITY-AND-HONESTY
+    description: "Defines comparable baseline/change conditions and clearly states no benchmark was executed and no metrics observed."
+    weight: 20
+    critical: false
+    requirement_ref: REQ-PERFORMANCE-ENGINEER-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+review_record: null
+evidence:
+  - path: skills/performance-engineer/SKILL.md
+    commit: 0e73551564b851ec26686d4ccd6fd46cb3b3db0d

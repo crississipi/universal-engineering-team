@@ -1,3 +1,75 @@
+# Current-state addendum — repository health pass
+
+> This addendum supersedes conflicting status statements in the historical handover below. It is based on the repository state audited at main commit `f7d30d8f7fd868f7154fa08cfce1a36362ecf5ff` on 2026-11-06. Update this addendum when the stabilization PR and baseline-design work are merged or materially changed.
+
+## Verified current state
+
+- PR #33 was merged to `main` as `39b2f9d725fc0fb805d855669ec8738f4b4ae809`. Its 14 role-specific requirement anchors are now part of the canonical skills. Merge does not equal semantic approval.
+- Stage B remains in baseline design/preparation. There are 17 planned role scenarios, 10 independent runs per scenario, 170 planned executions, 0 approved baseline scenarios, 0 baseline executions, and 0 baseline post-run reviews.
+- The separate pilot remains complete: 3 scenarios, 9 pilot run records, and 3 post-run reviews. Pilot results are not baseline evidence.
+- PR #10 merged blocker lifecycle alignment. Canonical blocker records, lifecycle guidance, and JSON Schema now share eight statuses: `open`, `in_progress`, `blocked`, `escalated`, `deferred`, `resolved`, `closed`, and `cancelled`. Historical Phase 2B reports are being amended to distinguish the resolved vocabulary issue from still-unverified live persistence/routing.
+- `docs/team/ownership.yml` still declares artifact packages as proposed and has no formal handoff contracts. Do not claim formal producer/consumer handoff execution.
+- The baseline run-record schema/validator, cohort checks, and report generator remain unimplemented. Do not start the 170-run cohort until scenario design, human approvals, evidence tooling, and configuration pinning are complete.
+- CI runs #97, #98, and #99 were failures. The GitHub connector exposed the failed job but not usable step logs, so the precise historical failure cause is not established by this audit.
+
+## Stabilization work in progress
+
+Branch: `chore/stage-b-repository-health`.
+
+The branch adds:
+- finite-positive criterion weight validation and a 100-point total check;
+- regression tests for incorrect totals and non-finite weights;
+- a role requirement-anchor validator checking one anchor per canonical skill, global uniqueness, placement in Identity and boundaries, an adjacent requirement statement, and exact mapping to the baseline register;
+- unit tests for the traceability validator;
+- a CI step invoking the new validator;
+- baseline and Phase 2B documentation corrections.
+
+The generated `ALL-ROLE-SKILLS.md` must be regenerated from canonical skill files and checked before this stabilization can be called complete. No baseline scenarios have been authored or approved in this pass. Human review of anchor meaning remains outstanding.
+
+## Required local verification before merge
+
+Run from the repository root in PowerShell:
+
+```powershell
+python -m pip install -r requirements-dev.txt
+python -m unittest discover -s tests -p "test_*.py" -v
+python scripts/build-all-role-skills.py --write
+python scripts/build-all-role-skills.py --check
+python scripts/validate-execution.py --check-schemas
+python scripts/validate-skills.py
+python scripts/validate-requirements.py
+python scripts/validate-manifest.py
+python scripts/validate-artifacts.py
+python scripts/validate-handoffs.py
+python scripts/validate-scenarios.py
+python scripts/build-agents-section.py --check
+git diff --check
+```
+
+Do not report a command as passed unless its output has been inspected. If the generated consolidated skill file changes, include that generated output in the PR.
+
+
+## Baseline scenario design update — 2026-11-08
+
+Branch `chore/stage-b-repository-health` now contains one draft scenario YAML file for every canonical role under `tests/scenarios/SCEN-BASELINE-<ROLE>.yml`. Each file is marked `status: draft`, uses `review_record: null`, contains five criteria totaling 100 points, maps every criterion to the role's requirement anchor, and pins the associated canonical skill revision in its evidence entry.
+
+An author-side structural preflight is recorded at `docs/evaluation/baseline/DESIGN-PREFLIGHT-2026-11-08.md`. It is not an independent design review and does not approve scenario content. Independent review records remain 0/17; human scenario approvals remain 0/17; baseline executions remain 0/170. The preflight flags the legacy Backend Developer, Penetration Tester, and Delivery Lead requirement wording for explicit semantic review.
+
+The next gate is independent design review and role-anchor semantic review. Do not begin baseline runs or create run-record/evidence files until explicit human pre-run approvals and dedicated baseline validation/reporting tools exist. The branch's 17 draft files have not yet been validated by a local run of `scripts/validate-scenarios.py`; rerun the full local validation suite after pulling the latest branch.
+
+## Next sequence after stabilization
+
+1. Complete generated-file synchronization and obtain a green full CI run.
+2. Record semantic review of all 17 requirement anchors, including the original three.
+3. Design 17 distinct baseline scenarios with criteria totaling 100 and evidence guidance.
+4. Conduct independent scenario design review and record findings.
+5. Obtain explicit human pre-run approval for each scenario.
+6. Implement and test dedicated baseline run-record validation, evidence integrity checks, cohort comparability checks, and reporting.
+7. Pin repository/scenario/skill revisions, prompt bytes/hash, provider/model/version, mode, settings, and tools.
+8. Only then perform 10 fresh independent runs per approved scenario and complete human post-run reviews.
+
+---
+
 # Universal Engineering Team — Complete Project Handover
 
 > **Repository:** https://github.com/crississipi/universal-engineering-team  
@@ -1122,3 +1194,90 @@ Preserve the distinction between:
 - unknown metadata and verified fact.
 
 When in doubt, inspect the repository's canonical sources, preserve evidence, record uncertainty, and ask for approval before crossing a governance gate.
+
+
+---
+
+## Addendum — 2026-11-08 baseline scenario second-pass review
+
+The user pulled the latest Stage B repository-health branch and reported:
+- Full unit suite: 65/65 tests passed.
+- `scripts/validate-requirements.py`: passed.
+- `scripts/validate-scenarios.py`: passed with 0 warnings.
+- `git diff --check`: no errors reported.
+
+These are user-reported local results, not a GitHub Actions pass or an independently reproduced run.
+
+An AI-assisted second-pass design audit of all 17 baseline scenario drafts was recorded in:
+`docs/evaluation/baseline/DESIGN-REVIEW-2026-11-08.md`.
+
+The review is not an independent human review and is not human pre-run approval. The review found required corrections before any scenario can be approved:
+1. All scenario records need an explicit mapping to the matching canonical artifact package ID and owner; prompts currently refer to artifact IDs without naming them.
+2. The daily event-outcome summary requested by Operations and the Data Engineer pipeline task is not connected to an explicit UX/frontend consumer.
+3. Provider `occurred_at` must be distinguished from receiver-observed `received_at`; the daily grouping timestamp needs an owner decision.
+4. Duplicate delivery attempts must be distinguished from unique event identity, and the daily duplicate-count definition must be agreed.
+5. Backend's rejected-domain-event path needs an approved domain rule or an injected caller-supplied policy boundary; Backend must not invent business policy.
+6. Existing Backend Developer, Penetration Tester, and Delivery Lead requirement anchors still need semantic review.
+7. Criterion-specific scoring anchors should be added for repeatable evaluation; delay thresholds must remain unknown until an owner defines them.
+
+The baseline README now links the second-pass report and records:
+- AI-assisted second-pass review: completed.
+- Independent human design reviews: 0/17.
+- Human pre-run approvals: 0/17.
+- Baseline executions: 0/170.
+
+PR #34 remains open and unmerged. Its current branch head after the review report, README update, and this handover addendum is recorded in the PR metadata; do not assume the branch is merged. Do not begin baseline executions or create approval/run records until the required corrections, independent human review, individual human approvals, and baseline execution-readiness tooling are complete.
+
+
+---
+
+## Addendum — 2026-11-08 Stage B scenario remediation
+
+Following the second-pass review, scenario corrections were applied on
+`chore/stage-b-repository-health`:
+
+- All 17 baseline scenarios now identify the canonical artifact package ID
+  and accountable owner. Package records remain proposed and no formal
+  handoffs exist.
+- Product, UX, frontend, data, and QA prompts now align around a proposed
+  support-facing daily delivery-attempt summary.
+- Provider `occurred_at` and receiver-generated `received_at` are distinct.
+- `delivery_attempt_id`, `event_id`, and `order_id` are distinct concepts.
+  Repeated attempts remain auditable; event-level idempotency remains separate.
+- Backend's rejected-domain-event path now requires an injected domain-policy
+  decision rather than an invented business rule.
+- All 85 baseline criteria have absent/partial/core/complete scoring anchors.
+- The Backend Developer, Penetration Tester, and Delivery Lead requirement
+  statements were refined; stable IDs were retained and scenario evidence pins
+  updated. `ALL-ROLE-SKILLS.md` was synchronized.
+- Delayed/not-yet-visible behavior does not invent a numeric threshold.
+- `validate-scenarios.py` now checks baseline artifact-package ownership and
+  criterion score-anchor structure, with regression tests.
+
+Detailed dispositions and remaining decision dependencies are in
+`docs/evaluation/baseline/DESIGN-REVIEW-2026-11-08.md`.
+
+**Important:** These latest scenario and validator changes have not yet been
+validated by the user locally. The earlier user-reported 65/65 test result
+predates this remediation series. Pull the latest branch and rerun the full
+unit suite, generated-skill check, scenario validator, requirement validator,
+and other repository validators before treating the corrections as verified.
+
+Remaining stakeholder decisions include the reporting timezone/day boundary,
+the precise business-event metric inclusion boundary versus invalid ingress
+telemetry, confirmation of attempt-level metric semantics, the domain rule for
+distinct event IDs referencing the same order ID, and whether a delay threshold
+is needed.
+
+The scenarios remain draft (17/17), independent human design reviews remain
+0/17, human pre-run approvals remain 0/17, and baseline executions remain
+0/170. No baseline run records, approvals, or formal handoffs were created.
+
+
+Metric clarification: the proposed `received` count includes eligible attempts, while
+`accepted`, `rejected`, and `duplicate` are terminal-outcome subtotals and may
+be lower while attempts remain in flight. A repeat `event_id` is a duplicate
+only when a durable terminal event outcome already exists; transient or
+nonterminal failures must not be mislabeled duplicate. Product/Operations
+confirmation remains required for the proposed metric contract and reporting
+timezone.

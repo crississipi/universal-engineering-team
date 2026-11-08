@@ -2,6 +2,7 @@
 """Validate scenario specifications and one-to-one review records."""
 
 from pathlib import Path
+import math
 import re
 import sys
 
@@ -45,6 +46,12 @@ def yaml_files(folder):
 def main():
     errors, warnings = [], []
     roles = set(expected_roles())
+    ownership = load_yaml(ROOT / "docs/team/ownership.yml")
+    artifact_owners = {
+        item.get("id"): item.get("owner")
+        for item in ownership.get("artifacts", [])
+        if isinstance(item, dict)
+    } if isinstance(ownership, dict) else {}
 
     scenario_paths = yaml_files(SCENARIO_DIR)
     review_paths = yaml_files(REVIEW_DIR)
@@ -87,6 +94,28 @@ def main():
         if not isinstance(role, str) or role not in roles:
             errors.append(f"{scenario_id}: role is not a canonical role")
 
+        if scenario_id.startswith("SCEN-BASELINE-"):
+            package_id = data.get("artifact_package")
+            package_owner = data.get("artifact_owner")
+            expected_owner = (
+                artifact_owners.get(package_id)
+                if isinstance(package_id, str)
+                else None
+            )
+
+            if not isinstance(package_id, str) or expected_owner is None:
+                errors.append(
+                    f"{scenario_id}: artifact_package must reference a canonical ownership package"
+                )
+            if package_owner != expected_owner:
+                errors.append(
+                    f"{scenario_id}: artifact_owner must match the canonical package owner"
+                )
+            if role != expected_owner:
+                errors.append(
+                    f"{scenario_id}: scenario role must own its declared artifact package"
+                )
+
         if not isinstance(status, str) or status not in SCENARIO_STATUSES:
             errors.append(f"{scenario_id}: status must be draft or approved")
 
@@ -108,6 +137,7 @@ def main():
             criteria = []
 
         criterion_ids = set()
+        criterion_weights = []
 
         for index, criterion in enumerate(criteria):
             label = f"{scenario_id}.criteria[{index}]"
@@ -140,12 +170,30 @@ def main():
             if (
                 not isinstance(weight, (int, float))
                 or isinstance(weight, bool)
+                or not math.isfinite(weight)
                 or weight <= 0
             ):
-                errors.append(f"{label}.weight must be a positive number")
+                errors.append(f"{label}.weight must be a finite positive number")
+            else:
+                criterion_weights.append(float(weight))
 
             if not isinstance(critical, bool):
                 errors.append(f"{label}.critical must be true or false")
+
+            if scenario_id.startswith("SCEN-BASELINE-"):
+                anchors = criterion.get("score_anchors")
+                expected_anchor_keys = {"absent", "partial", "core", "complete"}
+                if (
+                    not isinstance(anchors, dict)
+                    or set(anchors) != expected_anchor_keys
+                    or any(
+                        not isinstance(value, str) or not value.strip()
+                        for value in anchors.values()
+                    )
+                ):
+                    errors.append(
+                        f"{label}.score_anchors must define non-empty absent, partial, core, and complete anchors"
+                    )
 
             if (
                 not requirement_id(requirement_ref)
@@ -154,6 +202,14 @@ def main():
                 errors.append(
                     f"{label}.requirement_ref must appear in "
                     "required_requirements"
+                )
+
+        if criteria and len(criterion_weights) == len(criteria):
+            total_weight = math.fsum(criterion_weights)
+            if not math.isclose(total_weight, 100.0, rel_tol=0.0, abs_tol=1e-9):
+                errors.append(
+                    f"{scenario_id}: criterion weights must total 100; "
+                    f"found {total_weight:g}"
                 )
 
         approval = data.get("approval")

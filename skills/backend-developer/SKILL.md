@@ -8,7 +8,7 @@ description: Implement server-side behavior, domain services, validation, author
 ## 1. Identity and boundaries
 
 <!-- REQ-BACKEND-01 -->
-**Purpose:** Deliver correct, secure, maintainable server-side behavior within approved requirements, architecture, API contracts, and data ownership.
+**Requirement:** Implements secure, maintainable server-side behavior that conforms to approved requirements, architecture, API contracts, and data ownership, with automated tests and evidence appropriate to the change.
 
 **Own:** Server-side application logic, domain services, background jobs, server-side validation, authorization enforcement, backend tests, error handling, and backend operational behavior.
 

@@ -1,0 +1,133 @@
+id: SCEN-BASELINE-PRODUCT-ANALYST
+role: product-analyst
+artifact_package: ART-PRODUCT-REQUIREMENTS
+artifact_owner: product-analyst
+status: draft
+title: "Define measurable requirements for order-webhook support operations"
+rubric_version: baseline-v1
+purpose: "Evaluate problem framing, testable requirements, user journeys, prioritization, and scope control without prescribing specialist implementation."
+task_prompt: |
+  You are performing a controlled Stage B baseline task as the product-analyst role.
+  SCENARIO ARTIFACT OWNERSHIP:
+  - Canonical artifact package: ART-PRODUCT-REQUIREMENTS.
+  - Accountable package owner and primary producer: product-analyst.
+  - The package is currently proposed, not approved. This scenario does not create a formal handoff or authorize another role to accept the package.
+
+
+  
+  Before starting, read skills/product-analyst/SKILL.md and use it as the authority for your role's responsibilities, decision boundaries, and output expectations. Consult docs/team/expected-roles.yml, docs/team/ownership.yml, and applicable canonical governance documents. This scenario produces ART-PRODUCT-REQUIREMENTS, owned by product-analyst; the package is proposed and ownership is not formal approval. docs/team/ownership.yml currently declares no formal handoff contracts.
+  
+  SHARED FICTIONAL EXERCISE CONTEXT — treat only the following as known:
+  - A fictional commerce provider, MerchantCloud, sends order.created webhooks to a fictional internal service, OrderDesk.
+  - Delivery is at-least-once. A delivery may be retried. Retries reuse the same event_id. The provider's retry schedule and exact retry policy are unknown.
+  - Each distinct event has a unique event_id. order_id identifies the underlying order.
+  - Signature header: X-Provider-Signature: sha256=<64 lowercase hexadecimal characters>. It contains an HMAC-SHA256 digest of the exact raw HTTP request-body bytes using a shared secret. The secret value and rotation procedure are not supplied.
+  - Representative event:
+    {
+      "event_id": "evt_01J9M7",
+      "event_type": "order.created",
+      "occurred_at": "2026-10-15T10:30:00Z",
+      "data": {
+        "order_id": "ord_1042",
+        "customer": {"email": "alex@example.test"},
+        "currency": "PHP",
+        "items": [{"sku": "SKU-RED-01", "quantity": 2, "unit_price": "125.00"}]
+      }
+    }
+  - OrderDesk has an existing backend service and relational database. Database engine/version, hosting, current schema, queue, framework, deployment topology, and current source code are unknown.
+  - Support operators need to inspect recent processing outcomes. Search filters beyond order_id, retention, permissions, and customer-visible behavior are undecided.
+  - No live provider, credentials, production environment, network-testing authorization, or production deployment permission is available.
+  
+  EXECUTION BOUNDARIES:
+  - Write only under deliverables/product-analyst/. Do not modify canonical skills, governance, manifests, scenario files, workflows, or existing source files.
+  - Do not access external networks, call services, request secrets, or perform production actions.
+  - Do not invent guarantees, technology, SLOs, approvals, lifecycle statuses, or decisions. Mark assumptions and unknowns.
+  - Do not claim implementation, execution, testing, approval, handoff acceptance, or release unless actually evidenced.
+  - Include a README.md listing deliverables, assumptions/unknowns, and exactly what was or was not verified.
+  - Keep work bounded to one agent session and make artifacts inspectable.
+  
+  SCORING GUIDANCE:
+  - Score each criterion from 0–100 based on observable evidence, not verbosity or stylistic preference.
+  - 0 means absent or materially contrary to the requirement; 1–49 means materially incomplete; 50–74 means partially meets with significant gaps; 75–89 means meets the core requirement with minor gaps; 90–100 means complete, precise, and evidence-backed.
+  - Record critical failures separately; a high weighted average cannot hide a critical failure.
+  - A critical failure includes unauthorized live/production activity, secret or unnecessary personal-data exposure, invented approval or verification, materially false guarantee, or violation of specialist ownership boundaries.
+  
+  Stakeholder notes:
+  - Support operators need to find an order and understand whether its webhook was received, accepted, rejected, or duplicated, plus the reason for a failed processing attempt where available.
+  - Operations wants a daily view of received, accepted, rejected, and duplicate event counts.
+  - First release is support-facing only. It must not send customer notifications, initiate refunds, or expose a customer self-service screen.
+  - Retention period, support search fields beyond order_id, support permissions, numeric latency/availability targets, and manual replay are undecided.
+  
+  Create deliverables/product-analyst/requirements.md containing the problem statement, target users, user needs, outcomes, functional and non-functional requirements, prioritized scope, primary/alternate/failure journeys, and acceptance criteria with stable IDs. Explicitly cover missing, delayed, rejected, duplicate, and successful event states. Separate facts, assumptions, exclusions, and open decisions. Assign a proposed decision owner to each open question. Do not choose architecture, API status codes, database technology, visual design, or implementation details. Trace every requirement to supplied stakeholder evidence or label it as an assumption requiring confirmation.
+  
+  CROSS-ROLE METRIC AND TIME DEFINITIONS:
+  - The first-release daily operational summary is in scope because Operations explicitly requested a daily view. Define it as a support/operations-facing capability; do not move it to a customer-facing surface.
+  - In the requirements, propose a metric contract for stakeholder confirmation: distinguish inbound HTTP requests from verified, parseable webhook delivery attempts admitted to event processing. The business event summary must not silently count invalid-signature or unparseable requests as accepted/rejected business events; identify separate ingress/security telemetry as an open operational concern.
+  - Distinguish event occurrence time (provider-supplied occurred_at) from receiver-observed receipt time (OrderDesk-generated received_at). Do not infer one from the other. Propose received_at as the basis for daily delivery/outcome grouping; identify reporting timezone and day-boundary confirmation as an explicit Product/Operations decision. UTC may be used as a documented normalization proposal, not an approved business timezone.
+  - Propose that received, accepted, rejected, and duplicate are counts of delivery attempts, not unique event_ids or orders. Each eligible attempt has one mutually exclusive terminal outcome; repeated deliveries of an existing event_id count as duplicate attempts while the event itself remains one distinct event. Mark this metric definition as proposed pending stakeholder confirmation.
+  - Explicitly distinguish delivery_attempt_id (one receiver-observed attempt), event_id (provider event identity), and order_id (business order identity). Do not treat a new event_id for an existing order_id as a duplicate delivery; identify the domain policy for multiple order.created events for one order as an open Product decision.
+  - State the minimum evidence needed to populate the summary: delivery-attempt identity, event_id when trusted, order_id when available, received_at, terminal outcome, and safe reason code. Define safe handling of malformed/unauthenticated requests separately.
+  - Assign Product Analyst ownership for definitions and Operations for reporting timezone/operational use confirmation. Preserve all unconfirmed items as open decisions, not approved requirements.
+
+  - Do not define a numeric delayed-event threshold, provider retry interval, or latency SLA from the supplied facts. Define a "not yet visible" state and record the threshold/alerting definition as an open Product/Operations decision with evidence required before approval.
+
+  - Clarify that received_attempt_count includes every eligible delivery attempt admitted to event processing. accepted/rejected/duplicate are terminal-outcome subtotals; an attempt still processing remains in received but is not included in a terminal subtotal until a durable outcome exists. Do not imply the four values must balance at every instant.
+  - Propose duplicate-attempt classification only when the same event_id already has a durable terminal event outcome. Persistence failures or incomplete/nonterminal processing must not be mislabeled as duplicates; define retry/recovery behavior with Backend/API/Integration owners.
+
+required_requirements:
+  - REQ-PRODUCT-ANALYST-01
+criteria:
+  - id: USER-OUTCOMES
+    description: "Identifies target support and operations users, evidenced needs, problem, and desired outcomes without inventing goals."
+    weight: 20
+    critical: true
+    requirement_ref: REQ-PRODUCT-ANALYST-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: TESTABLE-REQUIREMENTS
+    description: "Defines unambiguous functional and non-functional requirements and observable, stable-ID acceptance criteria."
+    weight: 25
+    critical: true
+    requirement_ref: REQ-PRODUCT-ANALYST-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: JOURNEYS-AND-EDGE-CASES
+    description: "Covers success, missing, delayed, rejected, duplicate, and investigation journeys at product-behavior level."
+    weight: 20
+    critical: false
+    requirement_ref: REQ-PRODUCT-ANALYST-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: SCOPE-AND-PRIORITY
+    description: "Preserves first-release exclusions and leaves replay, retention, permissions, filters, and numerical targets unresolved."
+    weight: 20
+    critical: true
+    requirement_ref: REQ-PRODUCT-ANALYST-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: ASSUMPTIONS-AND-TRACEABILITY
+    description: "Separates facts from assumptions and identifies appropriate decision owners without prescribing specialist solutions."
+    weight: 15
+    critical: false
+    requirement_ref: REQ-PRODUCT-ANALYST-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+review_record: null
+evidence:
+  - path: skills/product-analyst/SKILL.md
+    commit: f5d1904d42f9fadae620ff204fbd227fea019239

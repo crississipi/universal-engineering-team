@@ -1,0 +1,109 @@
+id: SCEN-BASELINE-DEVOPS-SRE
+role: devops-sre
+artifact_package: ART-OPERATIONS
+artifact_owner: devops-sre
+status: draft
+title: "Define operational readiness for webhook processing"
+rubric_version: baseline-v1
+purpose: "Evaluate environment discovery, secure configuration, observability, deployment/recovery planning, and evidence-based operational readiness."
+task_prompt: |
+  You are performing a controlled Stage B baseline task as the devops-sre role.
+  SCENARIO ARTIFACT OWNERSHIP:
+  - Canonical artifact package: ART-OPERATIONS.
+  - Accountable package owner and primary producer: devops-sre.
+  - The package is currently proposed, not approved. This scenario does not create a formal handoff or authorize another role to accept the package.
+
+  
+  Read skills/devops-sre/SKILL.md first. Use docs/team/expected-roles.yml, docs/team/ownership.yml, and relevant governance documents as authoritative sources. Artifact package entries are currently proposed, and docs/team/ownership.yml declares no formal handoff contracts.
+  
+  SHARED FICTIONAL EXERCISE FACTS:
+  - MerchantCloud is a fictional commerce provider sending order.created webhooks to fictional OrderDesk.
+  - Delivery is at-least-once; retries reuse event_id. Retry schedule and exact provider retry policy are unknown.
+  - event_id uniquely identifies a delivered event; order_id identifies the business order.
+  - X-Provider-Signature has form sha256=<64 lowercase hexadecimal characters> and carries HMAC-SHA256 over the exact raw HTTP request-body bytes with a shared secret. Secret value and rotation procedure are unknown.
+  - Example event:
+    {
+      "event_id": "evt_01J9M7",
+      "event_type": "order.created",
+      "occurred_at": "2026-10-15T10:30:00Z",
+      "data": {"order_id": "ord_1042", "customer": {"email": "alex@example.test"}, "currency": "PHP", "items": [{"sku": "SKU-RED-01", "quantity": 2, "unit_price": "125.00"}]}
+    }
+  - OrderDesk has an existing backend service and relational database, but engine/version, current schema, hosting, queue, framework, traffic, and deployment topology are unknown.
+  - Support operators need recent processing outcomes. Search filters beyond order_id, retention, permissions, and customer-visible behavior are undecided.
+  - No provider credentials, live provider, production environment, network-test authorization, or deployment permission is available.
+  
+  RULES:
+  - Create only deliverables/devops-sre/. Do not modify canonical skills, governance sources, manifests, scenarios, workflows, or existing application sources.
+  - No network access, real services, secrets, production actions, or deployment.
+  - Do not invent provider guarantees, platforms, service targets, approvals, lifecycle states, or stakeholder decisions. Mark assumptions and unknowns.
+  - Do not claim execution, test results, review, approval, handoff acceptance, or release unless actually evidenced.
+  - Include README.md listing deliverables, assumptions/unknowns, and exact verification performed or not performed.
+  - Keep the task achievable in one agent session. Preserve the role's ownership boundaries.
+  
+  SCORING:
+  - Score each criterion from 0–100 using inspectable evidence, not verbosity/style.
+  - 0 = absent or materially contrary; 1–49 = materially incomplete; 50–74 = partial with significant gaps; 75–89 = core requirement met with minor gaps; 90–100 = complete, precise, and evidence-backed.
+  - Record critical failures separately. Critical failures include unauthorized activity, exposure of secrets/unnecessary PII, invented approval/test/release claims, materially false guarantees, or overriding another role's decision authority.
+  
+  Create deliverables/devops-sre/operational-design.md, observability-matrix.md, and deployment-recovery-plan.md.
+  
+  Describe operational prerequisites and an implementation-neutral deployment/run model for a webhook receiver and its processing/persistence dependencies. Include environment separation, secret references and rotation ownership without secret values, least privilege, CI/CD quality gates, configuration validation, health/readiness checks, logging/redaction, metrics, tracing/correlation using event_id safely, alert conditions, capacity/overload handling, backup/restore, incident triage, rollout sequencing, rollback/forward-fix constraints, and operator runbook needs.
+  
+  Do not assume a hosting provider, cloud, container orchestrator, queue, database engine, CI platform, SLO, RTO/RPO, traffic rate, or monitoring vendor. For each unknown, state the operational decision and evidence required. Distinguish deployability from production authorization. No CI, infrastructure, deployment, secret, or live system changes are authorized.
+required_requirements:
+  - REQ-DEVOPS-SRE-01
+criteria:
+  - id: ENVIRONMENT-DISCOVERY
+    description: "Identifies the actual operational facts that must be inspected and does not invent infrastructure or platform topology."
+    weight: 15
+    critical: false
+    requirement_ref: REQ-DEVOPS-SRE-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: SECURE-CONFIGURATION
+    description: "Defines least-privilege environment configuration and safe secret references/rotation handling without exposing or assuming secret values."
+    weight: 20
+    critical: true
+    requirement_ref: REQ-DEVOPS-SRE-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: OBSERVABILITY-AND-ALERTING
+    description: "Defines useful logs, metrics, traces, correlation, redaction, and actionable alert conditions for intake and processing outcomes."
+    weight: 20
+    critical: true
+    requirement_ref: REQ-DEVOPS-SRE-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: DEPLOYMENT-AND-RECOVERY
+    description: "Provides proportionate rollout, rollback/forward-fix, backup/restore, health, incident, and recovery planning."
+    weight: 25
+    critical: true
+    requirement_ref: REQ-DEVOPS-SRE-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: READINESS-AND-BOUNDARIES
+    description: "Separates operational recommendations from verified readiness, identifies missing SLO/traffic/recovery decisions, and performs no unauthorized deployment."
+    weight: 20
+    critical: false
+    requirement_ref: REQ-DEVOPS-SRE-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+review_record: null
+evidence:
+  - path: skills/devops-sre/SKILL.md
+    commit: 94074b4da51ca23861b1d2288b79b59df223a962

@@ -1,0 +1,122 @@
+id: SCEN-BASELINE-DATA-ENGINEER
+role: data-engineer
+artifact_package: ART-DATA-PIPELINE
+artifact_owner: data-engineer
+status: draft
+title: "Design a reproducible order-event reporting pipeline"
+rubric_version: baseline-v1
+purpose: "Evaluate source-to-target lineage, deterministic transformation, data quality, incremental processing, and safe replay/backfill design."
+task_prompt: |
+  You are performing a controlled Stage B baseline task as the data-engineer role.
+  SCENARIO ARTIFACT OWNERSHIP:
+  - Canonical artifact package: ART-DATA-PIPELINE.
+  - Accountable package owner and primary producer: data-engineer.
+  - The package is currently proposed, not approved. This scenario does not create a formal handoff or authorize another role to accept the package.
+
+
+  
+  Read skills/data-engineer/SKILL.md first. Use docs/team/expected-roles.yml, docs/team/ownership.yml, and relevant governance documents as authoritative sources. Artifact package entries are currently proposed, and docs/team/ownership.yml declares no formal handoff contracts.
+  
+  SHARED FICTIONAL EXERCISE FACTS:
+  - MerchantCloud is a fictional commerce provider sending order.created webhooks to fictional OrderDesk.
+  - Delivery is at-least-once; retries reuse event_id. Retry schedule and exact provider retry policy are unknown.
+  - event_id uniquely identifies a delivered event; order_id identifies the business order.
+  - X-Provider-Signature has form sha256=<64 lowercase hexadecimal characters> and carries HMAC-SHA256 over the exact raw HTTP request-body bytes with a shared secret. Secret value and rotation procedure are unknown.
+  - Example event:
+    {
+      "event_id": "evt_01J9M7",
+      "event_type": "order.created",
+      "occurred_at": "2026-10-15T10:30:00Z",
+      "data": {"order_id": "ord_1042", "customer": {"email": "alex@example.test"}, "currency": "PHP", "items": [{"sku": "SKU-RED-01", "quantity": 2, "unit_price": "125.00"}]}
+    }
+  - OrderDesk has an existing backend service and relational database, but engine/version, current schema, hosting, queue, framework, traffic, and deployment topology are unknown.
+  - Support operators need recent processing outcomes. Search filters beyond order_id, retention, permissions, and customer-visible behavior are undecided.
+  - No provider credentials, live provider, production environment, network-test authorization, or deployment permission is available.
+  
+  RULES:
+  - Create only deliverables/data-engineer/. Do not modify canonical skills, governance sources, manifests, scenarios, workflows, or existing application sources.
+  - No network access, real services, secrets, production actions, or deployment.
+  - Do not invent provider guarantees, platforms, service targets, approvals, lifecycle states, or stakeholder decisions. Mark assumptions and unknowns.
+  - Do not claim execution, test results, review, approval, handoff acceptance, or release unless actually evidenced.
+  - Include README.md listing deliverables, assumptions/unknowns, and exact verification performed or not performed.
+  - Keep the task achievable in one agent session. Preserve the role's ownership boundaries.
+  
+  SCORING:
+  - Score each criterion from 0–100 using inspectable evidence, not verbosity/style.
+  - 0 = absent or materially contrary; 1–49 = materially incomplete; 50–74 = partial with significant gaps; 75–89 = core requirement met with minor gaps; 90–100 = complete, precise, and evidence-backed.
+  - Record critical failures separately. Critical failures include unauthorized activity, exposure of secrets/unnecessary PII, invented approval/test/release claims, materially false guarantees, or overriding another role's decision authority.
+  
+  Create deliverables/data-engineer/pipeline-design.md, data-contract.md, and quality-checks.md.
+  
+  Design an analytical pipeline that derives a support-facing daily event-outcome summary from an authoritative event/outcome store. Do not invent an upstream store schema; define the minimum source fields required and mark them as proposed contract requirements to be confirmed with their owner.
+  
+  Specify source-to-target lineage, field mappings, event_id and order_id semantics, deduplication, timestamp/timezone handling, currency handling (preserve currency; do not sum mixed currencies), invalid/null data handling, late-arriving events, correction of previously recorded outcomes, deterministic aggregation, incremental checkpoints/watermarks, idempotent writes, restart, replay, and backfill boundaries. Define data-quality checks and quarantine behavior. Identify product definitions needed for metrics and retention/privacy constraints. Include a small illustrative transformation pseudocode only; do not implement or run a pipeline. State what evidence is required before a real backfill or production schedule is authorized.
+  
+  DAILY SUMMARY METRIC AND SOURCE CONTRACT:
+  - Treat the daily summary as a support/operations-facing first-release requirement, but do not assume a separate pipeline is automatically necessary. Explain when a database query/materialized view is sufficient versus when a pipeline is justified; mark the trigger as an architecture/operations decision.
+  - Distinguish a provider event (event_id) from each receiver-observed delivery attempt (proposed delivery_attempt_id). Repeated attempts share event_id but have distinct attempt IDs and received_at values. order_id is the business order identity and must not be used as the event deduplication key.
+  - Propose received_at (receiver-generated timestamp) as the daily aggregation clock and preserve occurred_at (provider-supplied event time) separately for event chronology/latency analysis. Never substitute one for the other. State that the reporting timezone/day boundary requires Product/Operations confirmation; use UTC only as an explicitly illustrative normalization choice.
+  - Define the proposed daily metrics as counts of eligible delivery attempts: received attempts and one mutually exclusive terminal outcome per attempt (accepted, rejected, duplicate). Distinguish malformed/unauthenticated ingress traffic from trusted business-event outcomes; do not silently mix it into these metrics.
+  - Require source fields at minimum: delivery_attempt_id, received_at, event_id when trusted, order_id when available, terminal outcome, safe reason code, and source/provenance. Identify which fields are proposed contract requirements requiring confirmation by the source owner.
+  - A duplicate attempt must remain auditable as an attempt without creating a second business order. Corrections/reprocessing must be represented so the aggregation remains deterministic and does not double count an attempt.
+
+  - For aggregation, count every eligible attempt in received_attempt_count. Count accepted/rejected/duplicate only after a durable terminal outcome is available; in-flight/nonterminal attempts remain received-only. Do not force the subtotals to equal received at every instant.
+  - Classify a repeated event_id as a duplicate attempt only when a durable terminal event outcome already exists. Do not aggregate a persistence failure or nonterminal attempt as duplicate; coordinate retry/recovery semantics with Backend/API/Integration owners.
+
+required_requirements:
+  - REQ-DATA-ENGINEER-01
+criteria:
+  - id: SOURCE-TO-TARGET
+    description: "Defines source/target ownership, minimum source contract, mapping, provenance, and event/order identity semantics."
+    weight: 20
+    critical: true
+    requirement_ref: REQ-DATA-ENGINEER-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: DETERMINISTIC-TRANSFORMS
+    description: "Specifies reproducible aggregation, timestamp treatment, late-arriving/corrected events, and currency-safe summaries."
+    weight: 20
+    critical: true
+    requirement_ref: REQ-DATA-ENGINEER-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: INCREMENTAL-AND-RECOVERY
+    description: "Defines checkpoints, idempotent writes, restart, replay, and backfill boundaries without claiming exactly-once behavior."
+    weight: 20
+    critical: true
+    requirement_ref: REQ-DATA-ENGINEER-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: QUALITY-AND-INVALID-DATA
+    description: "Defines measurable quality checks, quarantine/reject behavior, reconciliation, and lineage evidence."
+    weight: 20
+    critical: true
+    requirement_ref: REQ-DATA-ENGINEER-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+  - id: OWNERSHIP-AND-ASSUMPTIONS
+    description: "Identifies product definitions, source contracts, retention/privacy and operational decisions without inventing business semantics or running data jobs."
+    weight: 20
+    critical: false
+    requirement_ref: REQ-DATA-ENGINEER-01
+    score_anchors:
+      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
+      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
+      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
+      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+review_record: null
+evidence:
+  - path: skills/data-engineer/SKILL.md
+    commit: 91fea1ed0422aee888a8533ae307dd62c23624d1
