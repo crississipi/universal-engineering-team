@@ -36,7 +36,10 @@ def mean(values):
 
 
 def score_statistics(values):
-    numeric = [float(value) for value in values if isinstance(value, (int, float)) and not isinstance(value, bool)]
+    numeric = [
+        float(value) for value in values
+        if isinstance(value, (int, float)) and not isinstance(value, bool)
+    ]
     return {
         "count": len(numeric),
         "mean": mean(numeric),
@@ -58,9 +61,7 @@ def weighted_score(record, scenario):
         for item in record.get("scores", [])
         if isinstance(item, dict)
     }
-    if not criteria or len(weights) != len(criteria):
-        return None
-    if set(scores) != set(weights):
+    if not criteria or len(weights) != len(criteria) or set(scores) != set(weights):
         return None
     if any(
         not isinstance(scores[key], (int, float))
@@ -74,6 +75,27 @@ def weighted_score(record, scenario):
     if denominator <= 0:
         return None
     return sum(float(scores[key]) * float(weights[key]) for key in weights) / denominator
+
+
+def criterion_statistics(records, scenario):
+    results = []
+    for criterion in scenario.get("criteria", []):
+        criterion_id = criterion.get("id")
+        values = [
+            next(
+                (item.get("score") for item in record.get("scores", [])
+                 if item.get("criterion_id") == criterion_id),
+                None,
+            )
+            for record in records
+        ]
+        results.append({
+            "criterion_id": criterion_id,
+            "description": criterion.get("description"),
+            "weight": criterion.get("weight"),
+            **score_statistics(values),
+        })
+    return results
 
 
 def load_report_data(root=ROOT):
@@ -112,7 +134,6 @@ def build_report(scenarios, records, validation_warnings=None):
 
     scenario_rows = []
     approval_counts = Counter()
-    total_weighted_scores = []
     critical_failure_count = 0
 
     for scenario_id, scenario in sorted(scenarios.items()):
@@ -123,12 +144,8 @@ def build_report(scenarios, records, validation_warnings=None):
             scenario_records.get(scenario_id, []),
             key=lambda item: item["run_number"],
         )
-        weighted = [
-            weighted_score(record, scenario)
-            for record in actual
-        ]
-        available_weighted = [value for value in weighted if value is not None]
-        total_weighted_scores.extend(available_weighted)
+        run_numbers = {record["run_number"] for record in actual}
+        missing = sorted(set(range(1, 11)) - run_numbers) if approved else []
         failures = [
             {"run_id": record["run_id"], "failures": list(record.get("critical_failures", []))}
             for record in actual
@@ -136,26 +153,33 @@ def build_report(scenarios, records, validation_warnings=None):
         ]
         critical_failure_count += sum(len(item["failures"]) for item in failures)
 
-        criteria = []
-        for criterion in scenario.get("criteria", []):
-            criterion_id = criterion.get("id")
-            stats = score_statistics([
-                next(
-                    (item.get("score") for item in record.get("scores", [])
-                     if item.get("criterion_id") == criterion_id),
-                    None,
-                )
-                for record in actual
-            ])
-            criteria.append({
-                "criterion_id": criterion_id,
-                "description": criterion.get("description"),
-                "weight": criterion.get("weight"),
-                **stats,
+        cohort_summaries = []
+        scenario_cohort_ids = sorted({
+            record["comparability"]["cohort_id"] for record in actual
+        })
+        for cohort_id in scenario_cohort_ids:
+            cohort_runs = [
+                record for record in actual
+                if record["comparability"]["cohort_id"] == cohort_id
+            ]
+            comparable = [
+                record for record in cohort_runs
+                if record.get("comparability", {}).get("comparable_within_scenario_cohort") is True
+            ]
+            weighted = [
+                value for record in comparable
+                if (value := weighted_score(record, scenario)) is not None
+            ]
+            cohort_summaries.append({
+                "cohort_id": cohort_id,
+                "recorded_runs": len(cohort_runs),
+                "explicitly_comparable_runs": len(comparable),
+                "excluded_unconfirmed_or_non_comparable_runs": len(cohort_runs) - len(comparable),
+                "scored_comparable_runs": len(weighted),
+                "weighted_score": score_statistics(weighted),
+                "criteria": criterion_statistics(comparable, scenario),
             })
 
-        run_numbers = {record["run_number"] for record in actual}
-        missing = sorted(set(range(1, 11)) - run_numbers) if approved else []
         scenario_rows.append({
             "scenario_id": scenario_id,
             "role": scenario.get("role"),
@@ -163,24 +187,17 @@ def build_report(scenarios, records, validation_warnings=None):
             "status": status,
             "approved": approved,
             "recorded_runs": len(actual),
-            "scored_runs": len(available_weighted),
+            "scored_runs": sum(
+                weighted_score(record, scenario) is not None for record in actual
+            ),
             "expected_runs": 10 if approved else None,
             "missing_run_numbers": missing,
-            "weighted_score": score_statistics(available_weighted),
-            "criteria": criteria,
+            "cohorts": cohort_summaries,
             "critical_failures": failures,
             "review_decisions": dict(Counter(
                 record.get("review", {}).get("decision") or "not_reviewed"
                 for record in actual
             )),
-            "comparable_records": sum(
-                record.get("comparability", {}).get("comparable_within_scenario_cohort") is True
-                for record in actual
-            ),
-            "non_comparable_or_unconfirmed_records": sum(
-                record.get("comparability", {}).get("comparable_within_scenario_cohort") is not True
-                for record in actual
-            ),
         })
 
     cohorts = []
@@ -236,7 +253,6 @@ def build_report(scenarios, records, validation_warnings=None):
             "recorded_runs": recorded_runs,
             "scored_runs": sum(row["scored_runs"] for row in scenario_rows),
             "critical_failure_entries": critical_failure_count,
-            "weighted_score": score_statistics(total_weighted_scores),
         },
         "scenarios": scenario_rows,
         "cohorts": cohorts,
@@ -245,6 +261,7 @@ def build_report(scenarios, records, validation_warnings=None):
             "Only committed scenario status and actual validated run records are counted.",
             "Draft scenarios are not treated as approved and are not assigned missing-run counts.",
             "A weighted run score exists only when every criterion has a numeric score.",
+            "Scenario score statistics are kept separate by cohort; unlike cohorts are never averaged together.",
             "Cross-role cohort statistics include only runs explicitly marked comparable_within_scenario_cohort: true.",
             "Critical failures and human review decisions are reported separately from numeric scores.",
             "This report does not approve scenarios, authenticate reviewers, or establish model quality.",
@@ -274,47 +291,53 @@ def render_markdown(report):
         f"| Actual run records | {status['recorded_runs']} |",
         f"| Runs with complete numeric weighted scores | {status['scored_runs']} |",
         f"| Critical-failure entries | {status['critical_failure_entries']} |",
-        f"| Mean weighted score across recorded, fully scored runs | {format_number(status['weighted_score']['mean'])} |",
         "",
-        "A draft scenario is not an approved scenario. Planned runs are a target, not evidence that execution occurred.",
+        "Planned runs are a target, not evidence that execution occurred. Scores are never averaged across different cohorts.",
         "",
         "## Scenario results",
         "",
-        "| Scenario | Role | Status | Records | Scored | Weighted mean (range) | Missing approved run numbers |",
-        "|---|---|---|---:|---:|---:|---|",
+        "| Scenario | Role | Status | Records | Scored | Missing approved run numbers |",
+        "|---|---|---|---:|---:|---|",
     ]
     for row in report["scenarios"]:
-        stats = row["weighted_score"]
-        score = "—"
-        if stats["count"]:
-            score = f"{format_number(stats['mean'])} ({format_number(stats['minimum'])}–{format_number(stats['maximum'])})"
         missing = ", ".join(f"{number:02d}" for number in row["missing_run_numbers"]) or "—"
         lines.append(
             f"| {row['scenario_id']} | {row['role']} | {row['status']} | "
-            f"{row['recorded_runs']} | {row['scored_runs']} | {score} | {missing} |"
+            f"{row['recorded_runs']} | {row['scored_runs']} | {missing} |"
         )
 
-    lines.extend(["", "## Criterion results", ""])
+    lines.extend(["", "## Scenario scores by cohort", ""])
+    any_scenario_cohort = False
     for row in report["scenarios"]:
-        lines.extend([f"### {row['scenario_id']} ({row['role']})", ""])
-        if not row["criteria"]:
-            lines.extend(["No rubric criteria are available.", ""])
-            continue
-        lines.extend([
-            "| Criterion | Weight | Numeric scores | Mean | Range |",
-            "|---|---:|---:|---:|---:|",
-        ])
-        for criterion in row["criteria"]:
-            range_text = "—"
-            if criterion["count"]:
-                range_text = f"{format_number(criterion['minimum'])}–{format_number(criterion['maximum'])}"
-            lines.append(
-                f"| {criterion['criterion_id']} | {criterion['weight']} | {criterion['count']} | "
-                f"{format_number(criterion['mean'])} | {range_text} |"
-            )
-        lines.append("")
+        for cohort in row["cohorts"]:
+            any_scenario_cohort = True
+            stats = cohort["weighted_score"]
+            lines.extend([
+                f"### {row['scenario_id']} / {cohort['cohort_id']}",
+                "",
+                f"- Recorded runs: {cohort['recorded_runs']}",
+                f"- Explicitly comparable runs: {cohort['explicitly_comparable_runs']}",
+                f"- Excluded because comparability is false or unconfirmed: {cohort['excluded_unconfirmed_or_non_comparable_runs']}",
+                f"- Scored comparable runs: {cohort['scored_comparable_runs']}",
+                f"- Weighted-score mean: {format_number(stats['mean'])}",
+                f"- Weighted-score range: {format_number(stats['minimum'])}–{format_number(stats['maximum'])}",
+                "",
+                "| Criterion | Weight | Numeric scores | Mean | Range |",
+                "|---|---:|---:|---:|---:|",
+            ])
+            for criterion in cohort["criteria"]:
+                range_text = "—"
+                if criterion["count"]:
+                    range_text = f"{format_number(criterion['minimum'])}–{format_number(criterion['maximum'])}"
+                lines.append(
+                    f"| {criterion['criterion_id']} | {criterion['weight']} | {criterion['count']} | "
+                    f"{format_number(criterion['mean'])} | {range_text} |"
+                )
+            lines.append("")
+    if not any_scenario_cohort:
+        lines.extend(["No scenario run records exist; no score statistics are available.", ""])
 
-    lines.extend(["## Comparable cohort summaries", ""])
+    lines.extend(["## Comparable cross-role cohort summaries", ""])
     if not report["cohorts"]:
         lines.extend(["No cohort records exist. No cross-role score summary is available.", ""])
     for cohort in report["cohorts"]:
