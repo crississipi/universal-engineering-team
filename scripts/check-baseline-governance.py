@@ -71,7 +71,7 @@ def validate_decision_register(path=None):
         seen.add(decision_id)
 
         status = item.get("status")
-        if status not in {"open", "confirmed", "non_scored"}:
+        if not isinstance(status, str) or status not in {"open", "confirmed", "non_scored"}:
             errors.append(f"{decision_id}: status must be open, confirmed, or non_scored")
             continue
         for field in ("question", "owner", "affected_roles"):
@@ -133,7 +133,7 @@ def validate_scenario_approvals(scenario_dir=None):
             continue
         scenario_id = scenario.get("id", path.stem)
         role = scenario.get("role")
-        if role not in expected:
+        if not isinstance(role, str) or role not in expected:
             errors.append(f"{scenario_id}: role is not canonical")
         elif role in found_roles:
             errors.append(f"{scenario_id}: duplicate baseline scenario role {role}")
