@@ -72,50 +72,50 @@ criteria:
     critical: true
     requirement_ref: REQ-DATA-ENGINEER-01
     score_anchors:
-      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
-      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
-      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
-      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+      absent: "No inspectable deliverable evidence demonstrates SOURCE-TO-TARGET: Defines source/target ownership, minimum source contract, mapping, provenance, and event/order identity semantics The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The SOURCE-TO-TARGET evidence covers only part of the criterion (for example, Defines source/target ownership; minimum source contract) while material elements such as mapping; provenance; and event/order identity semantics are missing, ambiguous, inconsistent, or unsupported."
+      core: "The deliverable demonstrates the core SOURCE-TO-TARGET outcome: Defines source/target ownership, minimum source contract, mapping, provenance, and event/order identity semantics The corresponding artifact sections and examples are inspectable and substantially consistent, with only limited gaps that do not defeat the criterion."
+      complete: "The deliverable fully demonstrates SOURCE-TO-TARGET: Defines source/target ownership, minimum source contract, mapping, provenance, and event/order identity semantics Every material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
   - id: DETERMINISTIC-TRANSFORMS
     description: "Specifies reproducible aggregation, timestamp treatment, late-arriving/corrected events, and currency-safe summaries."
     weight: 20
     critical: true
     requirement_ref: REQ-DATA-ENGINEER-01
     score_anchors:
-      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
-      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
-      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
-      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+      absent: "No inspectable deliverable evidence demonstrates DETERMINISTIC-TRANSFORMS: Specifies reproducible aggregation, timestamp treatment, late-arriving/corrected events, and currency-safe summaries The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The DETERMINISTIC-TRANSFORMS evidence covers only part of the criterion (for example, Specifies reproducible aggregation; timestamp treatment) while material elements such as late-arriving/corrected events; and currency-safe summaries are missing, ambiguous, inconsistent, or unsupported."
+      core: "The deliverable demonstrates the core DETERMINISTIC-TRANSFORMS outcome: Specifies reproducible aggregation, timestamp treatment, late-arriving/corrected events, and currency-safe summaries The corresponding artifact sections and examples are inspectable and substantially consistent, with only limited gaps that do not defeat the criterion."
+      complete: "The deliverable fully demonstrates DETERMINISTIC-TRANSFORMS: Specifies reproducible aggregation, timestamp treatment, late-arriving/corrected events, and currency-safe summaries Every material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
   - id: INCREMENTAL-AND-RECOVERY
     description: "Defines checkpoints, idempotent writes, restart, replay, and backfill boundaries without claiming exactly-once behavior."
     weight: 20
     critical: true
     requirement_ref: REQ-DATA-ENGINEER-01
     score_anchors:
-      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
-      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
-      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
-      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+      absent: "No inspectable deliverable evidence demonstrates INCREMENTAL-AND-RECOVERY: Defines checkpoints, idempotent writes, restart, replay, and backfill boundaries without claiming exactly-once behavior The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The INCREMENTAL-AND-RECOVERY evidence covers only part of the criterion (for example, Defines checkpoints; idempotent writes) while material elements such as restart; replay; and backfill boundaries without claiming exactly-once behavior are missing, ambiguous, inconsistent, or unsupported."
+      core: "The deliverable demonstrates the core INCREMENTAL-AND-RECOVERY outcome: Defines checkpoints, idempotent writes, restart, replay, and backfill boundaries without claiming exactly-once behavior The corresponding artifact sections and examples are inspectable and substantially consistent, with only limited gaps that do not defeat the criterion."
+      complete: "The deliverable fully demonstrates INCREMENTAL-AND-RECOVERY: Defines checkpoints, idempotent writes, restart, replay, and backfill boundaries without claiming exactly-once behavior Every material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
   - id: QUALITY-AND-INVALID-DATA
     description: "Defines measurable quality checks, quarantine/reject behavior, reconciliation, and lineage evidence."
     weight: 20
     critical: true
     requirement_ref: REQ-DATA-ENGINEER-01
     score_anchors:
-      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
-      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
-      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
-      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+      absent: "No inspectable deliverable evidence demonstrates QUALITY-AND-INVALID-DATA: Defines measurable quality checks, quarantine/reject behavior, reconciliation, and lineage evidence The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The QUALITY-AND-INVALID-DATA evidence covers only part of the criterion (for example, Defines measurable quality checks; quarantine/reject behavior) while material elements such as reconciliation; and lineage evidence are missing, ambiguous, inconsistent, or unsupported."
+      core: "The deliverable demonstrates the core QUALITY-AND-INVALID-DATA outcome: Defines measurable quality checks, quarantine/reject behavior, reconciliation, and lineage evidence The corresponding artifact sections and examples are inspectable and substantially consistent, with only limited gaps that do not defeat the criterion."
+      complete: "The deliverable fully demonstrates QUALITY-AND-INVALID-DATA: Defines measurable quality checks, quarantine/reject behavior, reconciliation, and lineage evidence Every material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
   - id: OWNERSHIP-AND-ASSUMPTIONS
     description: "Identifies product definitions, source contracts, retention/privacy and operational decisions without inventing business semantics or running data jobs."
     weight: 20
     critical: false
     requirement_ref: REQ-DATA-ENGINEER-01
     score_anchors:
-      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
-      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
-      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
-      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+      absent: "No inspectable deliverable evidence demonstrates OWNERSHIP-AND-ASSUMPTIONS: Identifies product definitions, source contracts, retention/privacy and operational decisions without inventing business semantics or running data jobs The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The OWNERSHIP-AND-ASSUMPTIONS evidence covers only part of the criterion (for example, Identifies product definitions; source contracts) while material elements such as retention/privacy and operational decisions without inventing business semantics or running data jobs are missing, ambiguous, inconsistent, or unsupported."
+      core: "The deliverable demonstrates the core OWNERSHIP-AND-ASSUMPTIONS outcome: Identifies product definitions, source contracts, retention/privacy and operational decisions without inventing business semantics or running data jobs The corresponding artifact sections and examples are inspectable and substantially consistent, with only limited gaps that do not defeat the criterion."
+      complete: "The deliverable fully demonstrates OWNERSHIP-AND-ASSUMPTIONS: Identifies product definitions, source contracts, retention/privacy and operational decisions without inventing business semantics or running data jobs Every material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
 review_record: null
 evidence:
   - path: skills/data-engineer/SKILL.md
