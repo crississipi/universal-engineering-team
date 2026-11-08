@@ -184,3 +184,14 @@ No new criterion was added and existing weights were retained. Each scenario con
 - AI-04: **Open governance qualification.** Package IDs remain proposed ownership references; no formal handoff or acceptance is created.
 
 All 17 scenarios remain `status: draft`, with `review_record: null`. No pre-run approval or baseline execution has been created. The user will perform local tests and validators against the updated branch; no verification result is asserted here.
+
+
+## 8. Audit status supersession
+
+This section supersedes the prospective actions in section 6 for AI-01 and AI-02:
+
+- AI-01 criterion-specific anchors: remediation committed across all 17 scenario files (85 criteria total).
+- AI-02 daily-summary rubric coverage: remediation committed in the Frontend Developer and UX/UI Designer criteria.
+- The remaining work before baseline execution is local verification by the user, resolution or explicit non-scored disposition of AI-03 decisions, completion of execution-readiness tooling, and scenario-by-scenario human pre-run approval.
+
+The initial audit commit recorded in section 6 is the source snapshot for the findings, not the current branch head. The branch has since advanced with the remediation commits. The current PR head must be obtained from PR #34 when recording subsequent verification evidence.
