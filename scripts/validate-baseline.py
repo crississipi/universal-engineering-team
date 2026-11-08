@@ -202,8 +202,11 @@ def validate_record(path: Path, record, scenarios, root: Path, schema_validator)
     prompt_path = record["input"]["prompt_path"]
     check_evidence_path(prompt_path, root, errors, f"{relative} input.prompt_path")
     if prompt_path != "unknown":
-        prompt_file = safe_path(prompt_path, root)
-        if prompt_file.is_file():
+        try:
+            prompt_file = safe_path(prompt_path, root)
+        except ValueError:
+            prompt_file = None
+        if prompt_file is not None and prompt_file.is_file():
             digest = hashlib.sha256(prompt_file.read_bytes()).hexdigest()
             if digest != record["input"]["prompt_sha256"]:
                 errors.append(f"[BLV023] {relative} prompt_sha256 does not match prompt file bytes")
