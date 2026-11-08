@@ -35,9 +35,9 @@ def valid_scenario(status="approved"):
 class BaselineRunRecordValidationTests(unittest.TestCase):
     def setUp(self):
         self.schema = validator.load_schema(ROOT)
-        self.temp_evidence = tempfile.TemporaryDirectory(
-            dir=ROOT / "evaluations" / "baseline" / "evidence"
-        )
+        evidence_root = ROOT / "evaluations" / "baseline" / "evidence"
+        evidence_root.mkdir(parents=True, exist_ok=True)
+        self.temp_evidence = tempfile.TemporaryDirectory(dir=evidence_root)
         self.evidence_dir = Path(self.temp_evidence.name)
         self.addCleanup(self.temp_evidence.cleanup)
         self.prompt_file = self.evidence_dir / "prompt-used.md"
@@ -108,7 +108,10 @@ class BaselineRunRecordValidationTests(unittest.TestCase):
         }
 
     def test_schema_is_valid_draft_2020_12(self):
-        self.assertIsInstance(self.schema, object)
+        self.assertEqual(
+            self.schema.META_SCHEMA["$schema"],
+            "https://json-schema.org/draft/2020-12/schema",
+        )
 
     def test_valid_record_passes_schema_and_cross_reference_checks(self):
         record = self.make_record()
