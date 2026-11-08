@@ -56,6 +56,9 @@ jobs:
       - name: Validate scenarios and review records
         run: python scripts/validate-scenarios.py
 
+      - name: Validate baseline run records
+        run: python scripts/validate-baseline.py
+
       - name: Check generated AGENTS section
         run: python scripts/build-agents-section.py --check
 
