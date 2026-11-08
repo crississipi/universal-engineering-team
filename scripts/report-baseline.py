@@ -193,6 +193,18 @@ def build_report(scenarios, records, validation_warnings=None):
             "expected_runs": 10 if approved else None,
             "missing_run_numbers": missing,
             "cohorts": cohort_summaries,
+            "runs": [
+                {
+                    "run_id": record["run_id"],
+                    "run_number": record["run_number"],
+                    "cohort_id": record["comparability"]["cohort_id"],
+                    "weighted_score": weighted_score(record, scenario),
+                    "comparable": record.get("comparability", {}).get("comparable_within_scenario_cohort"),
+                    "critical_failures": list(record.get("critical_failures", [])),
+                    "review_decision": record.get("review", {}).get("decision"),
+                }
+                for record in actual
+            ],
             "critical_failures": failures,
             "review_decisions": dict(Counter(
                 record.get("review", {}).get("decision") or "not_reviewed"
@@ -306,7 +318,32 @@ def render_markdown(report):
             f"{row['recorded_runs']} | {row['scored_runs']} | {missing} |"
         )
 
-    lines.extend(["", "## Scenario scores by cohort", ""])
+    lines.extend(["", "## Individual run scores", ""])
+    any_runs = False
+    for row in report["scenarios"]:
+        if not row["runs"]:
+            continue
+        any_runs = True
+        lines.extend([
+            f"### {row['scenario_id']} ({row['role']})",
+            "",
+            "| Run | Cohort | Weighted score | Comparable | Critical failures | Human review |",
+            "|---:|---|---:|---|---|---|",
+        ])
+        for run in row["runs"]:
+            score = format_number(run["weighted_score"])
+            comparable = "yes" if run["comparable"] is True else ("no" if run["comparable"] is False else "unconfirmed")
+            failures_text = "; ".join(run["critical_failures"]) or "—"
+            review = run["review_decision"] or "not reviewed"
+            lines.append(
+                f"| {run['run_number']:02d} | {run['cohort_id']} | {score} | "
+                f"{comparable} | {failures_text} | {review} |"
+            )
+        lines.append("")
+    if not any_runs:
+        lines.extend(["No individual run scores exist because no run records are present.", ""])
+
+    lines.extend(["## Scenario scores by cohort", ""])
     any_scenario_cohort = False
     for row in report["scenarios"]:
         for cohort in row["cohorts"]:
