@@ -5,6 +5,9 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
+
+import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
@@ -161,6 +164,47 @@ class BaselineRunRecordValidationTests(unittest.TestCase):
         with self.assertRaises(Exception) as context:
             validator.load_yaml(path)
         self.assertIn("found duplicate key", str(context.exception))
+
+
+    def test_duplicate_run_number_is_reported_across_files(self):
+        scenario = valid_scenario()
+        record_one = self.make_record()
+        record_two = self.make_record()
+        record_two["run_id"] = "BASELINE-SCEN-BASELINE-TEST-RUN-01"
+        with tempfile.TemporaryDirectory(dir=ROOT) as temp_dir:
+            runs_dir = Path(temp_dir)
+            (runs_dir / "SCEN-BASELINE-TEST-run-01.yml").write_text(
+                yaml.safe_dump(record_one, sort_keys=False), encoding="utf-8"
+            )
+            (runs_dir / "duplicate-copy.yml").write_text(
+                yaml.safe_dump(record_two, sort_keys=False), encoding="utf-8"
+            )
+            with patch.object(validator, "load_schema", return_value=self.schema), patch.object(
+                validator, "load_scenario_catalog", return_value=({"SCEN-BASELINE-TEST": scenario}, [])
+            ):
+                result = validator.validate_run_records(runs_dir, ROOT)
+        self.assertTrue(any("[BLV027]" in error for error in result["errors"]))
+
+    def test_cohort_metadata_must_remain_consistent(self):
+        scenario = valid_scenario()
+        record_one = self.make_record()
+        record_two = self.make_record()
+        record_two["run_number"] = 2
+        record_two["run_id"] = "BASELINE-SCEN-BASELINE-TEST-RUN-02"
+        record_two["execution_environment"]["provider"] = "different-provider"
+        with tempfile.TemporaryDirectory(dir=ROOT) as temp_dir:
+            runs_dir = Path(temp_dir)
+            (runs_dir / "SCEN-BASELINE-TEST-run-01.yml").write_text(
+                yaml.safe_dump(record_one, sort_keys=False), encoding="utf-8"
+            )
+            (runs_dir / "SCEN-BASELINE-TEST-run-02.yml").write_text(
+                yaml.safe_dump(record_two, sort_keys=False), encoding="utf-8"
+            )
+            with patch.object(validator, "load_schema", return_value=self.schema), patch.object(
+                validator, "load_scenario_catalog", return_value=({"SCEN-BASELINE-TEST": scenario}, [])
+            ):
+                result = validator.validate_run_records(runs_dir, ROOT)
+        self.assertTrue(any("[BLV028]" in error for error in result["errors"]))
 
     def test_schema_rejects_out_of_range_scores(self):
         record = self.make_record()
