@@ -77,50 +77,50 @@ criteria:
     critical: true
     requirement_ref: REQ-DATABASE-MANAGER-01
     score_anchors:
-      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
-      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
-      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
-      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+      absent: "No inspectable deliverable evidence demonstrates RELATIONAL-MODEL: Models provider events, business orders, items, and outcomes with clear ownership, relationships, and event/order identity distinction The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The RELATIONAL-MODEL evidence covers only part of the criterion (for example, Models provider events; business orders) while material elements such as items; and outcomes with clear ownership; relationships; and event/order identity distinction are missing, ambiguous, inconsistent, or unsupported."
+      core: "The deliverable demonstrates the core RELATIONAL-MODEL outcome: Models provider events, business orders, items, and outcomes with clear ownership, relationships, and event/order identity distinction The corresponding artifact sections and examples are inspectable and substantially consistent, with only limited gaps that do not defeat the criterion."
+      complete: "The deliverable fully demonstrates RELATIONAL-MODEL: Models provider events, business orders, items, and outcomes with clear ownership, relationships, and event/order identity distinction Every material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
   - id: INTEGRITY-AND-IDEMPOTENCY
     description: "Defines appropriate uniqueness, foreign-key, and transaction-level invariants for durable duplicate prevention."
     weight: 20
     critical: true
     requirement_ref: REQ-DATABASE-MANAGER-01
     score_anchors:
-      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
-      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
-      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
-      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+      absent: "No inspectable deliverable evidence demonstrates INTEGRITY-AND-IDEMPOTENCY: Defines appropriate uniqueness, foreign-key, and transaction-level invariants for durable duplicate prevention The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The INTEGRITY-AND-IDEMPOTENCY evidence covers only part of the criterion (for example, Defines appropriate uniqueness; foreign-key) while material elements such as and transaction-level invariants for durable duplicate prevention are missing, ambiguous, inconsistent, or unsupported."
+      core: "The deliverable demonstrates the core INTEGRITY-AND-IDEMPOTENCY outcome: Defines appropriate uniqueness, foreign-key, and transaction-level invariants for durable duplicate prevention The corresponding artifact sections and examples are inspectable and substantially consistent, with only limited gaps that do not defeat the criterion."
+      complete: "The deliverable fully demonstrates INTEGRITY-AND-IDEMPOTENCY: Defines appropriate uniqueness, foreign-key, and transaction-level invariants for durable duplicate prevention Every material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
   - id: INDEX-AND-ACCESS-PATTERNS
     description: "Recommends proportionate indexes for stated support lookup and event processing while labeling workload assumptions."
     weight: 15
     critical: false
     requirement_ref: REQ-DATABASE-MANAGER-01
     score_anchors:
-      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
-      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
-      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
-      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+      absent: "No inspectable deliverable evidence demonstrates INDEX-AND-ACCESS-PATTERNS: Recommends proportionate indexes for stated support lookup and event processing while labeling workload assumptions The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The INDEX-AND-ACCESS-PATTERNS evidence covers only part of the criterion (for example, Recommends proportionate indexes for stated support lookup and event processing while labeling workload assumptions) while material elements such as Recommends proportionate indexes for stated support lookup and event processing while labeling workload assumptions are missing, ambiguous, inconsistent, or unsupported."
+      core: "The deliverable demonstrates the core INDEX-AND-ACCESS-PATTERNS outcome: Recommends proportionate indexes for stated support lookup and event processing while labeling workload assumptions The corresponding artifact sections and examples are inspectable and substantially consistent, with only limited gaps that do not defeat the criterion."
+      complete: "The deliverable fully demonstrates INDEX-AND-ACCESS-PATTERNS: Recommends proportionate indexes for stated support lookup and event processing while labeling workload assumptions Every material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
   - id: MIGRATION-SAFETY
     description: "Provides compatibility-aware migration/backfill/rollback/recovery guidance and does not assume unknown engine capabilities."
     weight: 25
     critical: true
     requirement_ref: REQ-DATABASE-MANAGER-01
     score_anchors:
-      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
-      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
-      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
-      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+      absent: "No inspectable deliverable evidence demonstrates MIGRATION-SAFETY: Provides compatibility-aware migration/backfill/rollback/recovery guidance and does not assume unknown engine capabilities The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The MIGRATION-SAFETY evidence covers only part of the criterion (for example, Provides compatibility-aware migration/backfill/rollback/recovery guidance and does not assume unknown engine capabilities) while material elements such as Provides compatibility-aware migration/backfill/rollback/recovery guidance and does not assume unknown engine capabilities are missing, ambiguous, inconsistent, or unsupported."
+      core: "The deliverable demonstrates the core MIGRATION-SAFETY outcome: Provides compatibility-aware migration/backfill/rollback/recovery guidance and does not assume unknown engine capabilities The corresponding artifact sections and examples are inspectable and substantially consistent, with only limited gaps that do not defeat the criterion."
+      complete: "The deliverable fully demonstrates MIGRATION-SAFETY: Provides compatibility-aware migration/backfill/rollback/recovery guidance and does not assume unknown engine capabilities Every material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
   - id: LIMITATIONS-AND-DECISIONS
     description: "Identifies unknown dialect, existing data, traffic, retention, operational, and approval evidence before production use."
     weight: 15
     critical: false
     requirement_ref: REQ-DATABASE-MANAGER-01
     score_anchors:
-      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
-      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
-      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
-      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+      absent: "No inspectable deliverable evidence demonstrates LIMITATIONS-AND-DECISIONS: Identifies unknown dialect, existing data, traffic, retention, operational, and approval evidence before production use The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The LIMITATIONS-AND-DECISIONS evidence covers only part of the criterion (for example, Identifies unknown dialect; existing data) while material elements such as traffic; retention; operational; and approval evidence before production use are missing, ambiguous, inconsistent, or unsupported."
+      core: "The deliverable demonstrates the core LIMITATIONS-AND-DECISIONS outcome: Identifies unknown dialect, existing data, traffic, retention, operational, and approval evidence before production use The corresponding artifact sections and examples are inspectable and substantially consistent, with only limited gaps that do not defeat the criterion."
+      complete: "The deliverable fully demonstrates LIMITATIONS-AND-DECISIONS: Identifies unknown dialect, existing data, traffic, retention, operational, and approval evidence before production use Every material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
 review_record: null
 evidence:
   - path: skills/database-manager/SKILL.md
