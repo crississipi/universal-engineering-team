@@ -163,15 +163,19 @@ class BaselineReportTests(unittest.TestCase):
 
     def test_report_preserves_individual_run_score_and_review(self):
         run = record(4, decision="needs_changes", failures=["Missing test evidence"])
+        run["limitations"] = ["Fake repository does not prove concurrency safety"]
         result = reporter.build_report({"SCEN-BASELINE-TEST": scenario()}, [run])
         details = result["scenarios"][0]["runs"][0]
         self.assertEqual(details["run_number"], 4)
         self.assertEqual(details["weighted_score"], 88.0)
         self.assertEqual(details["review_decision"], "needs_changes")
         self.assertEqual(details["critical_failures"], ["Missing test evidence"])
+        self.assertEqual(details["limitations"], ["Fake repository does not prove concurrency safety"])
+        self.assertEqual(len(details["criterion_scores"]), 2)
         markdown = reporter.render_markdown(result)
         self.assertIn("Individual run scores", markdown)
         self.assertIn("needs_changes", markdown)
+        self.assertIn("Fake repository does not prove concurrency safety", markdown)
 
 
 if __name__ == "__main__":
