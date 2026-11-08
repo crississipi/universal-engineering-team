@@ -289,3 +289,15 @@ Gate status remains:
 - Baseline executions: 0/170.
 
 Do not change scenario status to approved or start baseline runs until the latest local checks pass, remaining Product/Operations decisions are confirmed or explicitly retained as open/non-scored, each scenario receives explicit human pre-run approval, and execution-readiness tooling is complete. The independent human design-review step is waived for this stage by user instruction; the AI audit does not count as a human review.
+
+
+## Scoring remediation update — 2026-11-08
+
+Following the AI-assisted audit, the draft rubrics were revised:
+
+- All 85 criteria now contain criterion-specific absent/partial/core/complete evidence anchors. The anchors name the assessed criterion and distinguish missing, partial, core, and complete evidence. Their semantic usefulness still requires human judgment; structural validation alone cannot prove scoring reliability.
+- The Frontend Developer functional-interaction criterion explicitly includes the daily delivery-attempt summary and its attempt-level count semantics.
+- The UX/UI Designer interaction-and-states criterion explicitly includes the daily summary experience, in-flight subtotal explanation, and illustrative receipt-date basis.
+- Existing criterion weights were retained; each scenario still totals 100.
+
+The audit report records the remediation and its limitations. AI-03 stakeholder decisions remain open, AI-04 package/handoff governance remains proposed, all 17 scenarios remain drafts, and human pre-run approval is still required. The user is responsible for local test and validator execution against the resulting commit; no verification result is asserted here.
