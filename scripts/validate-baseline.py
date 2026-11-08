@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 import argparse
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 import hashlib
 import json
 from pathlib import Path, PurePosixPath
@@ -43,7 +43,12 @@ class UniqueKeyLoader(yaml.SafeLoader):
 
 def normalize_yaml_dates(value):
     """Convert PyYAML timestamp objects to ISO strings for JSON Schema."""
-    if isinstance(value, (datetime, date)):
+    if isinstance(value, datetime):
+        serialized = value.isoformat()
+        if value.utcoffset() == timedelta(0):
+            serialized = serialized.replace("+00:00", "Z")
+        return serialized
+    if isinstance(value, date):
         return value.isoformat()
     if isinstance(value, dict):
         return {key: normalize_yaml_dates(item) for key, item in value.items()}
