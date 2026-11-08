@@ -250,7 +250,10 @@ def validate_run_records(runs_dir: Path, root: Path = ROOT):
             errors.append(f"[BLV026] {path.relative_to(root)} must contain a YAML mapping")
             continue
 
-        errors.extend(validate_record(path, record, scenarios, root, schema_validator))
+        record_errors = validate_record(path, record, scenarios, root, schema_validator)
+        errors.extend(record_errors)
+        if any(error.startswith("[BLV010]") for error in record_errors):
+            continue
         scenario_id = record.get("scenario_id")
         run_number = record.get("run_number")
         if isinstance(scenario_id, str) and isinstance(run_number, int):
