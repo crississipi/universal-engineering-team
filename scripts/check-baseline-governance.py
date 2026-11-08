@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Check baseline pre-run governance without creating approvals or run evidence."""
 
+from datetime import datetime
 from pathlib import Path
 import argparse
 import json
@@ -21,6 +22,16 @@ EXPECTED_DECISIONS = {
     "DELAY-THRESHOLD-OR-RETRY-INTERVAL",
 }
 DATE_TIME_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})$")
+
+
+def valid_timestamp(value):
+    if not isinstance(value, str) or not DATE_TIME_RE.fullmatch(value):
+        return False
+    try:
+        datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError:
+        return False
+    return True
 
 
 def _read_yaml(path):
@@ -45,6 +56,7 @@ def validate_decision_register(path=None):
         return ["decision register decisions must be a list"], blockers
 
     seen = set()
+    canonical_roles = set(expected_roles())
     for index, item in enumerate(decisions):
         label = f"decisions[{index}]"
         if not isinstance(item, dict):
@@ -67,6 +79,8 @@ def validate_decision_register(path=None):
             if field == "affected_roles":
                 if not isinstance(value, list) or not value or any(not isinstance(v, str) or not v.strip() for v in value):
                     errors.append(f"{decision_id}: affected_roles must be a non-empty string list")
+                elif any(role not in canonical_roles for role in value):
+                    errors.append(f"{decision_id}: affected_roles contains a non-canonical role")
             elif not isinstance(value, str) or not value.strip():
                 errors.append(f"{decision_id}: {field} must be non-empty")
 
@@ -81,8 +95,8 @@ def validate_decision_register(path=None):
                 if not isinstance(value, str) or not value.strip():
                     errors.append(f"{decision_id}: {field} is required for {status}")
             timestamp = item.get("authorized_at")
-            if isinstance(timestamp, str) and not DATE_TIME_RE.fullmatch(timestamp):
-                errors.append(f"{decision_id}: authorized_at must be an ISO-8601 timestamp with timezone")
+            if timestamp is not None and not valid_timestamp(timestamp):
+                errors.append(f"{decision_id}: authorized_at must be a valid ISO-8601 timestamp with timezone")
             if status == "non_scored":
                 scope = item.get("non_scored_scope")
                 if not isinstance(scope, str) or not scope.strip():
@@ -138,8 +152,8 @@ def validate_scenario_approvals(scenario_dir=None):
             if not isinstance(value, str) or not value.strip():
                 errors.append(f"{scenario_id}: approval.{field} must be non-empty")
         approved_at = approval.get("approved_at")
-        if isinstance(approved_at, str) and not DATE_TIME_RE.fullmatch(approved_at):
-            errors.append(f"{scenario_id}: approval.approved_at must be ISO-8601 with timezone")
+        if approved_at is not None and not valid_timestamp(approved_at):
+            errors.append(f"{scenario_id}: approval.approved_at must be a valid ISO-8601 timestamp with timezone")
 
     missing_roles = sorted(expected - found_roles)
     if missing_roles:
