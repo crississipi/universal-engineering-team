@@ -368,3 +368,41 @@ scores. Missing run numbers are reported only for approved scenarios; draft
 scenarios are not represented as missing executions. The report does not
 authenticate approvals, assess evidence authenticity, or replace human scoring
 and review.
+
+## Stakeholder decision register and pre-run governance check
+
+The unresolved AI-03 topics are tracked in
+`stakeholder-decisions.yml`. Its initial entries are deliberately
+`status: open`; they record questions and accountable decision-owner groups,
+not decisions or policy answers.
+
+Before baseline execution, each entry must receive an authorized disposition:
+
+- `confirmed`: record the actual decision, rationale, authorizing person,
+  timezone-qualified authorization timestamp, and a repository evidence
+  reference.
+- `non_scored`: record the same authorization evidence plus the exact
+  assertions/scoring scope excluded for this cohort. A non-scored disposition
+  must not be treated as an answer to the underlying policy question.
+- `open`: remains a blocker. Do not infer an answer from scenario wording,
+  implementation behavior, or an AI audit.
+
+Run the read-only governance check:
+
+```powershell
+python scripts/check-baseline-governance.py
+python scripts/check-baseline-governance.py --format json
+```
+
+The check verifies that all 17 baseline scenarios have explicit human
+pre-run approval metadata and that all five registered stakeholder topics
+have a structurally complete `confirmed` or `non_scored` disposition.
+It does not create or authenticate approvals, decide policy, verify the
+authority of a named person, validate cohort revision/prompt/model pins, or
+authorize execution. A `GOVERNANCE-CLEAR` result is only one precondition;
+the remaining execution-readiness checklist and the human decision to begin
+runs still apply.
+
+The initial register intentionally leaves all five topics open. No scenario
+approval or baseline execution is implied by adding this register or validator.
+
