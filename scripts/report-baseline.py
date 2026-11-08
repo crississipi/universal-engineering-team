@@ -203,8 +203,10 @@ def build_report(scenarios, records, validation_warnings=None):
                     "run_number": record["run_number"],
                     "cohort_id": record["comparability"]["cohort_id"],
                     "weighted_score": weighted_score(record, scenario),
+                    "criterion_scores": list(record.get("scores", [])),
                     "comparable": record.get("comparability", {}).get("comparable_within_scenario_cohort"),
                     "critical_failures": list(record.get("critical_failures", [])),
+                    "limitations": list(record.get("limitations", [])),
                     "review_decision": record.get("review", {}).get("decision"),
                 }
                 for record in actual
@@ -331,17 +333,18 @@ def render_markdown(report):
         lines.extend([
             f"### {row['scenario_id']} ({row['role']})",
             "",
-            "| Run | Cohort | Weighted score | Comparable | Critical failures | Human review |",
-            "|---:|---|---:|---|---|---|",
+            "| Run | Cohort | Weighted score | Comparable | Critical failures | Limitations | Human review |",
+            "|---:|---|---:|---|---|---|---|",
         ])
         for run in row["runs"]:
             score = format_number(run["weighted_score"])
             comparable = "yes" if run["comparable"] is True else ("no" if run["comparable"] is False else "unconfirmed")
             failures_text = "; ".join(run["critical_failures"]) or "—"
+            limitations_text = "; ".join(run["limitations"]) or "—"
             review = run["review_decision"] or "not reviewed"
             lines.append(
                 f"| {run['run_number']:02d} | {run['cohort_id']} | {score} | "
-                f"{comparable} | {failures_text} | {review} |"
+                f"{comparable} | {failures_text} | {limitations_text} | {review} |"
             )
         lines.append("")
     if not any_runs:
