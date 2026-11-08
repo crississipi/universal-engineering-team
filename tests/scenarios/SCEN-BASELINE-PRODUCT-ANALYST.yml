@@ -83,50 +83,50 @@ criteria:
     critical: true
     requirement_ref: REQ-PRODUCT-ANALYST-01
     score_anchors:
-      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
-      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
-      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
-      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+      absent: "No inspectable deliverable evidence demonstrates USER-OUTCOMES: Identifies target support and operations users, evidenced needs, problem, and desired outcomes without inventing goals The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The USER-OUTCOMES evidence covers only part of the criterion (for example, Identifies target support and operations users; evidenced needs) while material elements such as problem; and desired outcomes without inventing goals are missing, ambiguous, inconsistent, or unsupported."
+      core: "The deliverable demonstrates the core USER-OUTCOMES outcome: Identifies target support and operations users, evidenced needs, problem, and desired outcomes without inventing goals The corresponding artifact sections and examples are inspectable and substantially consistent, with only limited gaps that do not defeat the criterion."
+      complete: "The deliverable fully demonstrates USER-OUTCOMES: Identifies target support and operations users, evidenced needs, problem, and desired outcomes without inventing goals Every material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
   - id: TESTABLE-REQUIREMENTS
     description: "Defines unambiguous functional and non-functional requirements and observable, stable-ID acceptance criteria."
     weight: 25
     critical: true
     requirement_ref: REQ-PRODUCT-ANALYST-01
     score_anchors:
-      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
-      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
-      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
-      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+      absent: "No inspectable deliverable evidence demonstrates TESTABLE-REQUIREMENTS: Defines unambiguous functional and non-functional requirements and observable, stable-ID acceptance criteria The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The TESTABLE-REQUIREMENTS evidence covers only part of the criterion (for example, Defines unambiguous functional and non-functional requirements and observable; stable-ID acceptance criteria) while material elements such as Defines unambiguous functional and non-functional requirements and observable, stable-ID acceptance criteria are missing, ambiguous, inconsistent, or unsupported."
+      core: "The deliverable demonstrates the core TESTABLE-REQUIREMENTS outcome: Defines unambiguous functional and non-functional requirements and observable, stable-ID acceptance criteria The corresponding artifact sections and examples are inspectable and substantially consistent, with only limited gaps that do not defeat the criterion."
+      complete: "The deliverable fully demonstrates TESTABLE-REQUIREMENTS: Defines unambiguous functional and non-functional requirements and observable, stable-ID acceptance criteria Every material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
   - id: JOURNEYS-AND-EDGE-CASES
     description: "Covers success, missing, delayed, rejected, duplicate, and investigation journeys at product-behavior level."
     weight: 20
     critical: false
     requirement_ref: REQ-PRODUCT-ANALYST-01
     score_anchors:
-      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
-      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
-      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
-      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+      absent: "No inspectable deliverable evidence demonstrates JOURNEYS-AND-EDGE-CASES: Covers success, missing, delayed, rejected, duplicate, and investigation journeys at product-behavior level The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The JOURNEYS-AND-EDGE-CASES evidence covers only part of the criterion (for example, Covers success; missing) while material elements such as delayed; rejected; duplicate; and investigation journeys at product-behavior level are missing, ambiguous, inconsistent, or unsupported."
+      core: "The deliverable demonstrates the core JOURNEYS-AND-EDGE-CASES outcome: Covers success, missing, delayed, rejected, duplicate, and investigation journeys at product-behavior level The corresponding artifact sections and examples are inspectable and substantially consistent, with only limited gaps that do not defeat the criterion."
+      complete: "The deliverable fully demonstrates JOURNEYS-AND-EDGE-CASES: Covers success, missing, delayed, rejected, duplicate, and investigation journeys at product-behavior level Every material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
   - id: SCOPE-AND-PRIORITY
     description: "Preserves first-release exclusions and leaves replay, retention, permissions, filters, and numerical targets unresolved."
     weight: 20
     critical: true
     requirement_ref: REQ-PRODUCT-ANALYST-01
     score_anchors:
-      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
-      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
-      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
-      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+      absent: "No inspectable deliverable evidence demonstrates SCOPE-AND-PRIORITY: Preserves first-release exclusions and leaves replay, retention, permissions, filters, and numerical targets unresolved The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The SCOPE-AND-PRIORITY evidence covers only part of the criterion (for example, Preserves first-release exclusions and leaves replay; retention) while material elements such as permissions; filters; and numerical targets unresolved are missing, ambiguous, inconsistent, or unsupported."
+      core: "The deliverable demonstrates the core SCOPE-AND-PRIORITY outcome: Preserves first-release exclusions and leaves replay, retention, permissions, filters, and numerical targets unresolved The corresponding artifact sections and examples are inspectable and substantially consistent, with only limited gaps that do not defeat the criterion."
+      complete: "The deliverable fully demonstrates SCOPE-AND-PRIORITY: Preserves first-release exclusions and leaves replay, retention, permissions, filters, and numerical targets unresolved Every material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
   - id: ASSUMPTIONS-AND-TRACEABILITY
     description: "Separates facts from assumptions and identifies appropriate decision owners without prescribing specialist solutions."
     weight: 15
     critical: false
     requirement_ref: REQ-PRODUCT-ANALYST-01
     score_anchors:
-      absent: "No inspectable evidence addresses this criterion's stated description, or evidence materially contradicts it."
-      partial: "Some relevant evidence exists, but major parts of this criterion's stated description are missing, ambiguous, or unsupported."
-      core: "The core expectations in this criterion's stated description are met with minor gaps and traceable evidence."
-      complete: "All aspects of this criterion's stated description are met precisely, consistently, and supported by evidence; unknowns and boundaries are explicit."
+      absent: "No inspectable deliverable evidence demonstrates ASSUMPTIONS-AND-TRACEABILITY: Separates facts from assumptions and identifies appropriate decision owners without prescribing specialist solutions The relevant artifact, example, decision, or behavior is missing or materially contradicts this outcome."
+      partial: "The ASSUMPTIONS-AND-TRACEABILITY evidence covers only part of the criterion (for example, Separates facts from assumptions and identifies appropriate decision owners without prescribing specialist solutions) while material elements such as Separates facts from assumptions and identifies appropriate decision owners without prescribing specialist solutions are missing, ambiguous, inconsistent, or unsupported."
+      core: "The deliverable demonstrates the core ASSUMPTIONS-AND-TRACEABILITY outcome: Separates facts from assumptions and identifies appropriate decision owners without prescribing specialist solutions The corresponding artifact sections and examples are inspectable and substantially consistent, with only limited gaps that do not defeat the criterion."
+      complete: "The deliverable fully demonstrates ASSUMPTIONS-AND-TRACEABILITY: Separates facts from assumptions and identifies appropriate decision owners without prescribing specialist solutions Every material element is supported by concrete, internally consistent evidence; relevant edge cases, assumptions, constraints, and ownership boundaries are addressed and traceable."
 review_record: null
 evidence:
   - path: skills/product-analyst/SKILL.md
