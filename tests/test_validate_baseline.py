@@ -147,6 +147,14 @@ class BaselineRunRecordValidationTests(unittest.TestCase):
         )
         self.assertTrue(any("[BLV023]" in error for error in errors))
 
+    def test_utc_yaml_timestamps_keep_z_suffix(self):
+        path = self.evidence_dir / "timestamp.yml"
+        path.write_text('started_at: "2026-11-08T10:01:00Z"\\n', encoding="utf-8")
+        self.assertEqual(
+            validator.load_yaml(path)["started_at"],
+            "2026-11-08T10:01:00Z",
+        )
+
     def test_duplicate_yaml_mapping_keys_are_rejected(self):
         path = self.evidence_dir / "duplicate.yml"
         path.write_text("run_number: 1\nrun_number: 2\n", encoding="utf-8")
