@@ -9,7 +9,7 @@ import sys
 
 import yaml
 
-from validation_common import ROOT, expected_roles, load_yaml
+from validation_common import ROOT, expected_roles
 
 SCENARIO_DIR = ROOT / "tests/scenarios"
 DECISION_REGISTER = ROOT / "docs/evaluation/baseline/stakeholder-decisions.yml"
@@ -30,8 +30,9 @@ def _read_yaml(path):
         raise ValueError(f"cannot read {path}: {exc}") from exc
 
 
-def validate_decision_register(path=DECISION_REGISTER):
+def validate_decision_register(path=None):
     errors, blockers = [], []
+    path = path or DECISION_REGISTER
     try:
         data = _read_yaml(path)
     except ValueError as exc:
@@ -98,8 +99,9 @@ def validate_decision_register(path=DECISION_REGISTER):
     return errors, blockers
 
 
-def validate_scenario_approvals(scenario_dir=SCENARIO_DIR):
+def validate_scenario_approvals(scenario_dir=None):
     errors, blockers = [], []
+    scenario_dir = scenario_dir or SCENARIO_DIR
     expected = set(expected_roles())
     found_roles = set()
     paths = sorted(scenario_dir.glob("SCEN-BASELINE-*.yml"))
