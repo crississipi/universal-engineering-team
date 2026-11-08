@@ -156,3 +156,31 @@ Before any baseline run:
 6. Obtain explicit human pre-run approval for each scenario, with approval metadata recorded separately from this AI audit.
 
 **No scenario is approved by this audit. Do not start the 170 baseline executions based on this report.**
+
+
+## 7. Design remediation — 2026-11-08
+
+The two major findings from this audit have been remediated in the scenario drafts on this branch.
+
+### AI-01 — Criterion-specific score anchors
+
+All 85 criteria now have four anchors that name the criterion ID and restate its own assessed outcome. The four levels distinguish absent or contradictory evidence, partial coverage with material omissions, core fulfillment with inspectable evidence, and complete evidence-backed fulfillment with relevant edge cases and boundaries addressed.
+
+These anchors are evaluation guidance, not exact-string requirements. Evaluators must judge actual artifacts and should not reward verbosity or penalize equivalent terminology. The structural validator checks presence; it cannot establish semantic quality or evaluator agreement.
+
+### AI-02 — Daily summary scoring coverage
+
+The Frontend Developer `FUNCTIONAL-INTERACTION` criterion now explicitly scores the support-facing daily received, accepted, rejected, and duplicate delivery-attempt summary, including attempt-level count semantics, the received-versus-terminal-subtotal distinction, and the illustrative `received_at` date basis.
+
+The UX/UI Designer `INTERACTION-AND-STATES` criterion now explicitly scores the same daily summary as a designed support experience, including the in-flight subtotal explanation and illustrative `received_at` date basis.
+
+No new criterion was added and existing weights were retained. Each scenario continues to use five criteria totaling 100 points.
+
+### Updated disposition
+
+- AI-01: **Remediated in draft content; local structural verification and human judgment of anchor quality remain pending.**
+- AI-02: **Remediated in draft content; prompt-to-rubric traceability is explicit.**
+- AI-03: **Open by design.** Stakeholder decisions must be confirmed or affected assertions explicitly marked non-scored before evaluation.
+- AI-04: **Open governance qualification.** Package IDs remain proposed ownership references; no formal handoff or acceptance is created.
+
+All 17 scenarios remain `status: draft`, with `review_record: null`. No pre-run approval or baseline execution has been created. The user will perform local tests and validators against the updated branch; no verification result is asserted here.
