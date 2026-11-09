@@ -1,7 +1,7 @@
 schema_version: 1
 cohort_id: baseline-primary
 purpose: "Primary controlled baseline cohort; configuration must be explicitly selected and pinned before execution."
-repository_base_commit: null
+repository_base_commit: 6d8d4a610c2616f39d6e2ecae1c1a02a9ac50e75
 execution_environment:
   provider: null
   model_display_label: null
@@ -17,92 +17,93 @@ execution_environment:
 scenario_pins:
   - scenario_id: SCEN-BASELINE-PRODUCT-ANALYST
     role: product-analyst
-    scenario_commit: null
-    skill_commit: null
-    prompt_sha256: null
+    scenario_commit: 72e5d3b67f0360b3a05ca622863c99207beb47bd
+    skill_commit: f6e5cf53cb1b4635601ea54dd8612571e43b74fe
+    prompt_sha256: dade79a9f64f9f90ab44b40d87ff613fb6e97de20638a94c81d638e2973a715e
   - scenario_id: SCEN-BASELINE-SOLUTION-ARCHITECT
     role: solution-architect
-    scenario_commit: null
-    skill_commit: null
-    prompt_sha256: null
+    scenario_commit: 9477c8e3c9d8ff5dbc8cd5194ed622562a958125
+    skill_commit: e994146cebda340218c39b4882ce93528c756ee0
+    prompt_sha256: b5ac0fc23598d15e2e2020d417ae69a2e2934d6ad88c603490235c8276e5a4bc
   - scenario_id: SCEN-BASELINE-API-MANAGER
     role: api-manager
-    scenario_commit: null
-    skill_commit: null
-    prompt_sha256: null
+    scenario_commit: aeccff70df99d0cb12bde8f6162a4054b4bef7cc
+    skill_commit: 0bd1fc5bf31b4f818e16186fe4eb3eef901b7290
+    prompt_sha256: 00ccddb8cb02e5efae8768cbcb3268012be72743fc8d883b2c5cf7de3b883c9c
   - scenario_id: SCEN-BASELINE-BACKEND-DEVELOPER
     role: backend-developer
-    scenario_commit: null
-    skill_commit: null
-    prompt_sha256: null
+    scenario_commit: 8ff981d2e68c2764bab4d72299f8fc15d49206e1
+    skill_commit: 9ee46539d0dcccb7e88cbed7215c8a32d8ef306e
+    prompt_sha256: fc325d0cbbd2f671fb0bb6e59c83be03af1a22af208088279177ec55f865df96
   - scenario_id: SCEN-BASELINE-FRONTEND-DEVELOPER
     role: frontend-developer
-    scenario_commit: null
-    skill_commit: null
-    prompt_sha256: null
+    scenario_commit: 6161690c63a5c894919035c4bcf876f78445d40c
+    skill_commit: 37176935eb820ee7cf3f4bd6bbf0462ecd5810ea
+    prompt_sha256: 8e5a6e282a50c14666f2b44d1c8b4e25821b5c454e2e0413b669eefb7ef49796
   - scenario_id: SCEN-BASELINE-UX-UI-DESIGNER
     role: ux-ui-designer
-    scenario_commit: null
-    skill_commit: null
-    prompt_sha256: null
+    scenario_commit: 42f624fece5d6319d39c957841b734452486a5ab
+    skill_commit: 81b1e1fd49a9dc7842c09a1d9a8249713e7f0af5
+    prompt_sha256: 13a15483e30327bffdc9b97eaf8fc90269d75d65ea75f067e82ec4a816830861
   - scenario_id: SCEN-BASELINE-DATABASE-MANAGER
     role: database-manager
-    scenario_commit: null
-    skill_commit: null
-    prompt_sha256: null
+    scenario_commit: 62ace56930bd3c80e4bd2dfc46e5f643b5a4f89f
+    skill_commit: 9ab43e1accde428c260d068f4ebea130cb84987e
+    prompt_sha256: aed827572719590c6cc7059de4aed500167955d85e3a0deb463c9f3eccc07c2b
   - scenario_id: SCEN-BASELINE-INTEGRATION-ENGINEER
     role: integration-engineer
-    scenario_commit: null
-    skill_commit: null
-    prompt_sha256: null
+    scenario_commit: 5ccc94b67cefc7300212e3038d68b4ce172fd4cb
+    skill_commit: a35bc332955daa340113975fe033f5bae614c6e2
+    prompt_sha256: 124898904a9e8b66f49d721c480aff3a6fa344c76158a85ac63d07d1ce122bb1
   - scenario_id: SCEN-BASELINE-DATA-ENGINEER
     role: data-engineer
-    scenario_commit: null
-    skill_commit: null
-    prompt_sha256: null
+    scenario_commit: 7150c291adeeb68f526029a450ccaaf39f85ea9f
+    skill_commit: a5f0ccee033e63d32a072bd172b42e204988b9d3
+    prompt_sha256: 92d4067490ff9d93dca9fe2d3782931c81e78b0d8a726f740ba9afcdbd3e238e
   - scenario_id: SCEN-BASELINE-QA-MANAGER
     role: qa-manager
-    scenario_commit: null
-    skill_commit: null
-    prompt_sha256: null
+    scenario_commit: ba175741e0fa4fd7ea5d11c471f342b1407aa1f0
+    skill_commit: f55ed7fd0720f9227d7f0329cb0a1f1112284e44
+    prompt_sha256: 26e6bc0890143ab327dacbb47389a76397f0675016113f6d285a6a069d615504
   - scenario_id: SCEN-BASELINE-PENETRATION-TESTER
     role: penetration-tester
-    scenario_commit: null
-    skill_commit: null
-    prompt_sha256: null
+    scenario_commit: b98d4357c25bc897cbeddaed4cd0f6e4a2e38add
+    skill_commit: 9ee46539d0dcccb7e88cbed7215c8a32d8ef306e
+    prompt_sha256: 889834a28875a19acff9020ff30e37c8bb84cb3c8ea66d189a0378b3a2d1f1b6
   - scenario_id: SCEN-BASELINE-DEVOPS-SRE
     role: devops-sre
-    scenario_commit: null
-    skill_commit: null
-    prompt_sha256: null
+    scenario_commit: a64ce50f1d1ffb98ac3aa40c6135efe004622d60
+    skill_commit: 86f05cc7046e7e32e2af239f2992bc5c6bad08a3
+    prompt_sha256: 95d2f4dbe7dd5173876da017f71901a7161f15ba99ef2133bea4e59ee1b80e53
   - scenario_id: SCEN-BASELINE-PERFORMANCE-ENGINEER
     role: performance-engineer
-    scenario_commit: null
-    skill_commit: null
-    prompt_sha256: null
+    scenario_commit: b0259ca4c29e418e88844040461af0c5de646563
+    skill_commit: a162c6b2666d03bcd0e3413f748f10f9467aa162
+    prompt_sha256: 6ae03cf48ad592f7317c3874a4bc78d99c3e31c0fdeaceeabd45abab867d08f7
   - scenario_id: SCEN-BASELINE-ACCESSIBILITY-SPECIALIST
     role: accessibility-specialist
-    scenario_commit: null
-    skill_commit: null
-    prompt_sha256: null
+    scenario_commit: 8a57ea94ddc26ff725d470f20f40bc6cdc530d36
+    skill_commit: 2651d687a859bc55582decb418943b0085cb8e7b
+    prompt_sha256: a66016df368e5c01d0666c24711184e765eef8775043ac7ed01d462457af229f
   - scenario_id: SCEN-BASELINE-TECHNICAL-WRITER-KNOWLEDGE-ENGINEER
     role: technical-writer-knowledge-engineer
-    scenario_commit: null
-    skill_commit: null
-    prompt_sha256: null
+    scenario_commit: f60052941fd59839ea2fa7c3b5bbc28ab41ee229
+    skill_commit: 3e19b00e591519adccdddb3c6354adf29814c29a
+    prompt_sha256: 15fed5405599260257ceeac23e566aa02f4b1d048334178c2d941f3617da3eee
   - scenario_id: SCEN-BASELINE-RELEASE-MANAGER
     role: release-manager
-    scenario_commit: null
-    skill_commit: null
-    prompt_sha256: null
+    scenario_commit: 02aea9abfcf35929e6d8e121e8f901e146eb7be4
+    skill_commit: abe35c240cc05b2ba1f43eeb9608c6d2720bffb4
+    prompt_sha256: 66a9ad41e3cf9fed3fcc99fe1bd7f7f510f8a2b99ea04ec0cc4925f8f323888f
   - scenario_id: SCEN-BASELINE-DELIVERY-LEAD
     role: delivery-lead
-    scenario_commit: null
-    skill_commit: null
-    prompt_sha256: null
+    scenario_commit: 9a9d2b6269259a1c49b0fce9da5cecad5cc62277
+    skill_commit: 9ee46539d0dcccb7e88cbed7215c8a32d8ef306e
+    prompt_sha256: f81c901887e6258970b7990320d46ddfa3dc77d222b96b4b188aa337fbd78d39
 notes:
   - "Null values are deliberate blockers, not inferred defaults."
   - "The cohort does not authorize execution."
-  - "Pin commits from the exact repository history used for the run; do not substitute branch names."
+  - "Repository base and per-file scenario/skill revisions were prepared from Git history using scripts/prepare-baseline-pins.py; review the preparation output before changing these pins."
+  - "Scenario and skill commits are the latest path-changing commits reachable from repository_base_commit."
   - "Prompt SHA-256 is computed from the UTF-8 bytes of the exact task_prompt string in the pinned scenario YAML, without trimming or newline normalization."
   - "Provider, model, mode, settings, tool permissions, and operating environment must be recorded as observed; unavailable values remain unknown and block a controlled cohort."
