@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://crississipi.github.io/universal-engineering-team/schemas/executions/task-completion-report.schema.json",
+  "title": "Task completion report",
+  "description": "One terminal report for one top-level agent task. This schema validates structure, not the truth of execution claims.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "execution_id",
+    "task",
+    "status",
+    "started_at",
+    "completed_at",
+    "summary",
+    "activated_roles",
+    "deliverables",
+    "verification",
+    "decisions",
+    "issues",
+    "next_steps"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "execution_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$"
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["objective", "prompt_reference"],
+      "properties": {
+        "objective": { "type": "string", "minLength": 1 },
+        "prompt_reference": { "type": ["string", "null"] }
+      }
+    },
+    "status": {
+      "enum": ["completed", "completed_with_warnings", "blocked", "failed"]
+    },
+    "started_at": { "type": "string", "format": "date-time" },
+    "completed_at": { "type": "string", "format": "date-time" },
+    "summary": { "type": "string", "minLength": 1 },
+    "activated_roles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["role", "skill_path", "skill_revision", "skill_loaded", "contribution"],
+        "properties": {
+          "role": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "skill_path": { "type": "string", "pattern": "^skills/[a-z][a-z0-9-]*/SKILL\\.md$" },
+          "skill_revision": { "type": ["string", "null"] },
+          "skill_loaded": { "const": true },
+          "contribution": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "deliverables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "action", "description"],
+        "properties": {
+          "path": { "type": "string", "minLength": 1 },
+          "action": { "enum": ["created", "modified", "deleted", "reviewed", "generated", "external"] },
+          "description": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "verification": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["check", "status", "result", "evidence_reference"],
+        "properties": {
+          "check": { "type": "string", "minLength": 1 },
+          "status": { "enum": ["passed", "failed", "blocked", "not_run"] },
+          "result": { "type": "string", "minLength": 1 },
+          "evidence_reference": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["decision", "authority", "rationale", "evidence_reference"],
+        "properties": {
+          "decision": { "type": "string", "minLength": 1 },
+          "authority": { "type": ["string", "null"] },
+          "rationale": { "type": "string", "minLength": 1 },
+          "evidence_reference": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "issues": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["severity", "description", "blocking"],
+        "properties": {
+          "severity": { "enum": ["info", "warning", "major", "critical"] },
+          "description": { "type": "string", "minLength": 1 },
+          "blocking": { "type": "boolean" }
+        }
+      }
+    },
+    "next_steps": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}
