@@ -93,6 +93,15 @@ class TaskCompletionReportingTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "must not precede"):
                 reporter.load_and_validate(source)
 
+    def test_duplicate_activated_role_is_rejected(self):
+        report = self.valid_report()
+        report["activated_roles"].append(dict(report["activated_roles"][0]))
+        with tempfile.TemporaryDirectory(dir=ROOT) as temp:
+            source = Path(temp) / "input.json"
+            source.write_text(json.dumps(report), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "duplicate activated role"):
+                reporter.load_and_validate(source)
+
     def test_existing_report_is_never_overwritten(self):
         report = self.valid_report()
         with tempfile.TemporaryDirectory(dir=ROOT) as temp:
