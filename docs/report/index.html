@@ -28,7 +28,7 @@ small,.muted{color:var(--muted)}.callout{padding:12px 15px;border-left:4px solid
 <nav id="nav">
 <div class="group"><h4>Overview</h4><a href="#overview">System Overview</a><a href="#architecture">Architecture</a></div>
 <div class="group"><h4>System</h4><a href="#product">Product & Domain</a><a href="#services">Services & Modules</a><a href="#apis">APIs & Integrations</a><a href="#data">Data Model</a></div>
-<div class="group"><h4>Engineering</h4><a href="#security">Security</a><a href="#quality">Quality & Tests</a><a href="#operations">Operations</a><a href="#decisions">Decisions & Changes</a></div>
+<div class="group"><h4>Engineering</h4><a href="#security">Security</a><a href="#quality">Quality & Tests</a><a href="#execution-reporting">Task Completion Reporting</a><a href="#operations">Operations</a><a href="#decisions">Decisions & Changes</a></div>
 </nav></aside>
 <main><article>
 <header class="hero" id="overview"><h1>Project Engineering Report</h1><p>Living technical walkthrough of the system, its architecture, implementation, verification, and operational behavior.</p><div class="chips"><span>Stack: pending discovery</span><span>Status: discovery required</span><span>Report schema v1</span></div></header>
@@ -51,6 +51,19 @@ small,.muted{color:var(--muted)}.callout{padding:12px 15px;border-left:4px solid
 <section id="security"><div class="head"><h2>Security</h2></div><div class="card"><p>Document trust boundaries, threats, controls, findings, remediation and retest status. Never include secret values or real personal data.</p></div></section>
 <section id="quality"><div class="head"><h2>Quality & Tests</h2></div><div class="card"><p>Record test strategy, acceptance traceability, exact commands, actual results, environment limitations and known gaps.</p></div></section>
 <section id="operations"><div class="head"><h2>Operations</h2></div><div class="card"><p>Document setup, environment variable names, deployment, monitoring, alerts, runbooks, backups, recovery and rollback.</p></div></section>
+<section id="execution-reporting"><div class="head"><h2>Task Completion Reporting & Role-Skill Orchestration</h2><small>Source: docs/agent-execution/TASK-COMPLETION-REPORTING.md; schema: schemas/executions/task-completion-report.schema.json</small></div>
+<div class="card"><h3>Completion-triggered lifecycle</h3><pre class="mermaid">flowchart TD
+  Prompt[Top-level user task] --> Identity[Create execution ID]
+  Identity --> Select[Select smallest sufficient canonical roles]
+  Select --> Skills[Read selected role SKILL.md files]
+  Skills --> Execute[Execute and coordinate owned work]
+  Execute --> Verify[Record actual verification evidence]
+  Verify --> Terminal[Set completed / warnings / blocked / failed]
+  Terminal --> Report[Generate one consolidated report]
+  Report --> Store[Persist JSON and Markdown]</pre></div>
+<div class="card"><h3>Report artifacts</h3><ul><li><code>scripts/report-task-completion.py</code> validates and renders one terminal task report.</li><li><code>schemas/executions/task-completion-report.schema.json</code> defines the structured report contract.</li><li>Output: <code>reports/task-completions/&lt;execution_id&gt;/report.json</code> and <code>report.md</code>.</li><li>Each report records actually activated roles, loaded canonical skills, contributions, deliverables, verification, decisions, issues, and next steps.</li></ul></div>
+<div class="card"><h3>Ingress security logging</h3><p><code>scripts/log-ingress-security-event.py</code> appends sanitized JSONL metadata for invalid signatures and unparseable webhook payloads. Raw bodies, secrets, authorization headers, and full signature values are excluded. Retention and access policy remain deployment decisions for Security and Operations.</p></div>
+<div class="callout">Reporting occurs after each top-level task reaches a terminal outcome. It is not daily, timezone-bound, or time-threshold-driven. The generator validates supplied evidence; it cannot independently prove that a skill was loaded or a task was performed.</div></section>
 <section id="decisions"><div class="head"><h2>Decisions & Changes</h2></div><div class="card"><p>Append dated entries with owner, purpose, affected paths, contracts, tests, risks, documentation links and next steps. Link ADRs.</p></div></section>
 <footer><small>Generated starter template. Populate from repository evidence; record last-verified dates per section.</small></footer>
 </article></main>
