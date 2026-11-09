@@ -14,8 +14,11 @@ Product Analyst; Solution Architect; API Manager; Backend Developer; Frontend De
 ├── ROLE-INDEX.md
 ├── SKILLS-RESOLVER.md
 ├── ALL-ROLE-SKILLS.md
-├── skills/
+├── skills/                         # canonical source skills
 │   └── <role>/SKILL.md
+├── .github/
+│   ├── skills/                      # generated Copilot project skill mirrors
+│   └── hooks/                       # Copilot runtime hooks
 ├── docs/
 │   ├── team/
 │   ├── agent-execution/

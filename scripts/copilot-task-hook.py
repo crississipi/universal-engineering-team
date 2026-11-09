@@ -85,10 +85,12 @@ def block_or_warn(state: dict, state_path: Path, reason: str) -> int:
             "reason": reason + (
                 "\nCreate the report input JSON at: "
                 f".copilot-runtime/task-completion-pending/{state['execution_id']}.json"
+                "\nRead the exact state file at: "
+                f".copilot-runtime/task-state/{state['session_id_hash']}.json"
                 "\nUse the task-completion schema at "
-                "schemas/executions/task-completion-report.schema.json. Read the "
-                "matching state file in .copilot-runtime/task-state/ for the exact "
-                "execution_id and started_at. Include only roles whose canonical "
+                "schemas/executions/task-completion-report.schema.json. Copy the "
+                "execution_id, started_at, and prompt_reference values from that "
+                "state file. Include only roles whose canonical "
                 "SKILL.md content you actually read. Record exact verification "
                 "outcomes; do not invent evidence. Then finish the turn so this hook "
                 "can validate and publish the report."
@@ -131,6 +133,9 @@ def stop(event: dict) -> int:
             raise ValueError("Report execution_id does not match this prompt's execution ID.")
         if report.get("started_at") != state.get("started_at"):
             raise ValueError("Report started_at does not match the captured prompt-start timestamp.")
+        task = report.get("task")
+        if not isinstance(task, dict) or task.get("prompt_reference") != state.get("prompt_reference"):
+            raise ValueError("Report task.prompt_reference does not match the captured prompt reference.")
         result = subprocess.run(
             [python_executable(), str(GENERATOR), str(pending_path)],
             cwd=ROOT,
