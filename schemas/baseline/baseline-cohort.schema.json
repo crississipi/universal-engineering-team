@@ -22,7 +22,7 @@
           "properties": {
             "temperature": { "$ref": "#/$defs/unknownScalar" },
             "reasoning_effort": { "$ref": "#/$defs/unknownScalar" },
-            "other_material_settings": { "type": "array", "items": { "type": "string" } }
+            "other_material_settings": { "oneOf": [{ "type": "array", "items": { "type": "string" } }, { "type": "null" }] }
           },
           "required": ["temperature", "reasoning_effort", "other_material_settings"],
           "additionalProperties": false
