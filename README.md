@@ -18,9 +18,12 @@ Product Analyst; Solution Architect; API Manager; Backend Developer; Frontend De
 │   └── <role>/SKILL.md
 ├── docs/
 │   ├── team/
+│   ├── agent-execution/
 │   ├── knowledge/
 │   ├── obsidian/
 │   └── report/
+├── schemas/
+│   └── executions/
 ├── scripts/
 └── .github/workflows/
 ```
@@ -51,12 +54,37 @@ has not started. Do not count pilot runs toward baseline totals.
 
 1. Read the project's applicable instruction file and inspect the repository before proposing changes.
 2. Use `SKILLS-RESOLVER.md` to identify likely roles; confirm each role against the task and ownership boundaries.
-3. Read only the selected role `SKILL.md` files. Each has standard Agent Skills `name` and `description` metadata plus its full role-specific instructions.
+3. Read only the selected role `SKILL.md` files before role work. Record which canonical skills were actually loaded; never count a considered-but-unread skill as activated.
 4. For cross-role work, appoint one coordinating lead, assign one owner per file/decision, define interfaces, and use concise evidence-based handoffs.
 5. Verify the implementation and report actual commands/results. Never claim an unrun check passed.
-6. Update applicable source documentation, Obsidian notes, Graphify relationships, and the central HTML report. Documentation is a completion requirement, not an optional follow-up.
+6. Produce exactly one consolidated task-completion report for every terminal top-level task outcome, including blocked and failed tasks. Reporting is completion-triggered, not daily or timezone-based. See `docs/agent-execution/TASK-COMPLETION-REPORTING.md`.
+7. Update applicable source documentation, Obsidian notes, Graphify relationships, and the central HTML report. Documentation is a completion requirement, not an optional follow-up.
 
 Do not load every role for every task. The resolver's examples are guidance, not hard-coded workflow restrictions.
+
+## Task completion report tools
+
+Validate and render a structured task report:
+
+```powershell
+python scripts/report-task-completion.py path\to\task-completion.json
+```
+
+Reports are written to `reports/task-completions/<execution_id>/report.json` and
+`report.md`. Each execution ID is write-once; corrections must use a new
+execution ID or a separately traceable correction process.
+
+For webhook adapters, append sanitized invalid-signature or unparseable-payload
+events to a restricted JSON Lines log:
+
+```powershell
+python scripts/log-ingress-security-event.py --output .\secure-logs\ingress.jsonl --event-type invalid_signature --reason-code signature_mismatch --signature-status invalid --payload-size 128
+```
+
+Do not store raw request bodies, secrets, authorization headers, or complete
+signature values. The logger does not choose a retention period; Security and
+Operations must approve deployment-specific access, rotation, retention, and
+deletion controls.
 
 ## Installation
 
