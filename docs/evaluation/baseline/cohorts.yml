@@ -1,0 +1,108 @@
+schema_version: 1
+cohort_id: baseline-primary
+purpose: "Primary controlled baseline cohort; configuration must be explicitly selected and pinned before execution."
+repository_base_commit: null
+execution_environment:
+  provider: null
+  model_display_label: null
+  model_identifier: null
+  model_version: null
+  mode: null
+  configuration:
+    temperature: null
+    reasoning_effort: null
+    other_material_settings: []
+  tool_permissions: null
+  operating_environment: null
+scenario_pins:
+  - scenario_id: SCEN-BASELINE-PRODUCT-ANALYST
+    role: product-analyst
+    scenario_commit: null
+    skill_commit: null
+    prompt_sha256: null
+  - scenario_id: SCEN-BASELINE-SOLUTION-ARCHITECT
+    role: solution-architect
+    scenario_commit: null
+    skill_commit: null
+    prompt_sha256: null
+  - scenario_id: SCEN-BASELINE-API-MANAGER
+    role: api-manager
+    scenario_commit: null
+    skill_commit: null
+    prompt_sha256: null
+  - scenario_id: SCEN-BASELINE-BACKEND-DEVELOPER
+    role: backend-developer
+    scenario_commit: null
+    skill_commit: null
+    prompt_sha256: null
+  - scenario_id: SCEN-BASELINE-FRONTEND-DEVELOPER
+    role: frontend-developer
+    scenario_commit: null
+    skill_commit: null
+    prompt_sha256: null
+  - scenario_id: SCEN-BASELINE-UX-UI-DESIGNER
+    role: ux-ui-designer
+    scenario_commit: null
+    skill_commit: null
+    prompt_sha256: null
+  - scenario_id: SCEN-BASELINE-DATABASE-MANAGER
+    role: database-manager
+    scenario_commit: null
+    skill_commit: null
+    prompt_sha256: null
+  - scenario_id: SCEN-BASELINE-INTEGRATION-ENGINEER
+    role: integration-engineer
+    scenario_commit: null
+    skill_commit: null
+    prompt_sha256: null
+  - scenario_id: SCEN-BASELINE-DATA-ENGINEER
+    role: data-engineer
+    scenario_commit: null
+    skill_commit: null
+    prompt_sha256: null
+  - scenario_id: SCEN-BASELINE-QA-MANAGER
+    role: qa-manager
+    scenario_commit: null
+    skill_commit: null
+    prompt_sha256: null
+  - scenario_id: SCEN-BASELINE-PENETRATION-TESTER
+    role: penetration-tester
+    scenario_commit: null
+    skill_commit: null
+    prompt_sha256: null
+  - scenario_id: SCEN-BASELINE-DEVOPS-SRE
+    role: devops-sre
+    scenario_commit: null
+    skill_commit: null
+    prompt_sha256: null
+  - scenario_id: SCEN-BASELINE-PERFORMANCE-ENGINEER
+    role: performance-engineer
+    scenario_commit: null
+    skill_commit: null
+    prompt_sha256: null
+  - scenario_id: SCEN-BASELINE-ACCESSIBILITY-SPECIALIST
+    role: accessibility-specialist
+    scenario_commit: null
+    skill_commit: null
+    prompt_sha256: null
+  - scenario_id: SCEN-BASELINE-TECHNICAL-WRITER-KNOWLEDGE-ENGINEER
+    role: technical-writer-knowledge-engineer
+    scenario_commit: null
+    skill_commit: null
+    prompt_sha256: null
+  - scenario_id: SCEN-BASELINE-RELEASE-MANAGER
+    role: release-manager
+    scenario_commit: null
+    skill_commit: null
+    prompt_sha256: null
+  - scenario_id: SCEN-BASELINE-DELIVERY-LEAD
+    role: delivery-lead
+    scenario_commit: null
+    skill_commit: null
+    prompt_sha256: null
+notes:
+  - "Null values are deliberate blockers, not inferred defaults."
+  - "The cohort does not authorize execution."
+  - "Pin commits from the exact repository history used for the run; do not substitute branch names."
+  - "Prompt SHA-256 is computed from the UTF-8 bytes of the exact task_prompt string in the pinned scenario YAML, without trimming or newline normalization."
+  - "Provider, model, mode, settings, tool permissions, and operating environment must be recorded as observed; unavailable values remain unknown and block a controlled cohort."
