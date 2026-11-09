@@ -1,1 +1,5 @@
 source,target,relation,evidence
+task-completion-reporting,task-completion-report-schema,defines,docs/agent-execution/TASK-COMPLETION-REPORTING.md
+task-completion-report-generator,task-completion-report-schema,validates_against,schemas/executions/task-completion-report.schema.json
+task-completion-reporting,task-completion-report-generator,implemented_by,scripts/report-task-completion.py
+task-completion-reporting,ingress-security-logger,documents_separate_security_log,scripts/log-ingress-security-event.py
