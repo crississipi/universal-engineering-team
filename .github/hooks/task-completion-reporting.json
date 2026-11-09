@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "hooks": {
+    "userPromptSubmitted": [
+      {
+        "type": "command",
+        "command": "python scripts/copilot-task-hook.py start",
+        "powershell": "python scripts/copilot-task-hook.py start",
+        "bash": "python3 scripts/copilot-task-hook.py start",
+        "cwd": ".",
+        "timeoutSec": 10
+      }
+    ],
+    "agentStop": [
+      {
+        "type": "command",
+        "command": "python scripts/copilot-task-hook.py stop",
+        "powershell": "python scripts/copilot-task-hook.py stop",
+        "bash": "python3 scripts/copilot-task-hook.py stop",
+        "cwd": ".",
+        "timeoutSec": 60
+      }
+    ]
+  }
+}

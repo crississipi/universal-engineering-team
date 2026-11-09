@@ -15,6 +15,6 @@ tags: [project, index]
 - [[06 Operations/Operations Index]]
 - [[07 Quality/Quality Strategy]]
 - [[08 Changes/Change Log]]
-- [[08 Changes/Task Completion Reporting]]
+- [[08 Changes/Task Completion Reporting]]\n- [[08 Changes/Copilot Runtime Integration]]
 
 See `docs/knowledge/graph/system-map.mmd` for the relationship map and `docs/report/index.html` for the navigable system walkthrough.

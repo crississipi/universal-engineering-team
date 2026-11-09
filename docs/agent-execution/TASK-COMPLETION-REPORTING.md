@@ -143,3 +143,24 @@ consistency, not the truth of claims.
 
 No baseline execution is authorized by this contract. Existing scenario
 approval, cohort, stakeholder, and human pre-run gates remain independent.
+
+## VS Code Copilot runtime enforcement
+
+The repository's Copilot-specific adapter is documented in
+`COPILOT-RUNTIME-INTEGRATION.md`. It uses the workspace
+`.github/hooks/task-completion-reporting.json` hook configuration:
+
+- Prompt submission captures a unique execution ID and start timestamp without
+  persisting the prompt text.
+- The main-agent stop hook requires a model-authored pending report, checks its
+  execution identity and start timestamp, and invokes the canonical report
+  generator.
+- The hook may request continuation when the report is missing or invalid.
+  After three attempts it warns and allows the turn to end; this fallback must
+  be disclosed and repaired manually.
+- The hook and generator validate structure and consistency, not the truth of
+  the model's claims.
+
+The hook applies to the VS Code Copilot harness only. Other providers and
+remote/cloud execution environments require separate configuration and
+verification.

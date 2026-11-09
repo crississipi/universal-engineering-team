@@ -33,6 +33,15 @@ Create/update `docs/project-context.md` with concise verified findings. Mark unk
 7. **Review** — check integration, regressions, consistency, security, accessibility, operational readiness, and documentation drift.
 8. **Close** — update centralized status, decisions, risks, tests, and next steps. Do not claim unrun checks passed.
 
+## Copilot runtime skill discovery and task-report hook
+
+- VS Code GitHub Copilot project skills are mirrored under `.github/skills/<role>/` from canonical `skills/<role>/`. Never edit mirrors directly.
+- Run `python scripts/sync-copilot-skills.py --check` when verifying skill synchronization; after canonical skill edits, regenerate with `--write`.
+- Copilot may auto-load a discovered skill when its description matches a task. Discovery is not proof of activation. Continue to select the smallest sufficient roles and read the canonical skill content before role work.
+- The workspace hook in `.github/hooks/task-completion-reporting.json` captures prompt-start metadata and checks completion through the Copilot `agentStop` lifecycle event.
+- If the stop hook asks for a report, read the exact state file and schema paths named in its continuation instruction. Create the pending JSON at the exact path supplied by the hook, using the captured `execution_id` and `started_at`. Include only actually loaded canonical skills and truthful evidence. Do not bypass or disable the hook to conceal a missing or invalid report.
+- The hook validates and publishes the report; it does not prove that the model's claims are true. If the hook reaches its retry limit, disclose the warning and repair the report manually.
+
 ## Mandatory task-completion reporting
 - Every top-level user prompt/task that reaches a terminal outcome must produce exactly one consolidated task-completion report. This applies to completed, completed-with-warnings, blocked, and failed outcomes.
 - Reporting is triggered by task completion, never by a daily schedule, midnight boundary, elapsed-time threshold, or reporting timezone.

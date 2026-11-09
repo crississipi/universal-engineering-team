@@ -62,6 +62,19 @@ has not started. Do not count pilot runs toward baseline totals.
 
 Do not load every role for every task. The resolver's examples are guidance, not hard-coded workflow restrictions.
 
+## VS Code GitHub Copilot integration
+
+The repository includes native project skill mirrors in `.github/skills/` and a workspace completion hook in `.github/hooks/task-completion-reporting.json`. Read `docs/agent-execution/COPILOT-RUNTIME-INTEGRATION.md` before enabling or modifying this integration.
+
+Synchronize and verify all 17 Copilot skill directories:
+
+```powershell
+python scripts/sync-copilot-skills.py --write
+python scripts/sync-copilot-skills.py --check
+```
+
+The `agentStop` hook requests a structured report when the model reaches a terminal turn without one, then validates and publishes it. The hook is Preview functionality in VS Code. Verify the workspace hook in the Copilot Hooks UI and test it in the actual local environment before relying on it. It does not independently prove skill activation or execution claims.
+
 ## Task completion report tools
 
 Validate and render a structured task report:
@@ -90,7 +103,7 @@ deletion controls.
 
 The skill format is portable, but discovery paths and project-instruction behavior vary by provider and version. Use the provider's current documentation to identify its supported global or project-level skill directory.
 
-- Copy the **entire** `skills/<role>/` folder into the provider's discovered skills directory, preserving the `SKILL.md` filename.
+- For VS Code Copilot, use the generated `.github/skills/<role>/` project mirrors. For other providers, copy the **entire** `skills/<role>/` folder into the provider's discovered skills directory, preserving the `SKILL.md` filename.
 - Copy or adapt `AGENTS.md` into the project's supported instruction mechanism. Do not assume every provider automatically reads `AGENTS.md`.
 - Keep `ROLE-INDEX.md` and `SKILLS-RESOLVER.md` available as routing references. If a provider does not automatically load them, the coordinating agent should consult them when selecting roles.
 - Maintain one canonical repository and synchronize provider-specific copies from it. Global local installation does not automatically sync to cloud agents or other machines.
