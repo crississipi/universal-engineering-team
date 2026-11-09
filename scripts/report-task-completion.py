@@ -6,13 +6,16 @@ from __future__ import annotations
 import argparse
 from datetime import datetime
 import json
+import os
 from pathlib import Path
 import re
+import shutil
 import sys
+import tempfile
 
 from jsonschema import Draft202012Validator, FormatChecker
 
-from validation_common import ROOT
+from validation_common import ROOT, expected_roles
 
 SCHEMA_PATH = ROOT / "schemas/executions/task-completion-report.schema.json"
 REPORT_ROOT = ROOT / "reports/task-completions"
@@ -38,10 +41,19 @@ def load_and_validate(input_path: Path):
             details.append(f"{location}: {error.message}")
         raise ValueError("Task completion report is invalid:\n- " + "\n- ".join(details))
 
-    if report["completed_at"] < report["started_at"]:
+    started_at = datetime.fromisoformat(report["started_at"].replace("Z", "+00:00"))
+    completed_at = datetime.fromisoformat(report["completed_at"].replace("Z", "+00:00"))
+    if completed_at < started_at:
         raise ValueError("completed_at must not precede started_at")
 
+    seen_roles = set()
+    canonical_roles = set(expected_roles())
     for role in report["activated_roles"]:
+        if role["role"] not in canonical_roles:
+            raise ValueError(f"non-canonical role in report: {role['role']}")
+        if role["role"] in seen_roles:
+            raise ValueError(f"duplicate activated role in report: {role['role']}")
+        seen_roles.add(role["role"])
         expected_path = f"skills/{role['role']}/SKILL.md"
         if role["skill_path"] != expected_path:
             raise ValueError(
@@ -136,22 +148,30 @@ def write_report(report: dict, output_root: Path = REPORT_ROOT):
     execution_id = report["execution_id"]
     if not EXECUTION_ID_RE.fullmatch(execution_id):
         raise ValueError("execution_id contains unsupported characters")
+    output_root.mkdir(parents=True, exist_ok=True)
     destination = output_root / execution_id
-    destination.mkdir(parents=True, exist_ok=True)
-    json_path = destination / "report.json"
-    markdown_path = destination / "report.md"
-    if json_path.exists() or markdown_path.exists():
+    if destination.exists():
         raise FileExistsError(
             f"Report already exists for {execution_id}; use a new execution ID. "
             "Existing reports are not overwritten."
         )
 
-    json_path.write_text(
-        json.dumps(report, indent=2, ensure_ascii=False) + "\n",
-        encoding="utf-8",
-    )
-    markdown_path.write_text(render_markdown(report), encoding="utf-8")
-    return json_path, markdown_path
+    temporary = Path(tempfile.mkdtemp(prefix=f".{execution_id}-", dir=output_root))
+    try:
+        json_path = temporary / "report.json"
+        markdown_path = temporary / "report.md"
+        json_path.write_text(
+            json.dumps(report, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
+        markdown_path.write_text(render_markdown(report), encoding="utf-8")
+        # Publish the completed pair together; readers never see a partial report.
+        os.rename(temporary, destination)
+    except Exception:
+        shutil.rmtree(temporary, ignore_errors=True)
+        raise
+
+    return destination / "report.json", destination / "report.md"
 
 
 def main(argv=None):
