@@ -60,6 +60,7 @@ python -m unittest discover -s tests -p "test_blocker_status_governance.py" -v
 | `validate-handoffs.py` | Formal handoff contract governance |
 | `validate-scenarios.py` | Scenario and review-record structure |
 | `validate-baseline.py` | Baseline run-record schema, scenario/rubric references, evidence paths and prompt hashes, duplicate/missing run numbers, and cohort consistency |
+| `check-baseline-cohort.py` | Cohort base/scenario/skill commit pins, exact task-prompt SHA-256, and recorded execution-environment metadata |
 | `report-baseline.py` | Validates and summarizes actual baseline records, criterion and weighted scores, critical failures, human review decisions, and comparable cohort results |
 | `validate-execution.py` | Integrated execution parsing, JSON Schema, cross-record, and lifecycle validation; `--check-schemas` validates schema documents without an execution fixture |
 | `build-agents-section.py --check` | Generated `AGENTS.md` section synchronization |
@@ -108,3 +109,22 @@ register data, incomplete authorization metadata, missing decision entries,
 or invalid scenario approval metadata are reported as errors. The check is
 read-only and must not be used to manufacture human decisions or approvals.
 
+
+
+## Baseline cohort readiness check
+
+Run the cohort pin and environment check independently of the human governance
+check:
+
+```powershell
+python scripts/check-baseline-cohort.py
+python scripts/check-baseline-cohort.py --format json
+python -m unittest discover -s tests -p "test_check_baseline_cohort.py" -v
+```
+
+The initial cohort register is intentionally incomplete, so the readiness
+command should report `BLOCKED` until exact pins and observed environment
+metadata are supplied. Missing values are blockers; malformed hashes,
+unavailable Git objects, mismatched prompt bytes, missing canonical role pins,
+and revisions outside the repository base commit are errors. This check never
+approves scenarios or authorizes execution.
