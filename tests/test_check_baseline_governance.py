@@ -2,6 +2,7 @@
 
 from pathlib import Path
 import importlib.util
+import sys
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -10,9 +11,16 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts/check-baseline-governance.py"
-SPEC = importlib.util.spec_from_file_location("check_baseline_governance", SCRIPT)
-checker = importlib.util.module_from_spec(SPEC)
-SPEC.loader.exec_module(checker)
+# The validator imports validation_common from the sibling scripts directory.
+# Add that directory explicitly so this test also works when run in isolation.
+SCRIPTS = ROOT / "scripts"
+sys.path.insert(0, str(SCRIPTS))
+try:
+    SPEC = importlib.util.spec_from_file_location("check_baseline_governance", SCRIPT)
+    checker = importlib.util.module_from_spec(SPEC)
+    SPEC.loader.exec_module(checker)
+finally:
+    sys.path.remove(str(SCRIPTS))
 
 
 class BaselineGovernanceTests(unittest.TestCase):
