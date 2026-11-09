@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://crississipi.github.io/universal-engineering-team/schemas/baseline/baseline-cohort.schema.json",
+  "title": "Repository baseline execution cohort",
+  "description": "Pins the shared execution profile and per-role scenario, skill, and prompt revisions before baseline runs. This schema does not authorize execution.",
+  "type": "object",
+  "properties": {
+    "schema_version": { "const": 1 },
+    "cohort_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,63}$" },
+    "purpose": { "type": "string", "minLength": 1 },
+    "repository_base_commit": { "oneOf": [{ "$ref": "#/$defs/gitSha" }, { "type": "null" }] },
+    "execution_environment": {
+      "type": "object",
+      "properties": {
+        "provider": { "$ref": "#/$defs/nullableText" },
+        "model_display_label": { "$ref": "#/$defs/nullableText" },
+        "model_identifier": { "$ref": "#/$defs/nullableText" },
+        "model_version": { "$ref": "#/$defs/nullableText" },
+        "mode": { "$ref": "#/$defs/nullableText" },
+        "configuration": {
+          "type": "object",
+          "properties": {
+            "temperature": { "$ref": "#/$defs/unknownScalar" },
+            "reasoning_effort": { "$ref": "#/$defs/unknownScalar" },
+            "other_material_settings": { "type": "array", "items": { "type": "string" } }
+          },
+          "required": ["temperature", "reasoning_effort", "other_material_settings"],
+          "additionalProperties": false
+        },
+        "tool_permissions": { "$ref": "#/$defs/nullableText" },
+        "operating_environment": { "$ref": "#/$defs/nullableText" }
+      },
+      "required": ["provider", "model_display_label", "model_identifier", "model_version", "mode", "configuration", "tool_permissions", "operating_environment"],
+      "additionalProperties": false
+    },
+    "scenario_pins": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "scenario_id": { "type": "string", "pattern": "^SCEN-BASELINE-[A-Z0-9-]+$" },
+          "role": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "scenario_commit": { "oneOf": [{ "$ref": "#/$defs/gitSha" }, { "type": "null" }] },
+          "skill_commit": { "oneOf": [{ "$ref": "#/$defs/gitSha" }, { "type": "null" }] },
+          "prompt_sha256": { "oneOf": [{ "$ref": "#/$defs/sha256" }, { "type": "null" }] }
+        },
+        "required": ["scenario_id", "role", "scenario_commit", "skill_commit", "prompt_sha256"],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "notes": { "type": "array", "items": { "type": "string" } }
+  },
+  "required": ["schema_version", "cohort_id", "purpose", "repository_base_commit", "execution_environment", "scenario_pins", "notes"],
+  "additionalProperties": false,
+  "$defs": {
+    "gitSha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "nullableText": { "oneOf": [{ "type": "string", "minLength": 1, "pattern": ".*\\S.*" }, { "type": "null" }] },
+    "unknownScalar": { "type": ["string", "number", "null"] }
+  }
+}
