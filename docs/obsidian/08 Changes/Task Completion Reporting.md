@@ -25,7 +25,7 @@ Every top-level task produces one consolidated report when it reaches a terminal
 
 ## Canonical sources
 
-- [[../agent-execution/TASK-COMPLETION-REPORTING]] — orchestration/reporting contract.
+- Canonical orchestration/reporting contract: `docs/agent-execution/TASK-COMPLETION-REPORTING.md`.
 - [[../report/index.html|Central Engineering Report]] — navigable system handbook.
 - `schemas/executions/task-completion-report.schema.json` — structured report schema.
 - `scripts/report-task-completion.py` — report validator and renderer.
