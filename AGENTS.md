@@ -8,8 +8,9 @@ Deliver correct, secure, maintainable systems across stacks and project types. A
 2. Read this file first, then inspect the repository, existing docs, Graphify/Obsidian setup, tests, and report before changing anything.
 3. Use `SKILLS-RESOLVER.md` and `ROLE-INDEX.md` to identify likely roles; verify the choice against actual task scope and ownership boundaries.
 4. Activate only the roles needed. The lead assigns bounded work, names owners, defines interfaces, and resolves conflicts. Do not ask every role to review every change.
-5. Role skills are specialist instructions, not permission to exceed scope. The lead owns final integration and completion.
-6. If two roles overlap, use the ownership matrix in `docs/team/ownership.md`. Ask the lead to resolve unresolved conflicts; never silently make competing edits.
+5. Before performing work for an activated role, read its canonical `skills/<role>/SKILL.md`. Record the skill path and revision/hash when available. A role is not considered skill-activated merely because it was considered, mentioned, or assigned.
+6. Role skills are specialist instructions, not permission to exceed scope. The lead owns final integration and completion.
+7. If two roles overlap, use the ownership matrix in `docs/team/ownership.md`. Ask the lead to resolve unresolved conflicts; never silently make competing edits.
 
 ## Cross-provider skill compatibility
 - Treat each `skills/<role>/SKILL.md` as a standard Agent Skill with required `name` and `description` frontmatter. Do not rename these keys or depend on provider-specific metadata for core behavior.
@@ -31,6 +32,16 @@ Create/update `docs/project-context.md` with concise verified findings. Mark unk
 6. **Document** — update technical docs, diagrams, Obsidian notes, Graphify graph, and central HTML report.
 7. **Review** — check integration, regressions, consistency, security, accessibility, operational readiness, and documentation drift.
 8. **Close** — update centralized status, decisions, risks, tests, and next steps. Do not claim unrun checks passed.
+
+## Mandatory task-completion reporting
+- Every top-level user prompt/task that reaches a terminal outcome must produce exactly one consolidated task-completion report. This applies to completed, completed-with-warnings, blocked, and failed outcomes.
+- Reporting is triggered by task completion, never by a daily schedule, midnight boundary, elapsed-time threshold, or reporting timezone.
+- For multi-role work, the top-level report lists only roles actually activated, the canonical skill files actually loaded, each role's contribution, deliverables, verification evidence, decisions, blockers, warnings, and next steps.
+- Do not mark a skill as loaded unless its content was actually read in the current execution context. Record a revision or content hash when available; otherwise state that it was not captured.
+- A plan, proposed test, unexecuted command, inferred approval, or unverified claim must never be represented as completed evidence.
+- Use `docs/agent-execution/TASK-COMPLETION-REPORTING.md` and validate structured reports against `schemas/executions/task-completion-report.schema.json`. Store reports under `reports/task-completions/<execution_id>/` without silently overwriting prior reports.
+- Timestamps are audit metadata only. Use offset-aware timestamps; UTC is recommended for machine consistency, but no business timezone or time-window aggregation is required.
+- The report generator validates supplied records; it does not prove that the agent actually loaded skills or performed reported work. The runtime/orchestrator remains responsible for truthful evidence collection.
 
 ## Team collaboration contract
 Every handoff contains: objective; verified context; files/components owned; decisions made; interfaces/contracts; work completed; tests run/results; open questions/risks; docs/report locations; exact next action. Keep it short and actionable.
