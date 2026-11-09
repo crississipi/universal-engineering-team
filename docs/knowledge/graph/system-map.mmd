@@ -12,3 +12,11 @@ flowchart TD
   Docs --> Report[Central HTML report]
   Obsidian <--> Graph
   Graph --> Report
+
+  Prompt[Top-level task] --> RoleSelect[Dynamic role selection]
+  RoleSelect --> RoleSkills[Load selected canonical skills]
+  RoleSkills --> TaskWork[Execute and verify work]
+  TaskWork --> Completion[Terminal task outcome]
+  Completion --> TaskReport[JSON + Markdown completion report]
+  TaskReport --> Report[Central HTML report]
+  Ingress[Untrusted webhook ingress] --> SecurityLog[Sanitized ingress security log]
