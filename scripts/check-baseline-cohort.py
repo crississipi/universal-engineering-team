@@ -166,6 +166,8 @@ def validate_cohort(path: Path = COHORT_PATH):
         skill_path = f"skills/{role}/SKILL.md"
         scenario_commit = pin["scenario_commit"]
         skill_commit = pin["skill_commit"]
+        if pin["prompt_sha256"] is None:
+            blockers.append(f"{label}: prompt_sha256 is not pinned")
 
         if scenario_commit is None:
             blockers.append(f"{label}: scenario_commit is not pinned")
@@ -183,9 +185,7 @@ def validate_cohort(path: Path = COHORT_PATH):
                     else:
                         actual_hash = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
                         expected_hash = pin["prompt_sha256"]
-                        if expected_hash is None:
-                            blockers.append(f"{label}: prompt_sha256 is not pinned")
-                        elif actual_hash != expected_hash:
+                        if expected_hash is not None and actual_hash != expected_hash:
                             errors.append(f"{label}: prompt_sha256 does not match pinned scenario task_prompt bytes")
             except (ValueError, yaml.YAMLError) as exc:
                 errors.append(f"{label}: cannot read scenario at pinned commit: {exc}")
