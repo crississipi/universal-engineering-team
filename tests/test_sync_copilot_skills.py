@@ -1,3 +1,4 @@
+import importlib.util
 import sys
 import tempfile
 import unittest
@@ -7,7 +8,15 @@ SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
-from sync_copilot_skills import synchronize
+SPEC = importlib.util.spec_from_file_location(
+    "sync_copilot_skills", SCRIPTS / "sync-copilot-skills.py"
+)
+if SPEC is None or SPEC.loader is None:
+    raise ImportError("Could not load scripts/sync-copilot-skills.py")
+SYNC_MODULE = importlib.util.module_from_spec(SPEC)
+sys.modules[SPEC.name] = SYNC_MODULE
+SPEC.loader.exec_module(SYNC_MODULE)
+synchronize = SYNC_MODULE.synchronize
 
 
 class CopilotSkillSyncTests(unittest.TestCase):
