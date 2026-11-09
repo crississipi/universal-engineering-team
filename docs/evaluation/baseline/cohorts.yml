@@ -11,7 +11,7 @@ execution_environment:
   configuration:
     temperature: null
     reasoning_effort: null
-    other_material_settings: []
+    other_material_settings: null
   tool_permissions: null
   operating_environment: null
 scenario_pins:
