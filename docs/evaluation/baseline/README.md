@@ -410,3 +410,44 @@ runs still apply.
 The initial register intentionally leaves all five topics open. No scenario
 approval or baseline execution is implied by adding this register or validator.
 
+## Cohort revision and environment readiness
+
+The cohort register is `cohorts.yml`, validated against
+`schemas/baseline/baseline-cohort.schema.json` by
+`scripts/check-baseline-cohort.py`:
+
+```powershell
+python scripts/check-baseline-cohort.py
+python scripts/check-baseline-cohort.py --format json
+```
+
+The initial `baseline-primary` register deliberately contains null pins and
+unknown environment values. Its expected result is `BLOCKED`, not an error
+and not a signal to fill values with assumptions. Before a controlled cohort
+can be considered pin-complete, record:
+
+- One exact repository base commit.
+- For each of the 17 scenarios, the exact scenario commit and role-skill
+  commit, both present in the repository history and ancestors of the base
+  commit.
+- The SHA-256 of the UTF-8 bytes of the exact `task_prompt` string read from
+  that scenario file at its pinned scenario commit. The checker does not trim
+  or normalize prompt bytes.
+- Observed provider, user-visible model label, model identifier and version,
+  agent mode, material settings, tool permissions, and operating environment.
+  Do not infer unavailable values or defaults.
+
+The checker verifies Git commit existence, ancestry to the cohort base commit,
+pinned scenario identity/role, role-skill file presence, and prompt hash
+consistency. It does not prove that a provider actually served the recorded
+model, authenticate settings, establish isolation, or verify the integrity of
+future execution evidence. Those facts must be recorded from the actual run
+environment.
+
+Run both `check-baseline-governance.py` and
+`check-baseline-cohort.py` before execution planning is finalized. The former
+checks human scenario approvals and stakeholder dispositions; the latter
+checks cohort pins and environment metadata. Neither tool authorizes
+execution. Human authorization and the controlled execution protocol remain
+separate gates. The cohort register is a plan only; no run records or evidence
+are created by this check.
