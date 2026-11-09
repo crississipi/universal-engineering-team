@@ -53,7 +53,18 @@ def latest_path_commit(base: str, path: str) -> str:
 
 
 def file_at(commit: str, path: str) -> str:
-    return git("show", f"{commit}:{path}")
+    result = subprocess.run(
+        ["git", "show", f"{commit}:{path}"],
+        cwd=ROOT,
+        text=True,
+        encoding="utf-8",
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    if result.returncode:
+        raise ValueError(result.stderr.strip() or f"cannot read {path} at {commit}")
+    return result.stdout
 
 
 def load_roles() -> list[str]:
