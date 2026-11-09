@@ -129,6 +129,8 @@ def stop(event: dict) -> int:
 
     try:
         report = json.loads(pending_path.read_text(encoding="utf-8"))
+        if not isinstance(report, dict):
+            raise ValueError("Report input must be a JSON object.")
         if report.get("execution_id") != execution_id:
             raise ValueError("Report execution_id does not match this prompt's execution ID.")
         if report.get("started_at") != state.get("started_at"):
@@ -147,8 +149,11 @@ def stop(event: dict) -> int:
         if result.returncode != 0:
             details = (result.stdout + "\n" + result.stderr).strip()
             raise ValueError(details or f"Report generator exited with {result.returncode}.")
-        pending_path.unlink()
-        state_path.unlink(missing_ok=True)
+        for cleanup_path in (pending_path, state_path):
+            try:
+                cleanup_path.unlink(missing_ok=True)
+            except OSError as cleanup_error:
+                print(f"WARNING: Could not remove local hook state {cleanup_path}: {cleanup_error}", file=sys.stderr)
         emit({})
         return 0
     except (OSError, ValueError, json.JSONDecodeError, subprocess.SubprocessError) as exc:

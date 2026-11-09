@@ -20,3 +20,11 @@ flowchart TD
   Completion --> TaskReport[JSON + Markdown completion report]
   TaskReport --> Report[Central HTML report]
   Ingress[Untrusted webhook ingress] --> SecurityLog[Sanitized ingress security log]
+
+  subgraph CopilotRuntime[VS Code Copilot runtime]
+    CanonicalSkills[Canonical skills/ tree] --> SkillSync[Skill synchronizer]
+    SkillSync --> CopilotSkills[.github/skills/ project discovery]
+    PromptSubmit[User prompt submitted] --> PromptState[Capture execution ID and start time]
+    AgentStop[Copilot agentStop hook] --> PendingReport[Require pending structured report]
+    PendingReport --> ReportValidator[Validate and publish report]
+  end

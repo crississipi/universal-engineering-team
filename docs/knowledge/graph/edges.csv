@@ -3,3 +3,8 @@ task-completion-reporting,task-completion-report-schema,defines,docs/agent-execu
 task-completion-report-generator,task-completion-report-schema,validates_against,schemas/executions/task-completion-report.schema.json
 task-completion-reporting,task-completion-report-generator,implemented_by,scripts/report-task-completion.py
 task-completion-reporting,ingress-security-logger,documents_separate_security_log,scripts/log-ingress-security-event.py
+copilot-runtime-integration,copilot-skill-sync,documents,scripts/sync-copilot-skills.py
+copilot-skill-sync,copilot-project-skills,materializes,.github/skills/
+copilot-runtime-integration,copilot-task-hook,documents,scripts/copilot-task-hook.py
+copilot-hook-config,copilot-task-hook,invokes,scripts/copilot-task-hook.py
+copilot-task-hook,task-completion-report-generator,invokes,scripts/report-task-completion.py
