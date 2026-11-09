@@ -436,6 +436,8 @@ can be considered pin-complete, record:
 - Observed provider, user-visible model label, model identifier and version,
   agent mode, material settings, tool permissions, and operating environment.
   Do not infer unavailable values or defaults.
+  For `other_material_settings`, use `null` when not assessed and an empty list
+  only when it was checked and no additional material settings were present.
 
 The checker verifies Git commit existence, ancestry to the cohort base commit,
 pinned scenario identity/role, role-skill file presence, and prompt hash
