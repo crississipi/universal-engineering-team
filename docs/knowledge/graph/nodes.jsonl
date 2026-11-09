@@ -1,1 +1,5 @@
 
+{"id":"task-completion-reporting","type":"document","label":"Task Completion Reporting Contract","path":"docs/agent-execution/TASK-COMPLETION-REPORTING.md","summary":"Defines per-task terminal reporting and dynamic role-skill selection.","status":"active","verified":"2026-11-09"}
+{"id":"task-completion-report-schema","type":"document","label":"Task Completion Report Schema","path":"schemas/executions/task-completion-report.schema.json","summary":"Structured schema for one consolidated terminal task report.","status":"active","verified":"2026-11-09"}
+{"id":"task-completion-report-generator","type":"module","label":"Task Completion Report Generator","path":"scripts/report-task-completion.py","summary":"Validates and renders structured task completion records.","status":"active","verified":"2026-11-09"}
+{"id":"ingress-security-logger","type":"module","label":"Ingress Security Logger","path":"scripts/log-ingress-security-event.py","summary":"Appends sanitized webhook ingress/security events as JSONL.","status":"active","verified":"2026-11-09"}
